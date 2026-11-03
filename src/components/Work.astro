@@ -1,0 +1,31 @@
+---
+import KadugoScreen from './KadugoScreen.astro';
+import Arrow from './Arrow.astro';
+---
+<section id="work" class="section" aria-labelledby="work-h">
+  <div class="section__head">
+    <h2 id="work-h" class="display h-section" data-reveal>Selected work</h2>
+    <p class="lede" data-reveal style="--d:1">Remember the app on my monitor? Here it is, up close.</p>
+  </div>
+  <div class="grid12 work">
+    <figure class="work__shot" data-reveal style="--d:2">
+      <div class="work__shot-shadow" aria-hidden="true"></div>
+      <KadugoScreen />
+    </figure>
+    <article class="work__info">
+      <div data-reveal style="--d:2">
+        <h3 class="display work__name">Ka-dugo</h3>
+        <p class="lede work__tag">A blood donation web app that installs like a phone app.</p>
+      </div>
+      <dl class="work__facts" data-reveal style="--d:3">
+        <div><dt>Who it helps</dt><dd class="placeholder">[Who uses it: e.g. donors looking for a nearby drive, and the staff who run them]</dd></div>
+        <div><dt>What I built</dt><dd class="placeholder">[Your part: e.g. the drive finder, slot booking and offline support]</dd></div>
+        <div><dt>Context</dt><dd>Team project for IT312 Web Technologies, 2026 · <span class="placeholder">[Stack]</span></dd></div>
+      </dl>
+      <a class="link-arrow" href="/work/ka-dugo/" data-reveal style="--d:4">
+        <span class="link-arrow__label">View case study</span>
+        <Arrow />
+      </a>
+    </article>
+  </div>
+</section>

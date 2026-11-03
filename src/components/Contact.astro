@@ -1,0 +1,21 @@
+---
+import Arrow from './Arrow.astro';
+import { profile, githubUrl } from '../data/profile';
+---
+<section id="contact" class="section grid12 contact" aria-labelledby="contact-h">
+  <div class="contact__invite">
+    <h2 id="contact-h" class="display h-section" data-reveal>Let’s build<br>something.</h2>
+    <p class="lede" data-reveal style="--d:1">I’m open to <span class="placeholder">[internships, collaborations, freelance web work]</span>. The fastest way to reach me is email.</p>
+  </div>
+  <div class="contact__links" data-reveal style="--d:2">
+    <a class="contact__link" href={`mailto:${profile.email}`}>
+      <span>Email</span>
+      <Arrow />
+    </a>
+    <a class="contact__link" href={githubUrl}>
+      <span>GitHub</span>
+      <Arrow />
+    </a>
+    <p class="contact__plain placeholder">{profile.email} · github.com/{profile.github}</p>
+  </div>
+</section>

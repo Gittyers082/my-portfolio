@@ -1,0 +1,22 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+
+# environment
+.env
+.env.production
+
+# OS / editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# design-check output
+.taste-skill/

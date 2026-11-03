@@ -1,0 +1,42 @@
+---
+import Arrow from './Arrow.astro';
+import DeskScene from './DeskScene.astro';
+import { profile } from '../data/profile';
+
+// How the name breaks in the hero: two lines, like a title card.
+const nameLines = ['El. Steven', 'D. Cruz'];
+---
+<section class="hero" id="top" aria-labelledby="hero-name">
+  <div class="hero__stage">
+    <div class="hero__panel">
+      <DeskScene />
+    </div>
+    <svg class="hero__cut hero__cut--desk" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="58.24" y1="0" x2="42" y2="100" stroke="#15130F" stroke-width="8" vector-effect="non-scaling-stroke"></line></svg>
+    <svg class="hero__cut hero__cut--phone" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="16" x2="100" y2="0" stroke="#15130F" stroke-width="7" vector-effect="non-scaling-stroke"></line></svg>
+
+    <div class="hero__card" aria-hidden="true">
+      <div class="hero__card-shadow"></div>
+      <svg class="hero__card-streaks" viewBox="0 0 150 60"><polygon points="0,18 150,0 150,8 0,26" fill="#15130F"></polygon><polygon points="0,38 120,40 120,46 0,44" fill="#15130F"></polygon></svg>
+      <svg class="hero__card-pointer" viewBox="0 0 22 30"><polygon points="22,0 0,15 22,30" fill="#15130F"></polygon></svg>
+      <div class="hero__card-body">
+        <span class="hero__card-title"><svg viewBox="0 0 18 22"><path d="M9 1 C6 6 2 10 2 14 a7 7 0 0 0 14 0 c0 -4 -4 -8 -7 -13z" fill="#15130F"></path></svg>Donor matched</span>
+        <span class="hero__card-meta">O+ · 1.2 km away · Sat at SLU Gym</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__content">
+    <div class="hero__name-wrap">
+      <h1 class="hero__name" id="hero-name" data-shadow={nameLines.join('\n')}>{nameLines.map((line) => <span>{line}</span>)}</h1>
+    </div>
+    <div class="hero__intro">
+      <p class="hero__title">{profile.title}</p>
+      <p class="lede hero__lede">{profile.intro}</p>
+      <a class="link-arrow" href="#work">
+        <span class="link-arrow__label">View my work</span>
+        <Arrow />
+      </a>
+    </div>
+  </div>
+  <p class="hero__caption">{profile.year} · {profile.school}</p>
+</section>

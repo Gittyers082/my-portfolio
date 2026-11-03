@@ -1,0 +1,25 @@
+<header class="nav">
+  <a class="nav__mark" href="/" aria-label="El. Steven D. Cruz, home">El.</a>
+  <div class="nav__right">
+    <nav aria-label="Main" class="nav__links">
+      <a href="/#work">Work</a>
+      <a href="/#about">About</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <button type="button" class="theme-toggle" aria-disabled="true" aria-describedby="theme-note" title="Dark mode is coming soon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg>
+      <span class="theme-toggle__label">Light</span>
+      <span class="visually-hidden">theme. Dark mode is coming soon.</span>
+    </button>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu-panel" aria-label="Open menu">
+      <span class="menu-btn__bars" aria-hidden="true"><span></span><span></span></span>
+    </button>
+  </div>
+  <p id="theme-note" class="theme-note" role="status" aria-live="polite"></p>
+</header>
+<nav id="menu-panel" class="menu-panel" aria-label="Menu" hidden>
+  <a href="/#work" style="--i:0">Work</a>
+  <a href="/#file" style="--i:1">Character file</a>
+  <a href="/#about" style="--i:2">About</a>
+  <a href="/#contact" style="--i:3">Contact</a>
+</nav>

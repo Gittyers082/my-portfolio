@@ -1,0 +1,15 @@
+---
+import SketchbookArt from './SketchbookArt.astro';
+---
+<section id="about" class="section grid12 about" aria-labelledby="about-h">
+  <div class="about__text">
+    <h2 id="about-h" class="display" data-reveal>About me</h2>
+    <p data-reveal style="--d:1">I built <span class="placeholder">[the thing you built: e.g. the booking flow in Ka-dugo]</span>. I wanted it to <span class="placeholder">[what you were aiming for]</span>.</p>
+    <p data-reveal style="--d:2">Then <span class="placeholder">[the problem you ran into: the bug, the deadline, the thing that broke in front of the class]</span>.</p>
+    <p data-reveal style="--d:3">What I learned: <span class="placeholder">[the lesson, in one honest sentence]</span>. That’s also why I’m heading toward AI engineering: <span class="placeholder">[your reason]</span>.</p>
+  </div>
+  <figure class="about__art" data-reveal style="--d:2">
+    <SketchbookArt />
+    <figcaption class="placeholder">[Swap for a page from your real sketchbook]</figcaption>
+  </figure>
+</section>

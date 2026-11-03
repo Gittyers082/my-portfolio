@@ -1,0 +1,51 @@
+---
+/**
+ * Ka-dugo case study. A stub so "View case study" never goes nowhere.
+ * Fill each [bracketed] section with the real story.
+ */
+import Base from '../../layouts/Base.astro';
+import Arrow from '../../components/Arrow.astro';
+import KadugoScreen from '../../components/KadugoScreen.astro';
+
+const sections = [
+  { h: 'The problem', body: '[Who was struggling with what, before Ka-dugo]' },
+  { h: 'What I built', body: '[Your part of the team build, in plain words]' },
+  { h: 'The hard part', body: '[The problem you ran into and how you solved it]' },
+  { h: 'What I learned', body: '[One honest lesson]' },
+];
+---
+<Base title="Ka-dugo case study · El. Steven D. Cruz" description="How Ka-dugo, a blood donation web app, was built.">
+  <section class="section case" aria-labelledby="case-h">
+    <a class="link-arrow case__back" href="/#work">
+      <span class="link-arrow__label">Back to selected work</span>
+    </a>
+    <h1 id="case-h" class="display h-section">Ka-dugo</h1>
+    <p class="lede case__tag">A blood donation web app that installs like a phone app. Team project for IT312 Web Technologies, 2026.</p>
+    <figure class="work__shot case__shot">
+      <div class="work__shot-shadow" aria-hidden="true"></div>
+      <KadugoScreen />
+    </figure>
+    <div class="case__grid">
+      {sections.map((s) => (
+        <div class="case__part">
+          <h2>{s.h}</h2>
+          <p class="placeholder">{s.body}</p>
+        </div>
+      ))}
+    </div>
+    <a class="link-arrow" href="/#contact">
+      <span class="link-arrow__label">Get in touch</span>
+      <Arrow />
+    </a>
+  </section>
+</Base>
+
+<style>
+  .case { padding-top: 140px; display: flex; flex-direction: column; gap: var(--s-500); }
+  .case__tag { max-width: 640px; }
+  .case__shot { max-width: 1100px; }
+  .case__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-600) var(--s-300); margin-top: var(--s-700); }
+  .case__part h2 { font-size: 30px; line-height: 36px; font-weight: 700; }
+  .case__part p { margin-top: var(--s-100); font-size: 20px; line-height: 30px; }
+  @media (max-width: 959px) { .case__grid { grid-template-columns: 1fr; } }
+</style>

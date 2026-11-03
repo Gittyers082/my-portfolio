@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+---
+<Base title="Page not found · El. Steven D. Cruz" description="This page doesn’t exist.">
+  <section class="lost" aria-labelledby="lost-h">
+    <p class="display lost__code" aria-hidden="true">404</p>
+    <h1 id="lost-h" class="display h-section">This panel was never drawn.</h1>
+    <p class="lede">The page you’re looking for isn’t here. The rest of the story is.</p>
+    <a class="link-arrow" href="/">
+      <span class="link-arrow__label">Back to the start</span>
+      <Arrow />
+    </a>
+  </section>
+</Base>
