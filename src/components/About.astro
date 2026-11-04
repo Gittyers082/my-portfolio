@@ -1,15 +1,14 @@
 ---
-import SketchbookArt from './SketchbookArt.astro';
+import Notebook from './Notebook.astro';
 ---
 <section id="about" class="section grid12 about" aria-labelledby="about-h">
   <div class="about__text">
-    <h2 id="about-h" class="display" data-reveal>About me</h2>
-    <p data-reveal style="--d:1">I built <span class="placeholder">[the thing you built: e.g. the booking flow in Ka-dugo]</span>. I wanted it to <span class="placeholder">[what you were aiming for]</span>.</p>
-    <p data-reveal style="--d:2">Then <span class="placeholder">[the problem you ran into: the bug, the deadline, the thing that broke in front of the class]</span>.</p>
-    <p data-reveal style="--d:3">What I learned: <span class="placeholder">[the lesson, in one honest sentence]</span>. That’s also why I’m heading toward AI engineering: <span class="placeholder">[your reason]</span>.</p>
+    <h2 id="about-h" class="display glitch" data-text="About me" data-reveal>About me</h2>
+    <p data-reveal style="--d:1">I was a writer before I was a developer. I built worlds first: universes, power systems, characters with flaws they can’t outrun. Then I found code, and started building things that run instead of things you read.</p>
+    <p data-reveal style="--d:2">Now I’m a third-year IT student at Saint Louis University, still figuring a lot of it out. I like building for problems people actually have, like a blood donation app for my web class, or KitaKlaro, a tool for small businesses that went from a pitch to a working prototype.</p>
+    <p data-reveal style="--d:3">The worldbuilding never left. It’s why I think in systems, rules and edge cases, and why I care how something feels to use. Next, I’m learning AI engineering properly, from the ground up.</p>
   </div>
   <figure class="about__art" data-reveal style="--d:2">
-    <SketchbookArt />
-    <figcaption class="placeholder">[Swap for a page from your real sketchbook]</figcaption>
+    <Notebook />
   </figure>
 </section>

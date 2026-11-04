@@ -1,28 +1,47 @@
 ---
 /**
- * The Character file: four chapters, one open at a time.
- * Built on native <details name="…"> so it works with no JavaScript;
- * site.ts closes the others in browsers that don't support `name` yet.
+ * The Character file: the climb. Stack, Training and Writing on the way up,
+ * Projects at the top (open by default: it's the peak of the page).
+ * One chapter open at a time, built on native <details name="…"> so it works
+ * without JavaScript; site.ts covers browsers without `name` support.
+ *
+ * Inside Projects, the picked episode "pops out" into a big panel. Without
+ * JavaScript every episode panel is simply shown, one after another.
  */
-import { skills, kit, projects } from '../data/profile';
+import Arrow from './Arrow.astro';
+import StackIcon from './StackIcon.astro';
+import TechIcon from './TechIcon.astro';
+import EpisodeArt from './EpisodeArt.astro';
+import KadugoDemo from './KadugoDemo.astro';
+import LoreIcon from './LoreIcon.astro';
+import { stack, episodes, profile, lore, course, missions, selfTraining } from '../data/profile';
+
+const loreKind = { universe: 'Universe', power: 'Power system', oc: 'Character' } as const;
+
+const statusLabel = { cleared: 'Cleared', active: 'In progress', locked: 'Locked' } as const;
+
+// Quest counts for the Academy progress bar
+const allQuests = course.terms.flatMap((t) => t.quests.map(() => t.status));
+const cleared = allQuests.filter((st) => st === 'cleared').length;
+const active = allQuests.filter((st) => st === 'active').length;
 
 const chapters = [
-  { id: 'stack', title: 'Stack', teaser: 'Languages, tools and what I’m learning next', count: `${skills.length} skills`, open: true },
-  { id: 'projects', title: 'Projects', teaser: 'Everything I’ve shipped, big and small', count: `${projects.length} builds` },
+  { id: 'stack', title: 'Stack', teaser: 'Languages, tools and what I’m learning next', count: `${stack.length} areas` },
+  { id: 'training', title: 'Training', teaser: 'School, field missions and self-training', count: 'Training arc' },
   { id: 'writing', title: 'Writing', teaser: 'Lore, worldbuilding and power systems', count: 'Side quest' },
-  { id: 'training', title: 'Training', teaser: 'School, courses and certificates', count: 'SLU · 3rd year' },
+  { id: 'projects', title: 'Projects', teaser: 'The main event. Pick an episode and it pops out.', count: `${episodes.length} episodes`, open: true },
 ];
 const segments = Array.from({ length: 10 }, (_, i) => i);
 ---
 <section id="file" class="section" aria-labelledby="file-h">
   <div class="section__head">
-    <h2 id="file-h" class="display h-section" data-reveal>Character file</h2>
-    <p class="lede" data-reveal style="--d:1">My stack, projects, writing and training. Open any chapter.</p>
+    <h2 id="file-h" class="display h-section glitch" data-text="Character file" data-reveal>Character file</h2>
+    <p class="lede" data-reveal style="--d:1">Stack, training and side quests on the way up. Projects at the top.</p>
   </div>
 
   <div class="cf">
     {chapters.map((ch, i) => (
-      <details class="cf__item" name="character-file" open={ch.open} data-reveal style={`--d:${i + 2}`}>
+      <details class:list={['cf__item', `cf__item--${ch.id}`]} name="character-file" open={ch.open} id={ch.id === 'projects' ? 'projects' : undefined} data-chapter={ch.id} data-reveal style={`--d:${i + 2}`}>
         <summary class="cf__head">
           <span class="display cf__title">{ch.title}</span>
           <span class="cf__teaser">{ch.teaser}</span>
@@ -33,56 +52,270 @@ const segments = Array.from({ length: 10 }, (_, i) => i);
         </summary>
 
         {ch.id === 'stack' && (
-          <div class="cf__body grid12">
-            <div class="stats">
-              <p class="stats__note">Power levels <span class="placeholder">[set your own; these are placeholders]</span></p>
-              {skills.map((s) => (
-                <div class="stat">
-                  <span class="stat__name">{s.name}</span>
-                  <div>
-                    <div class="stat__bar" role="img" aria-label={`Level ${s.level} of 10`}>
-                      {segments.map((n) => (
-                        <span class:list={['stat__seg', { 'stat__seg--on': n < s.level }]} style={`--n:${n}`}></span>
-                      ))}
+          <div class="cf__body">
+            <p class="stats__note">Bars show how confident I am, out of 10.</p>
+            <div class="areas">
+              {stack.map((area, i) => (
+                <div class:list={['area', `area--${area.id}`]} style={`--i:${i}`}>
+                  <div class="area__head">
+                    <StackIcon name={area.id} />
+                    <div>
+                      <p class="area__title">{area.title}</p>
+                      <p class="area__line">{area.line}</p>
                     </div>
-                    <p class:list={['stat__desc', { placeholder: s.placeholderNote }]}>{s.note}</p>
                   </div>
+                  {area.skills?.map((s) => (
+                    <div class="stat">
+                      <span class="stat__name stat__name--tech"><TechIcon name={s.name} />{s.name}</span>
+                      <div>
+                        <div class="stat__bar" role="img" aria-label={`Level ${s.level} of 10`}>
+                          {segments.map((n) => (
+                            <span class:list={['stat__seg', { 'stat__seg--on': n < s.level }]} style={`--n:${n}`}></span>
+                          ))}
+                        </div>
+                        <p class:list={['stat__desc', { placeholder: s.placeholderNote }]}>{s.note}</p>
+                      </div>
+                    </div>
+                  ))}
+                  {area.items && (
+                    <ul class="area__items">
+                      {area.items.map((it) => <li class:list={['tech', { placeholder: it.placeholder }]}><TechIcon name={it.text} />{it.text}</li>)}
+                    </ul>
+                  )}
+                  {area.groups && (
+                    <dl class="area__groups">
+                      {area.groups.map((g) => (
+                        <div class:list={['area__group', { 'area__group--logos': g.iconsOnly }]}>
+                          <dt>{g.label}</dt>
+                          {g.iconsOnly ? (
+                            <dd class="logo-row">
+                              {g.items.map((t) => (
+                                <span class="logo-tile" title={t}><TechIcon name={t} /><span class="sr-only">{t}</span></span>
+                              ))}
+                            </dd>
+                          ) : (
+                            <dd>{g.items.map((t) => <span class="tech tech--sm"><TechIcon name={t} size="sm" />{t}</span>)}</dd>
+                          )}
+                        </div>
+                      ))}
+                    </dl>
+                  )}
                 </div>
               ))}
             </div>
-            <dl class="kit">
-              {kit.map((k) => (
-                <div><dt>{k.label}</dt><dd>{k.known} {k.todo && <span class="placeholder">{k.todo}</span>}</dd></div>
-              ))}
-            </dl>
-          </div>
-        )}
-
-        {ch.id === 'projects' && (
-          <div class="cf__body">
-            <ul class="cf-list">
-              {projects.map((p) => (
-                <li>
-                  <span class:list={['cf-list__name', { placeholder: p.placeholder }]}>{p.name}</span>
-                  <span class:list={['cf-list__line', { placeholder: p.placeholder }]}>{p.line}</span>
-                  {p.href ? <a href={p.href}>Case study</a> : <span class="placeholder">[link]</span>}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {ch.id === 'writing' && (
-          <div class="cf__body cf-two">
-            <p>Outside code, I write lore, original characters, worldbuilding and power systems for clients on Fiverr. <span class="placeholder">[Keep or remove this chapter]</span></p>
-            <p><span class="placeholder">[Fiverr profile link]</span><br /><span class="placeholder">[Sample world or excerpt]</span></p>
           </div>
         )}
 
         {ch.id === 'training' && (
-          <div class="cf__body cf-two">
-            <p><b>BS Information Technology</b><br />Saint Louis University · 3rd year · <span class="placeholder">[expected graduation]</span></p>
-            <p><b class="placeholder">[Courses, certificates or bootcamps]</b><br /><span class="placeholder">[Details]</span></p>
+          <div class="cf__body train">
+            <section class="train__block" style="--i:0" aria-labelledby="train-academy">
+              <h3 id="train-academy" class="train__h">Academy</h3>
+              <details class="course" data-glide>
+                <summary class="course__head">
+                  <span class="course__title">
+                    <span class="course__degree">{course.degree}</span>
+                    <span class="course__school">{course.school} · {course.year}</span>
+                  </span>
+                  <span class="course__progress">
+                    <span class="course__count"><b>{cleared}</b> cleared · <b>{active}</b> in progress</span>
+                    <span class="course__bar" aria-hidden="true">
+                      {allQuests.map((st) => <span class:list={['course__seg', `course__seg--${st}`]}></span>)}
+                    </span>
+                  </span>
+                  <span class="course__toggle" aria-hidden="true">
+                    <span class="course__toggle-text course__toggle-text--open">Open the quest board</span>
+                    <span class="course__toggle-text course__toggle-text--close">Close</span>
+                    <svg viewBox="0 0 28 28"><path d="M4 14 H24" stroke="currentColor" stroke-width="4"></path><path class="course__toggle-v" d="M14 4 V24" stroke="currentColor" stroke-width="4"></path></svg>
+                  </span>
+                </summary>
+                <ol class="quests" role="list">
+                  {course.terms.map((t, ti) => (
+                    <li class:list={['term', `term--${t.status}`]} style={`--t:${ti}`}>
+                      <div class="term__head">
+                        <span class="term__label">{t.label}</span>
+                        <span class:list={['term__status', `term__status--${t.status}`]}>{statusLabel[t.status]}</span>
+                      </div>
+                      {t.quests.length > 0 ? (
+                        <ul class="term__quests" role="list">
+                          {t.quests.map((q) => {
+                            const mark = t.status === 'cleared'
+                              ? <svg viewBox="0 0 16 16"><path d="M2.5 8.5 L6.5 12 L13.5 4" fill="none" stroke="currentColor" stroke-width="2.4"></path></svg>
+                              : <span class="quest__dot"></span>;
+                            return q.learned ? (
+                              <li class:list={['quest', 'quest--open-able', `quest--${t.status}`]}>
+                                <details class="quest__details" data-glide>
+                                  <summary class="quest__head">
+                                    <span class="quest__mark" aria-hidden="true">{mark}</span>
+                                    <span class="quest__title"><span class="quest__name">{q.name}</span>{q.tag && <span class="quest__tag">{q.tag}</span>}</span>
+                                    <span class="sr-only"> ({statusLabel[t.status]})</span>
+                                    <svg class="quest__plus" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8 H14" stroke="currentColor" stroke-width="2.4"></path><path class="quest__plus-v" d="M8 2 V14" stroke="currentColor" stroke-width="2.4"></path></svg>
+                                  </summary>
+                                  <div class="quest__learned">
+                                    <p>{q.learned}</p>
+                                    {q.link && <a class="quest__link" href={q.link.href}>{q.link.label}</a>}
+                                  </div>
+                                </details>
+                              </li>
+                            ) : (
+                              <li class:list={['quest', `quest--${t.status}`]}>
+                                <div class="quest__head">
+                                  <span class="quest__mark" aria-hidden="true">{mark}</span>
+                                  <span class="quest__title"><span class="quest__name">{q.name}</span></span>
+                                  <span class="sr-only"> ({statusLabel[t.status]})</span>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : (
+                        <p class="term__locked">Unlocks next semester.</p>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            </section>
+
+            <section class="train__block" style="--i:1" aria-labelledby="train-missions">
+              <h3 id="train-missions" class="train__h">Field missions</h3>
+              <ul class="missions" role="list">
+                {missions.map((m) => (
+                  <li class="mission">
+                    <div class="mission__top">
+                      <span class="mission__kind">{m.kind}</span>
+                      <span class:list={['mission__when', { 'mission__when--now': m.current }]}>{m.when}</span>
+                    </div>
+                    <h4 class="mission__title">{m.title}</h4>
+                    <p class="mission__role">{m.role}</p>
+                    <p class:list={['mission__note', { placeholder: m.placeholder }]}>{m.note}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section class="train__block" style="--i:2" aria-labelledby="train-self">
+              <h3 id="train-self" class="train__h">Self-training</h3>
+              <ul class="selftrain" role="list">
+                {selfTraining.map((st) => (
+                  <li class="selftrain__item">
+                    <h4 class="selftrain__title">{st.title}</h4>
+                    <p class="selftrain__note">{st.note}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+        )}
+
+        {ch.id === 'writing' && (
+          <div class="cf__body lore">
+            <p class="lore__intro">Outside code, I build worlds. This is a piece of the Otherverse, the universe I’ve been writing: the world, its rarest power, and one of its characters. I also write lore like this for clients.</p>
+
+            <ul class="lore__grid" role="list">
+              {lore.map((w, i) => (
+                <li class:list={['dossier', `dossier--${w.kind}`]} style={`--i:${i}`}>
+                  <div class="dossier__top">
+                    <LoreIcon name={w.kind} />
+                    <span class="dossier__kind">{loreKind[w.kind]}</span>
+                    {w.year && <span class:list={['dossier__year', { placeholder: w.placeholder }]}>{w.year}</span>}
+                  </div>
+                  <div>
+                    <h3 class:list={['dossier__name', { placeholder: w.placeholder }]}>{w.name}</h3>
+                    {w.epithet && <p class="dossier__epithet">{w.epithet}</p>}
+                  </div>
+                  <p class:list={['dossier__hook', { placeholder: w.placeholder }]}>{w.hook}</p>
+                  {w.quote && (
+                    <blockquote class="dossier__quote"><p>“{w.quote}”</p><footer>{w.name}</footer></blockquote>
+                  )}
+                  <dl class="dossier__specs">
+                    {w.specs.map((sp) => (
+                      <div class="dossier__spec">
+                        <dt>{sp.label}</dt>
+                        <dd class:list={{ placeholder: w.placeholder }}>{sp.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {w.link && (
+                    <a class="dossier__link" href={w.link} target="_blank" rel="noopener">Read it<span class="sr-only"> ({w.name})</span></a>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <a class="commission" style={`--i:${lore.length}`} href={profile.fiverr} target="_blank" rel="noopener">
+              <span class="commission__text">
+                <span class="commission__kicker">Commissions open</span>
+                <span class="commission__title">Need a world built?</span>
+                <span class="commission__list">Lore · OCs · Worldbuilding · Power systems</span>
+              </span>
+              <span class="commission__cta">Commission me on Fiverr <Arrow /></span>
+            </a>
+          </div>
+        )}
+
+        {ch.id === 'projects' && (
+          <div class="cf__body episodes" data-episodes>
+            <p class="stats__note">Pick an episode. The one you pick pops out.</p>
+
+            <div class="pop">
+              <div class="pop__shadow" aria-hidden="true"></div>
+              <div class="pop__panel">
+                {episodes.map((ep, j) => (
+                  <div class:list={['pop__ep', { 'is-active': j === 0 }]} data-episode={ep.id} id={`episode-${ep.id}`} role="region" aria-label={ep.title}>
+                    {ep.id === 'kadugo' ? (
+                      <div class="pop__kadugo">
+                        <KadugoDemo />
+                        <article class="pop__info">
+                          <div>
+                            <h3 class="display pop__title">{ep.title}</h3>
+                            <p class="lede pop__summary">{ep.summary}</p>
+                          </div>
+                          <dl class="work__facts">
+                            <div><dt>Who it helps</dt><dd class="placeholder">[Who uses it: e.g. donors looking for a nearby drive, and the staff who run them]</dd></div>
+                            <div><dt>What I built</dt><dd class="placeholder">[Your part: e.g. the drive finder, slot booking and offline support]</dd></div>
+                            <div><dt>Context</dt><dd>{ep.meta} · <span class="placeholder">[Stack]</span></dd></div>
+                          </dl>
+                          <a class="link-arrow" href={ep.href}>
+                            <span class="link-arrow__label">View case study</span>
+                            <Arrow />
+                          </a>
+                        </article>
+                      </div>
+                    ) : (
+                      <div class="pop__poster">
+                        <div class="pop__art">
+                          <div class="pop__art-frame" data-snap-target>
+                            <EpisodeArt id={ep.id} title={ep.title} uid={`big-${ep.id}`} />
+                          </div>
+                          <button type="button" class="snap-btn" data-snap aria-pressed="false">Snap the art style</button>
+                        </div>
+                        <article class="pop__info">
+                          <h3 class:list={['display pop__title', { placeholder: ep.placeholder }]}>{ep.title}</h3>
+                          <p class:list={['pop__meta', { placeholder: ep.placeholder }]}>{ep.meta} · Style: {ep.style}</p>
+                          <p class:list={['pop__summary', { placeholder: ep.placeholder }]}>{ep.summary}</p>
+                          {ep.todo && <p class="pop__todo placeholder">{ep.todo}</p>}
+                          {ep.link && (
+                            <a class="link-arrow" href={ep.link.href} target="_blank" rel="noopener">
+                              <span class="link-arrow__label">{ep.link.label}</span>
+                              <Arrow />
+                            </a>
+                          )}
+                        </article>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="picker" role="group" aria-label="Episodes" hidden>
+              {episodes.map((ep, j) => (
+                <button type="button" class="picker__btn" data-pick={ep.id} aria-controls={`episode-${ep.id}`} aria-pressed={j === 0 ? 'true' : 'false'}>
+                  <span class="picker__thumb"><span class="picker__zoom"><EpisodeArt id={ep.id} title={ep.title} uid={`thumb-${ep.id}`} /></span></span>
+                  <span class="picker__name">{ep.title}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </details>

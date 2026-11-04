@@ -1,0 +1,37 @@
+---
+/**
+ * A small monochrome logo for a tool or language, from the open-source
+ * Simple Icons set (npm package `simple-icons`). Logos it doesn't carry get a
+ * lettered tile so the row still lines up. Names not listed here render nothing.
+ */
+import * as si from 'simple-icons';
+
+interface Props { name: string; size?: 'sm' | 'md' }
+const { name, size = 'md' } = Astro.props;
+
+// display name → Simple Icons slug (null = no logo available, use a tile)
+const SLUG: Record<string, string | null> = {
+  Java: 'openjdk', SQL: null, Python: 'python', JavaScript: 'javascript', TypeScript: 'typescript',
+  Kotlin: 'kotlin', Elixir: 'elixir', Rust: 'rust', C: 'c', 'C++': 'cplusplus', 'C#': null, Go: 'go',
+  Ruby: 'ruby', Dart: 'dart', PHP: 'php', Bash: 'gnubash',
+  Astro: 'astro', React: 'react', 'Next.js': 'nextdotjs', HTML: 'html5', CSS: 'css',
+  Tailwind: 'tailwindcss', Bootstrap: 'bootstrap',
+  'Node.js': 'nodedotjs', Express: 'express', 'Spring Boot': 'springboot', FastAPI: 'fastapi', Phoenix: 'phoenixframework',
+  MySQL: 'mysql', PostgreSQL: 'postgresql', MongoDB: 'mongodb', Firebase: 'firebase', Supabase: 'supabase',
+  Git: 'git', 'VS Code': null, 'IntelliJ IDEA': 'intellijidea', Antigravity: null,
+  Docker: 'docker', npm: 'npm', Maven: 'apachemaven', Gradle: 'gradle', Ant: 'apacheant', Mix: null,
+  Vercel: 'vercel', AWS: null, GitHub: 'github',
+  Figma: 'figma', Canva: null, Obsidian: 'obsidian', 'Claude Code': 'claude',
+};
+const TILE: Record<string, string> = { SQL: 'SQL', 'C#': 'C#', 'VS Code': 'VS', Antigravity: 'AG', Mix: 'mix', AWS: 'AWS', Canva: 'Ca' };
+
+const known = name in SLUG;
+const slug = SLUG[name];
+const icons = si as unknown as Record<string, { path: string } | undefined>;
+const icon = slug ? icons['si' + slug[0].toUpperCase() + slug.slice(1)] : undefined;
+const tile = known && !icon ? (TILE[name] ?? name.slice(0, 2)) : null;
+---
+{icon && (
+  <svg class:list={['tech-icon', `tech-icon--${size}`]} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={icon.path}></path></svg>
+)}
+{tile && <span class:list={['tech-icon', 'tech-icon--tile', `tech-icon--${size}`, { 'tech-icon--long': tile.length > 2 }]} aria-hidden="true">{tile}</span>}

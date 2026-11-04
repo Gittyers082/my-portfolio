@@ -1,11 +1,12 @@
 ---
-import { profile } from '../data/profile';
+import { profile, githubUrl } from '../data/profile';
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
   <p class="display footer__name" aria-hidden="true">{profile.name}</p>
   <div class="footer__row">
     <span>© {year} {profile.name}</span>
+    <span class="footer__links"><a href={githubUrl} target="_blank" rel="noopener">GitHub</a> · <a href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a> · <a href={profile.fiverr} target="_blank" rel="noopener">Fiverr</a></span>
     <span>Built with Astro</span>
     <span><a href="#main">Back to top</a></span>
   </div>

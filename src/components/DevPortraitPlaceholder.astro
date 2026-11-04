@@ -1,0 +1,20 @@
+---
+/**
+ * DEVELOPMENT ONLY. Rendered by Hero.astro under `astro dev` when no photo exists
+ * in public/portrait/. It is deliberately not a face: it marks where your face
+ * will sit (the `focus` point) so the crop can be checked at every screen size.
+ * Never shipped by `astro build`.
+ */
+interface Props { focus: string }
+const { focus } = Astro.props;
+const [fx = '50%', fy = '30%'] = focus.split(/\s+/);
+---
+<div class="portrait-placeholder" role="img" aria-label="Development placeholder for the portrait, not a photo">
+  <div class="portrait-placeholder__face" style={`left:${fx};top:${fy}`}>
+    <span>Face goes here</span>
+  </div>
+  <p class="portrait-placeholder__label">
+    <strong>Dev placeholder · not a photo</strong>
+    <span>Add public/portrait/steven.jpg to turn on the real reveal</span>
+  </p>
+</div>

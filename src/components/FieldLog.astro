@@ -1,0 +1,19 @@
+---
+/** Field log: dated, newest first (like the news list on the show's site). */
+import { log } from '../data/profile';
+---
+<section id="log" class="section" aria-labelledby="log-h">
+  <div class="section__head">
+    <h2 id="log-h" class="display h-section h-section--sm glitch" data-text="Field log" data-reveal>Field log</h2>
+    <p class="lede" data-reveal style="--d:1">What I’ve been working on, newest first.</p>
+  </div>
+  <ol class="log">
+    {log.map((e, i) => (
+      <li class:list={['log__row', { 'log__row--top': i === 0, placeholder: e.placeholder }]} data-reveal style={`--d:${i + 2}`}>
+        <span class="log__date">{e.date}</span>
+        <span class="log__text">{e.text}</span>
+        <span class="log__tag">{e.tag}</span>
+      </li>
+    ))}
+  </ol>
+</section>

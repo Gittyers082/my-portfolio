@@ -1,0 +1,18 @@
+---
+/**
+ * Trust value: the show's wrist readout. It rises as the visitor explores
+ * (opening chapters, picking episodes, using the demo, revealing the portrait,
+ * copying the email). Shows only after the hero has scrolled away.
+ * Needs JavaScript, so it starts hidden and site.ts reveals it.
+ */
+---
+<aside class="trust" aria-label="Trust value" hidden data-trust>
+  <div class="trust__top">
+    <span class="trust__label">Trust value</span>
+    <span class="trust__value" data-trust-value>0</span>
+  </div>
+  <div class="trust__bar" aria-hidden="true">
+    {Array.from({ length: 10 }, () => <span class="trust__seg"></span>)}
+  </div>
+  <span class="trust__rank" data-trust-rank>Rookie: open a chapter, play the demo</span>
+</aside>

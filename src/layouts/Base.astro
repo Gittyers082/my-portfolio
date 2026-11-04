@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import TrustMeter from '../components/TrustMeter.astro';
 import { profile } from '../data/profile';
 
 interface Props {
@@ -47,6 +48,7 @@ const ogImage = new URL('/og.png', Astro.site ?? profile.site);
       <slot />
     </main>
     <Footer />
+    <TrustMeter />
     <script>
       import { initSite } from '../scripts/site';
       initSite();

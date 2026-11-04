@@ -2,10 +2,14 @@
   <a class="nav__mark" href="/" aria-label="El. Steven D. Cruz, home">El.</a>
   <div class="nav__right">
     <nav aria-label="Main" class="nav__links">
-      <a href="/#work">Work</a>
+      <a href="/#projects">Projects</a>
       <a href="/#about">About</a>
       <a href="/#contact">Contact</a>
     </nav>
+    <button type="button" class="theme-toggle sound-toggle" data-sound aria-pressed="true" title="Heading hover sound">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 9 H8 L13 5 V19 L8 15 H4 Z" fill="currentColor"></path><path class="sound-toggle__waves" d="M16.5 9 C18 10.5 18 13.5 16.5 15 M19 6.5 C22 9.5 22 14.5 19 17.5"></path><path class="sound-toggle__x" d="M16 9 L22 15 M22 9 L16 15"></path></svg>
+      <span class="theme-toggle__label sound-toggle__label">Sound on</span>
+    </button>
     <button type="button" class="theme-toggle" aria-disabled="true" aria-describedby="theme-note" title="Dark mode is coming soon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg>
       <span class="theme-toggle__label">Light</span>
@@ -18,8 +22,8 @@
   <p id="theme-note" class="theme-note" role="status" aria-live="polite"></p>
 </header>
 <nav id="menu-panel" class="menu-panel" aria-label="Menu" hidden>
-  <a href="/#work" style="--i:0">Work</a>
-  <a href="/#file" style="--i:1">Character file</a>
+  <a href="/#card" style="--i:0">Character card</a>
+  <a href="/#projects" style="--i:1">Projects</a>
   <a href="/#about" style="--i:2">About</a>
   <a href="/#contact" style="--i:3">Contact</a>
 </nav>

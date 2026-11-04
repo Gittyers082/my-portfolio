@@ -1,0 +1,93 @@
+---
+/**
+ * About me art: a notebook lying open on the desk, with a coffee.
+ * Click (or press Enter on) the notebook to flip a page: the page turns in 3D,
+ * a soft paper sound plays (if sound is on), and a little symbol pops out.
+ * Click the mug and the coffee spills (it refills itself). Click the pencil and
+ * it doodles hello, a heart or a star, then erases it.
+ * Without JavaScript it's a still drawing.
+ * Logic: src/scripts/notebook.ts
+ */
+const S = 'fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+
+// Each spread: [left page, right page], drawn on a 300×400 page.
+const spreads: [string, string][] = [
+  // 1 · the Otherverse: a five-point power diagram, and an OC sketch
+  [
+    `<svg viewBox="0 0 300 400" ${S}><path d="M40 52 Q120 48 196 46"/><path d="M40 78 Q100 76 150 74"/><circle cx="150" cy="150" r="10"/><circle cx="222" cy="202" r="10"/><circle cx="194" cy="286" r="10"/><circle cx="106" cy="286" r="10"/><circle cx="78" cy="202" r="10"/><path d="M158 157 L214 196 M219 212 L198 276 M184 286 L116 286 M102 276 L81 212 M86 196 L142 157"/><circle cx="150" cy="226" r="42" stroke-dasharray="4 7"/><path d="M146 210 Q160 226 146 242"/><path d="M40 340 Q110 336 176 334"/><path d="M40 362 Q90 360 130 358"/></svg>`,
+    `<svg viewBox="0 0 300 400" ${S}><circle cx="150" cy="120" r="34"/><path d="M128 110 L172 110"/><path d="M96 238 Q100 172 150 166 Q200 172 204 238"/><path d="M118 186 L84 270 L120 256 M182 186 L216 270 L180 256"/><path d="M196 74 L208 52 L214 78 L236 70 L220 90"/><path d="M60 300 Q140 296 230 292"/><path d="M60 324 Q120 322 180 320"/><path d="M60 348 Q110 346 150 344"/></svg>`,
+  ],
+  // 2 · Ka-dugo: a phone wireframe with a drop, and a checklist
+  [
+    `<svg viewBox="0 0 300 400" ${S}><rect x="86" y="44" width="128" height="250" rx="18"/><path d="M134 62 L166 62"/><path d="M150 104 Q126 140 128 158 Q132 180 150 180 Q168 180 172 158 Q174 140 150 104 Z"/><path d="M106 206 L194 206"/><rect x="106" y="222" width="88" height="22" rx="4"/><rect x="106" y="252" width="56" height="22" rx="4"/><path d="M48 334 Q130 330 236 328"/><path d="M48 358 Q110 356 170 354"/></svg>`,
+    `<svg viewBox="0 0 300 400" ${S}><path d="M44 52 Q120 48 190 46"/><rect x="48" y="98" width="22" height="22"/><path d="M53 109 L59 115 L67 103"/><path d="M90 110 Q160 106 236 104"/><rect x="48" y="150" width="22" height="22"/><path d="M53 161 L59 167 L67 155"/><path d="M90 162 Q150 158 210 156"/><rect x="48" y="202" width="22" height="22"/><path d="M53 213 L59 219 L67 207"/><path d="M90 214 Q160 210 226 208"/><rect x="48" y="254" width="22" height="22"/><path d="M90 266 Q140 262 190 260"/><path d="M196 318 Q232 300 246 330 Q254 356 222 362"/></svg>`,
+  ],
+  // 3 · code: brackets and indented lines, and a build flow
+  [
+    `<svg viewBox="0 0 300 400" ${S}><path d="M56 60 L40 80 L56 100"/><path d="M84 60 L100 80 L84 100"/><path d="M72 104 L68 56"/><path d="M40 140 L140 140"/><path d="M64 168 L200 168"/><path d="M88 196 L176 196"/><path d="M88 224 L230 224"/><path d="M64 252 L150 252"/><path d="M40 280 L96 280"/><path d="M40 330 Q120 326 200 324"/></svg>`,
+    `<svg viewBox="0 0 300 400" ${S}><rect x="40" y="70" width="70" height="40" rx="4"/><rect x="150" y="70" width="90" height="40" rx="4"/><path d="M112 90 L146 90 M138 82 L146 90 L138 98"/><path d="M195 112 L195 170 M187 162 L195 170 L203 162"/><rect x="150" y="174" width="90" height="40" rx="4"/><path d="M148 194 L112 194 M120 186 L112 194 L120 202"/><rect x="40" y="174" width="70" height="40" rx="4"/><path d="M75 216 L75 262" stroke-dasharray="5 6"/><rect x="40" y="266" width="70" height="40" rx="4"/><path d="M150 330 Q200 326 250 324"/></svg>`,
+  ],
+  // 4 · the plan: a climb with a flag, and a to-do with a coffee ring
+  [
+    `<svg viewBox="0 0 300 400" ${S}><path d="M30 300 L96 214 L130 248 L190 150 L262 300"/><path d="M190 150 L190 88"/><path d="M190 88 L232 102 L190 116"/><path d="M60 292 Q76 280 92 284 Q110 270 126 278 Q146 262 168 268"/><path d="M40 344 Q120 340 210 338"/></svg>`,
+    `<svg viewBox="0 0 300 400" ${S}><path d="M44 52 Q110 48 170 46"/><path d="M48 104 L60 104"/><path d="M76 104 Q140 100 210 98"/><path d="M48 144 L60 144"/><path d="M76 144 Q130 140 180 138"/><path d="M48 184 L60 184"/><path d="M76 184 Q150 180 226 178"/><circle cx="196" cy="296" r="42" stroke-width="3" opacity="0.45"/><circle cx="196" cy="296" r="34" stroke-width="1.5" opacity="0.35"/></svg>`,
+  ],
+];
+---
+<div class="desk" data-notebook>
+  <button class="book" type="button" aria-label="Flip a page of my notebook" data-book>
+    <span class="book__board" aria-hidden="true"></span>
+    <span class="book__page book__page--left" data-book-left set:html={spreads[0][0]}></span>
+    <span class="book__page book__page--right" data-book-right set:html={spreads[0][1]}></span>
+    <span class="book__gutter" aria-hidden="true"></span>
+    <span class="book__leaf" aria-hidden="true" data-book-leaf>
+      <span class="book__face book__face--front" data-book-front></span>
+      <span class="book__face book__face--back" data-book-back></span>
+    </span>
+  </button>
+
+  <button class="mug-btn" type="button" aria-label="Knock the coffee over" data-mug>
+    <svg class="mug" viewBox="0 0 120 170" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <g class="steam">
+        <path class="steam__w steam__w--1" d="M38 54 Q30 40 38 28 Q46 16 38 4"></path>
+        <path class="steam__w steam__w--2" d="M56 56 Q48 42 56 30 Q64 18 56 6"></path>
+        <path class="steam__w steam__w--3" d="M74 54 Q66 40 74 28 Q82 16 74 4"></path>
+      </g>
+      <g class="mug__body">
+        <path d="M18 72 L24 156 Q26 164 34 164 L78 164 Q86 164 88 156 L94 72 Z" fill="var(--paper)"></path>
+        <path class="mug__coffee" d="M21 78 Q56 87 91 78 L90.5 86 Q56 95 21.5 86 Z" fill="currentColor" stroke="none"></path>
+        <path d="M18 72 Q56 82 94 72"></path>
+        <path d="M93 92 Q114 92 114 112 Q114 132 89 134"></path>
+      </g>
+    </svg>
+  </button>
+  <svg class="puddle" viewBox="0 0 300 120" aria-hidden="true" data-puddle>
+    <path d="M292 30 Q300 52 276 62 Q250 70 226 66 Q214 86 180 84 Q150 96 118 86 Q96 104 64 94 Q30 100 18 82 Q4 66 26 56 Q44 48 70 52 Q90 36 122 42 Q150 28 178 36 Q206 22 236 28 Q262 14 292 30 Z" fill="currentColor"></path>
+    <circle cx="44" cy="108" r="5" fill="currentColor"></circle>
+    <circle cx="140" cy="108" r="3.5" fill="currentColor"></circle>
+    <circle cx="96" cy="20" r="3" fill="currentColor"></circle>
+  </svg>
+
+  <button class="pencil-btn" type="button" aria-label="Doodle with the pencil" data-pencil>
+    <svg class="pencil" viewBox="0 0 220 40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
+      <path d="M10 26 L40 12 L200 12 L200 34 L40 34 Z" fill="var(--paper)"></path>
+      <path d="M40 12 L40 34 M180 12 L180 34"></path>
+      <path d="M10 26 L22 20 L22 30 Z" fill="currentColor"></path>
+    </svg>
+  </button>
+  <svg class="scribble" viewBox="0 0 200 100" aria-hidden="true" data-scribble>
+    <path data-doodle="hello" d="M14 70 C24 48 32 16 26 12 C18 8 16 40 18 70 C20 54 30 48 36 54 C40 60 38 70 44 70 C54 70 62 58 56 53 C50 48 44 58 48 65 C52 72 64 70 70 62 C78 50 86 18 80 14 C72 10 70 46 74 66 C76 72 84 70 90 62 C98 50 106 18 100 14 C92 10 90 46 94 66 C96 72 104 70 110 62 C114 54 124 50 128 56 C132 64 124 72 116 68 C110 62 116 54 126 55 C132 56 140 56 150 52"></path>
+    <path data-doodle="heart" d="M100 88 C60 62 52 34 70 22 C84 13 98 22 100 36 C102 22 116 13 130 22 C148 34 140 62 100 88 Z"></path>
+    <path data-doodle="star" d="M100 8 L111 38 L143 39 L118 58 L127 90 L100 71 L73 90 L82 58 L57 39 L89 38 Z"></path>
+  </svg>
+
+  <div class="desk-pops" aria-hidden="true" data-desk-pops></div>
+
+  {spreads.map(([l, r], i) => (
+    <>
+      <template data-page={`${i}-l`} set:html={l} />
+      <template data-page={`${i}-r`} set:html={r} />
+    </>
+  ))}
+</div>
+<p class="desk__hint"><span class="desk__hint-mouse">Click</span><span class="desk__hint-touch">Tap</span> the notebook to flip a page.</p>

@@ -1,17 +1,50 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Arrow from './Arrow.astro';
 import DeskScene from './DeskScene.astro';
-import { profile } from '../data/profile';
+import DevPortraitPlaceholder from './DevPortraitPlaceholder.astro';
+import { profile, portrait } from '../data/profile';
 
 // How the name breaks in the hero: two lines, like a title card.
 const nameLines = ['El. Steven', 'D. Cruz'];
+
+// The portrait reveal turns on only when a real photo is in public/portrait/.
+// In `astro dev` a labelled placeholder stands in so the interaction can be tested.
+const photo = ['avif', 'webp', 'jpg', 'jpeg', 'png']
+  .map((ext) => `portrait/${portrait.basename}.${ext}`)
+  .find((file) => fs.existsSync(path.join(process.cwd(), 'public', file)));
+const usePlaceholder = !photo && import.meta.env.DEV;
+const revealEnabled = Boolean(photo) || usePlaceholder;
 ---
 <section class="hero" id="top" aria-labelledby="hero-name">
+  <div class="hero__bg" aria-hidden="true"><div class="hero__bg-dots"></div></div>
+
   <div class="hero__stage">
-    <div class="hero__panel">
+    <div class="hero__edge" aria-hidden="true"></div>
+    <div class="hero__panel" data-portrait-reveal={revealEnabled ? 'idle' : undefined}>
       <DeskScene />
+      {revealEnabled && (
+        <>
+          <div class="reveal__dots" aria-hidden="true"></div>
+          <div class="reveal__frame" aria-hidden="true"></div>
+          <div class="reveal__portrait" id="hero-portrait" aria-hidden="true">
+            {photo ? (
+              <img
+                class="reveal__img"
+                src={`/${photo}`}
+                alt={portrait.alt}
+                style={`--focus:${portrait.focus}`}
+                decoding="async"
+                loading="eager"
+              />
+            ) : (
+              <DevPortraitPlaceholder focus={portrait.focus} />
+            )}
+          </div>
+        </>
+      )}
     </div>
-    <svg class="hero__cut hero__cut--desk" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="58.24" y1="0" x2="42" y2="100" stroke="#15130F" stroke-width="8" vector-effect="non-scaling-stroke"></line></svg>
     <svg class="hero__cut hero__cut--phone" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="16" x2="100" y2="0" stroke="#15130F" stroke-width="7" vector-effect="non-scaling-stroke"></line></svg>
 
     <div class="hero__card" aria-hidden="true">
@@ -19,14 +52,29 @@ const nameLines = ['El. Steven', 'D. Cruz'];
       <svg class="hero__card-streaks" viewBox="0 0 150 60"><polygon points="0,18 150,0 150,8 0,26" fill="#15130F"></polygon><polygon points="0,38 120,40 120,46 0,44" fill="#15130F"></polygon></svg>
       <svg class="hero__card-pointer" viewBox="0 0 22 30"><polygon points="22,0 0,15 22,30" fill="#15130F"></polygon></svg>
       <div class="hero__card-body">
-        <span class="hero__card-title"><svg viewBox="0 0 18 22"><path d="M9 1 C6 6 2 10 2 14 a7 7 0 0 0 14 0 c0 -4 -4 -8 -7 -13z" fill="#15130F"></path></svg>Donor matched</span>
-        <span class="hero__card-meta">O+ · 1.2 km away · Sat at SLU Gym</span>
+        <span class="hero__card-title hero__card-title--code"><span class="hero__card-prompt" aria-hidden="true">$</span>git commit -m "fix stuff"</span>
+        <span class="hero__card-meta"><span>1 file changed</span><span class="hero__card-sep">{" · "}</span><span>it works, don’t touch it</span></span>
       </div>
     </div>
+
+    {revealEnabled && (
+      <div class="frames" role="group" aria-label="Hero frame">
+        <button type="button" class="frames__btn" data-frame="ink" aria-pressed="true" aria-controls="hero-portrait">
+          <span class="frames__thumb frames__thumb--ink" aria-hidden="true">
+            <svg viewBox="0 0 84 56"><rect x="10" y="8" width="44" height="30" fill="#15130F"></rect><rect x="14" y="12" width="36" height="22" fill="#FBF8F1"></rect><rect class="accent-fill" x="18" y="22" width="28" height="5"></rect><path d="M56 56 C58 40 66 34 76 34 L84 36 L84 56 Z" fill="#15130F"></path><path d="M64 40 L62 26 L68 32 L70 22 L74 30 L80 24 L80 40 Z" fill="#15130F"></path></svg>
+          </span>
+          <span class="frames__label">Ink</span>
+        </button>
+        <button type="button" class="frames__btn" data-frame="photo" aria-pressed="false" aria-controls="hero-portrait">
+          <span class="frames__thumb frames__thumb--photo" aria-hidden="true"><span></span></span>
+          <span class="frames__label">Photo</span>
+        </button>
+      </div>
+    )}
   </div>
 
   <div class="hero__content">
-    <div class="hero__name-wrap">
+    <div class="hero__name-wrap glitch" data-text={nameLines.join('\n')}>
       <h1 class="hero__name" id="hero-name" data-shadow={nameLines.join('\n')}>{nameLines.map((line) => <span>{line}</span>)}</h1>
     </div>
     <div class="hero__intro">

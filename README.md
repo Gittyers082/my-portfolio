@@ -5,6 +5,16 @@ The homepage opens like a character introduction: one paused frame, the name as 
 
 Built with **Astro**, plain **CSS** and **TypeScript**. No UI framework, no CSS framework.
 
+## Logos in Stack
+
+The small logos come from the open-source Simple Icons set. Install it once:
+
+```
+npm install simple-icons
+```
+
+To add a logo for a new item, add its name and Simple Icons slug to the `SLUG` table in `src/components/TechIcon.astro` (find slugs at simpleicons.org). Anything without a logo gets a lettered tile.
+
 ## Run it
 
 ```bash
@@ -18,13 +28,16 @@ npm run preview   # serves the production build
 
 | Path | What it is |
 | --- | --- |
-| `src/data/profile.ts` | **Your content.** Name, links, skill levels, project list. Start here. |
-| `src/pages/index.astro` | The homepage: Hero → Selected work → Character file → Tagline → About → Contact |
+| `src/data/profile.ts` | **Your content.** Name, links, Character card facts, Stack areas and levels, project episodes, Field log. Start here. |
+| `src/data/contributions.ts` | Trust history: pulls your GitHub contribution calendar at build time (set `github` in profile.ts). |
+| `src/pages/index.astro` | The homepage, climbing like a story: Hero → Character card → Character file (Projects is the peak) → Tagline → About → Trust history → Field log → Contact |
 | `src/pages/work/ka-dugo.astro` | Ka-dugo case study (stub, fill it in) |
 | `src/pages/404.astro` | Custom 404 |
-| `src/components/` | One file per section. `DeskScene` and `SketchbookArt` are the drawings. |
+| `src/components/` | One file per section. `DeskScene`, `SketchbookArt` and `EpisodeArt` are the drawings; `KadugoDemo` is the demo loop. |
 | `src/styles/global.css` | All styles. Design tokens (colours, spacing, motion) are at the top. |
-| `src/scripts/site.ts` | Reveals, word-by-word tagline, card drift, mobile menu, chapter behaviour |
+| `src/scripts/site.ts` | Reveals, tagline, card drift, menu, chapters, hero background |
+| `src/scripts/features.ts` | Trust value meter, demo loop, episode picker + Snap, copy-the-email |
+| `src/scripts/portrait-reveal.ts` | Hero Ink / Photo reveal |
 | `public/fonts/` | Archivo variable font, self-hosted (SIL Open Font License) |
 
 ## Design system, in short
@@ -37,15 +50,33 @@ npm run preview   # serves the production build
   `prefers-reduced-motion`. Content is visible without JavaScript.
 - **Dark mode:** the toggle in the nav is a placeholder. Dark tokens go under `[data-theme="dark"]` in `global.css`.
 
+## Hero portrait reveal
+
+The hero art has a second frame: your portrait under the illustration. Hover to peek, click (or tap,
+or press the "Reveal portrait" button) to wipe the whole panel over to the photo, click again to go back.
+
+1. Save a head-and-shoulders photo, at least 1200 px tall, as **`public/portrait/steven.jpg`**
+   (`.webp`, `.avif` or `.png` also work).
+2. If the crop cuts your face, adjust `portrait.focus` in `src/data/profile.ts`
+   (a CSS `object-position`, default `50% 28%`: horizontal, then vertical position of your face).
+3. Check it at phone and desktop widths with `npm run dev`.
+
+Until that file exists, the reveal is **off in the public build** (`npm run build`). In `npm run dev`
+a clearly labelled development placeholder (not a face) stands in so the interaction can be tested.
+
 ## Before launch: placeholders to replace
 
 Search the code for `[` brackets or `TODO`:
 
-- [ ] `profile.ts`: email, GitHub username, deployed site URL, real skill levels, third project
+- [x] `profile.ts`: email, GitHub, LinkedIn, Fiverr
+- [ ] `profile.ts`: deployed site URL, real skill levels, fun fact, third project, Field log entries
+- [ ] `public/resume.pdf`: your résumé (the Contact link appears once the file exists)
+- [ ] A real Ka-dugo screen recording to replace the HTML demo loop (`KadugoDemo.astro`)
 - [ ] `astro.config.mjs`: `site` URL
 - [ ] Ka-dugo: who it helps, what you built, stack, app URL, case study text, **real screenshots**
 - [ ] About: your story (built / problem / learned)
 - [ ] Character file: Writing chapter (keep or remove), training details
+- [ ] `public/portrait/steven.jpg`: your photo for the hero reveal (see above)
 - [ ] `public/og.png` (1200×630 social card)
 - [ ] Swap the sketchbook drawing for a real page from your sketchbook, if you have one
 

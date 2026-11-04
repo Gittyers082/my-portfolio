@@ -1,0 +1,80 @@
+---
+/**
+ * Ka-dugo demo loop: the app plays through a booking like a muted clip.
+ * Built in HTML until a real screen recording exists (then swap the three
+ * screens for a <video muted loop playsinline> with a poster frame).
+ * Without JavaScript the first screen shows and the controls stay hidden.
+ */
+const steps = ['Find a drive', 'Book a slot', 'Get matched'];
+const times = [
+  { t: '9:00', taken: true }, { t: '9:30' }, { t: '10:00', picked: true }, { t: '10:30' },
+  { t: '11:00' }, { t: '11:30', taken: true }, { t: '13:00' }, { t: '14:30' },
+];
+---
+<figure class="demo" data-demo data-step="0">
+  <div class="demo__frame">
+    <div class="demo__shadow" aria-hidden="true"></div>
+    <div class="screen" data-ui>
+      <div class="screen__bar">
+        <span class="screen__dot"></span><span class="screen__dot"></span><span class="screen__dot"></span>
+        <span class="screen__url">[ka-dugo app URL]</span>
+        <span class="demo__status" aria-hidden="true"><span class="demo__rec"></span><span class="demo__status-text">Demo loop</span></span>
+      </div>
+      <div class="screen__body" aria-live="off">
+        <div class="screen__side" aria-hidden="true">
+          <span class="screen__brand"><svg viewBox="0 0 18 22"><path d="M9 1 C6 6 2 10 2 14 a7 7 0 0 0 14 0 c0 -4 -4 -8 -7 -13z" fill="#15130F"></path></svg>Ka-dugo</span>
+          <span class="screen__nav screen__nav--on">Drives</span>
+          <span class="screen__nav">My donations</span>
+          <span class="screen__nav">Donor card</span>
+          <span class="screen__nav">Profile</span>
+        </div>
+
+        <div class="demo__screen" data-screen="0" aria-label="Step 1 of 3: nearby blood drives this week">
+          <div><p class="screen__h">Nearby blood drives</p><p class="screen__sub">This week · within 5 km</p></div>
+          <div class="screen__filters"><span class="screen__chip screen__chip--on">All blood types</span><span class="screen__chip">O+</span><span class="screen__chip">This week</span></div>
+          <div class="screen__row"><span class="screen__date">FRI<br>13 NOV</span><span><b>Cathedral Hall</b><br>8:00 – 12:00</span><span class="screen__slots">12 slots</span></div>
+          <div class="screen__row screen__row--ink"><span class="screen__date">SAT<br>14 NOV</span><span><b>SLU Gym</b><br>9:00 – 15:00</span><span class="screen__slots"><b>23 slots ›</b></span></div>
+          <div class="screen__row"><span class="screen__date">SUN<br>15 NOV</span><span><b>City Hall</b><br>10:00 – 14:00</span><span class="screen__slots">4 slots</span></div>
+        </div>
+
+        <div class="demo__screen" data-screen="1" aria-label="Step 2 of 3: booking a 10:00 slot at SLU Gym">
+          <div><p class="screen__h">Book a slot</p><p class="screen__sub">SLU Gym · Saturday 14 November</p></div>
+          <div class="demo__times">
+            {times.map((x) => <span class:list={['demo__time', { 'demo__time--taken': x.taken, 'demo__time--picked': x.picked }]}>{x.t}</span>)}
+          </div>
+          <div class="demo__line"><span>Your blood type</span><b>O+</b></div>
+          <div class="demo__line"><span>Last donation</span><b>14 Jul 2026</b></div>
+          <span class="demo__confirm">Confirm 10:00</span>
+        </div>
+
+        <div class="demo__screen demo__screen--match" data-screen="2" aria-label="Step 3 of 3: booked, and matched with a nearby request">
+          <div class="demo__booked">
+            <span class="demo__check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="square"></path></svg></span>
+            <div><p class="demo__booked-h">You’re booked</p><p class="screen__sub">Sat 14 Nov · 10:00 · SLU Gym</p></div>
+          </div>
+          <div class="demo__match">
+            <div class="demo__match-shadow" aria-hidden="true"></div>
+            <div class="demo__match-body">
+              <span class="demo__match-title"><svg viewBox="0 0 18 22" aria-hidden="true"><path d="M9 1 C6 6 2 10 2 14 a7 7 0 0 0 14 0 c0 -4 -4 -8 -7 -13z" fill="#15130F"></path></svg>Donor matched</span>
+              <span>An O+ request 1.2 km away needs you on Saturday.</span>
+            </div>
+          </div>
+          <p class="screen__sub">We’ll remind you the night before.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo__controls" hidden>
+    <button type="button" class="demo__play" aria-label="Pause demo" data-demo-play>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path class="demo__icon-pause" d="M4 3 H8 V17 H4 Z M12 3 H16 V17 H12 Z"></path><path class="demo__icon-play" d="M5 3 L17 10 L5 17 Z"></path></svg>
+    </button>
+    {steps.map((label, i) => (
+      <button type="button" class="demo__step" data-demo-step={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+        <span class="demo__step-label">{label}</span>
+        <span class="demo__track"><span class="demo__fill"></span></span>
+      </button>
+    ))}
+  </div>
+  <figcaption class="demo__caption placeholder">[Swap for a real screen recording: a muted 10–15 s loop with a poster frame.]</figcaption>
+</figure>

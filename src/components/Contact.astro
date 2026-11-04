@@ -1,21 +1,48 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Arrow from './Arrow.astro';
 import { profile, githubUrl } from '../data/profile';
+
+// The résumé link appears once the file exists (public/resume.pdf), so it's never a dead link.
+const hasResume = fs.existsSync(path.join(process.cwd(), 'public', profile.resume.replace(/^\//, '')));
 ---
 <section id="contact" class="section grid12 contact" aria-labelledby="contact-h">
   <div class="contact__invite">
-    <h2 id="contact-h" class="display h-section" data-reveal>Let’s build<br>something.</h2>
+    <h2 id="contact-h" class="display h-section glitch" data-text={'Let’s build\nsomething.'} data-reveal>Let’s build<br>something.</h2>
     <p class="lede" data-reveal style="--d:1">I’m open to <span class="placeholder">[internships, collaborations, freelance web work]</span>. The fastest way to reach me is email.</p>
   </div>
   <div class="contact__links" data-reveal style="--d:2">
-    <a class="contact__link" href={`mailto:${profile.email}`}>
-      <span>Email</span>
+    <!-- Copies the address; without JavaScript it is a normal mailto link. -->
+    <a class="contact__link contact__link--copy" href={`mailto:${profile.email}`} data-copy={profile.email}>
+      <span class="contact__stack">
+        <span>Email</span>
+        <span class="contact__sub" data-copy-label>Click to copy the address</span>
+      </span>
       <Arrow />
     </a>
-    <a class="contact__link" href={githubUrl}>
+    <a class="contact__link" href={githubUrl} target="_blank" rel="noopener">
       <span>GitHub</span>
       <Arrow />
     </a>
-    <p class="contact__plain placeholder">{profile.email} · github.com/{profile.github}</p>
+    <a class="contact__link" href={profile.linkedin} target="_blank" rel="noopener">
+      <span>LinkedIn</span>
+      <Arrow />
+    </a>
+    <a class="contact__link" href={profile.fiverr} target="_blank" rel="noopener">
+      <span class="contact__stack">
+        <span>Fiverr</span>
+        <span class="contact__sub">Lore and worldbuilding commissions</span>
+      </span>
+      <Arrow />
+    </a>
+{hasResume && (
+    <a class="contact__link" href={profile.resume} download>
+      <span>Résumé <span class="contact__fmt">PDF</span></span>
+      <svg class="arrow arrow--down" viewBox="0 0 28 32" aria-hidden="true"><path d="M14 2 V24" stroke="currentColor" stroke-width="5"></path><path d="M3 14 L14 25 L25 14" fill="none" stroke="currentColor" stroke-width="5"></path><path d="M2 30 H26" stroke="currentColor" stroke-width="4"></path></svg>
+    </a>
+    )}
+    <p class="contact__plain">{profile.email}</p>
+    <p class="contact__trust" data-trust-final hidden></p>
   </div>
 </section>

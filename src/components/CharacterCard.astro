@@ -1,0 +1,22 @@
+---
+/** The quick version, right after the hero: six facts on a cut-corner card. */
+import { facts } from '../data/profile';
+---
+<section id="card" class="section" aria-labelledby="card-h">
+  <div class="section__head">
+    <h2 id="card-h" class="display h-section glitch" data-text="Character card" data-reveal>Character card</h2>
+    <p class="lede" data-reveal style="--d:1">The quick version, before the long one.</p>
+  </div>
+  <div class="card" data-reveal style="--d:2">
+    <div class="card__shadow" aria-hidden="true"></div>
+    <dl class="card__grid">
+      {facts.map((f) => (
+        <div class:list={['card__fact', { 'card__fact--hi': f.highlight }]}>
+          <dt class="card__label">{f.label}</dt>
+          <dd class:list={['card__value', { placeholder: f.placeholder }]}>{f.value}</dd>
+          <dd class:list={['card__note', { placeholder: f.placeholder }]}>{f.note}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

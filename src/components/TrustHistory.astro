@@ -1,0 +1,55 @@
+---
+/**
+ * Trust history: the GitHub contribution calendar, drawn as halftone dots
+ * (bigger dot = busier day, the busiest in cyan). Data comes from
+ * src/data/contributions.ts at build time; a labelled sample until your
+ * GitHub username is set in profile.ts.
+ */
+import { getCalendar } from '../data/contributions';
+import { profile } from '../data/profile';
+
+const cal = await getCalendar();
+const offset = cal.days.length ? new Date(cal.days[0].date + 'T00:00:00').getDay() : 0;
+const weeks = Math.ceil((offset + cal.days.length) / 7);
+const months: { label: string; col: number }[] = [];
+cal.days.forEach((d, i) => {
+  const date = new Date(d.date + 'T00:00:00');
+  if (date.getDate() <= 7 && date.getDay() === 0) {
+    months.push({ label: date.toLocaleString('en', { month: 'short' }), col: Math.floor((offset + i) / 7) + 1 });
+  }
+});
+const fmt = (iso: string | null): string =>
+  iso ? new Date(iso + 'T00:00:00').toLocaleDateString('en', { day: 'numeric', month: 'short' }) : '[—]';
+const pads = Array.from({ length: offset });
+---
+<section id="trust-history" class="section" aria-labelledby="trust-h">
+  <div class="section__head">
+    <h2 id="trust-h" class="display h-section h-section--sm glitch" data-text="Trust history" data-reveal>Trust history</h2>
+    <p class="lede" data-reveal style="--d:1">Every dot is a day I pushed code to GitHub. Some weeks are empty. It’s a student’s calendar, and it’s honest.</p>
+  </div>
+  <div class="th" data-reveal style="--d:2">
+    <div class="th__stats">
+      <div><p class:list={['th__num', { placeholder: cal.sample }]}>{cal.sample || cal.total === null ? '[—]' : cal.total.toLocaleString('en')}</p><p class="th__cap">contributions in the last year</p></div>
+      <div><p class:list={['th__num', { placeholder: cal.sample }]}>{cal.sample ? '[—]' : cal.longestStreak} days</p><p class="th__cap">longest streak</p></div>
+      <div><p class:list={['th__num', { placeholder: cal.sample }]}>{cal.sample ? '[—]' : fmt(cal.busiest)}</p><p class="th__cap">busiest day, in cyan</p></div>
+    </div>
+    <div class="th__scroll">
+      <div class="th__cal" style={`--weeks:${weeks}`}>
+        <div class="th__days" aria-hidden="true"><span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span></div>
+        <div class="th__months" aria-hidden="true">
+          {months.map((m) => <span style={`grid-column:${m.col}`}>{m.label}</span>)}
+        </div>
+        <div class="th__grid" role="img" aria-label={cal.sample ? 'Sample contribution calendar (not real data yet)' : `GitHub contributions over the last year: longest streak ${cal.longestStreak} days`}>
+          {pads.map(() => <span class="th__pad"></span>)}
+          {cal.days.map((d) => <span class:list={['th__dot', `th__dot--${d.level}`, { 'th__dot--best': d.date === cal.busiest }]} title={d.date}></span>)}
+        </div>
+      </div>
+    </div>
+    <div class="th__foot">
+      {cal.sample
+        ? <p class="th__note placeholder">[Sample pattern. Set your GitHub username in src/data/profile.ts and the real calendar is pulled at build time.]</p>
+        : <p class="th__note">From <a href={`https://github.com/${profile.github}`}>github.com/{profile.github}</a>, updated at each build.</p>}
+      <div class="th__legend" aria-hidden="true">Less <span class="th__dot th__dot--0"></span><span class="th__dot th__dot--1"></span><span class="th__dot th__dot--2"></span><span class="th__dot th__dot--3"></span><span class="th__dot th__dot--4"></span> More</div>
+    </div>
+  </div>
+</section>
