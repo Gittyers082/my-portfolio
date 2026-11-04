@@ -1,22 +1,55 @@
 ---
-/** The quick version, right after the hero: six facts on a cut-corner card. */
-import { facts } from '../data/profile';
+/**
+ * The quick version, right after the hero: six facts as separate tiles.
+ * - The set tilts toward your cursor, with a sheen on each tile (mouse only).
+ * - Hovering a fact bursts manga speed lines behind it.
+ * - Clicking a fact flips it to a back side with a detail and a jump to where
+ *   that part of the story lives (opens the right chapter).
+ * Without JavaScript the backs simply show under each front.
+ * Logic: src/scripts/card.ts
+ */
+import { facts, course } from '../data/profile';
+import Arrow from './Arrow.astro';
+
+const all = course.terms.flatMap((t) => t.quests.map(() => t.status));
+const fill = (text: string): string => text
+  .replace('{cleared}', String(all.filter((s) => s === 'cleared').length))
+  .replace('{active}', String(all.filter((s) => s === 'active').length));
+const SPEED = `<svg class="card__speed" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line pathLength="1" x1="122.7" y1="49.2" x2="83.8" y2="49.7" style="--k:0"></line><line pathLength="1" x1="116.9" y1="65.1" x2="81.6" y2="56.3" style="--k:1"></line><line pathLength="1" x1="110.8" y1="69.6" x2="86.4" y2="60.3" style="--k:2"></line><line pathLength="1" x1="104.1" y1="83.0" x2="80.7" y2="66.4" style="--k:3"></line><line pathLength="1" x1="103.3" y1="98.7" x2="72.0" y2="67.6" style="--k:4"></line><line pathLength="1" x1="92.2" y1="107.6" x2="69.5" y2="73.4" style="--k:0"></line><line pathLength="1" x1="81.4" y1="107.9" x2="64.7" y2="73.7" style="--k:1"></line><line pathLength="1" x1="68.3" y1="120.3" x2="59.2" y2="80.9" style="--k:2"></line><line pathLength="1" x1="57.1" y1="122.4" x2="53.4" y2="80.4" style="--k:3"></line><line pathLength="1" x1="39.6" y1="120.4" x2="45.6" y2="76.1" style="--k:4"></line><line pathLength="1" x1="29.3" y1="119.8" x2="39.8" y2="80.0" style="--k:0"></line><line pathLength="1" x1="16.4" y1="112.3" x2="32.6" y2="78.1" style="--k:1"></line><line pathLength="1" x1="4.9" y1="103.7" x2="26.5" y2="74.5" style="--k:2"></line><line pathLength="1" x1="3.0" y1="93.1" x2="27.9" y2="67.8" style="--k:3"></line><line pathLength="1" x1="-9.7" y1="83.9" x2="23.2" y2="63.3" style="--k:4"></line><line pathLength="1" x1="-11.1" y1="74.7" x2="19.3" y2="60.8" style="--k:0"></line><line pathLength="1" x1="-21.3" y1="62.6" x2="19.1" y2="54.8" style="--k:1"></line><line pathLength="1" x1="-19.2" y1="47.2" x2="20.4" y2="48.9" style="--k:2"></line><line pathLength="1" x1="-22.0" y1="36.0" x2="18.7" y2="44.7" style="--k:3"></line><line pathLength="1" x1="-12.2" y1="28.6" x2="19.3" y2="40.8" style="--k:4"></line><line pathLength="1" x1="-5.6" y1="19.2" x2="19.0" y2="35.0" style="--k:0"></line><line pathLength="1" x1="-1.6" y1="0.3" x2="24.6" y2="28.6" style="--k:1"></line><line pathLength="1" x1="7.2" y1="-6.6" x2="28.4" y2="25.0" style="--k:2"></line><line pathLength="1" x1="22.6" y1="-10.7" x2="37.1" y2="24.9" style="--k:3"></line><line pathLength="1" x1="29.8" y1="-10.3" x2="38.6" y2="20.1" style="--k:4"></line><line pathLength="1" x1="46.2" y1="-16.7" x2="48.1" y2="20.2" style="--k:0"></line><line pathLength="1" x1="54.6" y1="-19.3" x2="52.0" y2="24.0" style="--k:1"></line><line pathLength="1" x1="71.2" y1="-10.7" x2="62.0" y2="19.8" style="--k:2"></line><line pathLength="1" x1="79.3" y1="-12.0" x2="62.7" y2="26.4" style="--k:3"></line><line pathLength="1" x1="89.3" y1="0.7" x2="70.3" y2="27.7" style="--k:4"></line><line pathLength="1" x1="98.3" y1="6.8" x2="72.2" y2="32.7" style="--k:0"></line><line pathLength="1" x1="106.2" y1="13.7" x2="79.3" y2="33.4" style="--k:1"></line><line pathLength="1" x1="107.8" y1="26.7" x2="80.4" y2="39.3" style="--k:2"></line><line pathLength="1" x1="116.3" y1="34.8" x2="86.2" y2="42.7" style="--k:3"></line></svg>`;
 ---
-<section id="card" class="section" aria-labelledby="card-h">
+<section id="card" class="section has-stars" aria-labelledby="card-h">
+  <div class="stars" aria-hidden="true" data-stars></div>
   <div class="section__head">
     <h2 id="card-h" class="display h-section glitch" data-text="Character card" data-reveal>Character card</h2>
-    <p class="lede" data-reveal style="--d:1">The quick version, before the long one.</p>
+    <p class="lede" data-reveal style="--d:1">The quick version, before the long one. Flip a card for more.</p>
   </div>
-  <div class="card" data-reveal style="--d:2">
-    <div class="card__shadow" aria-hidden="true"></div>
-    <dl class="card__grid">
+  <div class="card" data-reveal style="--d:2" data-card>
+    <div class="card__tilt">
+    <ul class="card__grid" role="list">
       {facts.map((f) => (
-        <div class:list={['card__fact', { 'card__fact--hi': f.highlight }]}>
-          <dt class="card__label">{f.label}</dt>
-          <dd class:list={['card__value', { placeholder: f.placeholder }]}>{f.value}</dd>
-          <dd class:list={['card__note', { placeholder: f.placeholder }]}>{f.note}</dd>
-        </div>
+        <li class:list={['card__fact', { 'card__fact--hi': f.highlight }]} data-fact>
+          <div class="card__flip">
+            <button class="card__face card__face--front" type="button" aria-label={`${f.label}: ${f.value}. Flip for more`} data-flip>
+              <Fragment set:html={SPEED} />
+              <span class="card__label">{f.label}</span>
+              <span class:list={['card__value', { placeholder: f.placeholder }]}>{f.value}</span>
+              <span class:list={['card__note', { placeholder: f.placeholder }]}>{f.note}</span>
+              <svg class="card__corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 A8 8 0 1 1 7 18.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path><path d="M3 14 L7 19 L11 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+            <div class="card__face card__face--back">
+              <span class="card__label">{f.label}</span>
+              <p class:list={['card__back', { placeholder: f.placeholder }]}>{fill(f.back)}</p>
+              <span class="card__actions">
+                {f.jump && (
+                  <a class="card__jump" href="#file" data-jump={f.jump.chapter} data-jump-target={f.jump.target} data-jump-open={f.jump.open}>{f.jump.label} <Arrow /></a>
+                )}
+                <button class="card__back-btn" type="button" data-unflip>Flip back</button>
+              </span>
+            </div>
+          </div>
+        </li>
       ))}
-    </dl>
+    </ul>
+    </div>
   </div>
 </section>

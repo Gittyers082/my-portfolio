@@ -1,3 +1,48 @@
-<section class="tagline" aria-label="In short">
+---
+/**
+ * The pause between the climb and the longer story: the tagline, the idea it all
+ * rests on (arete), and a breeze carrying the tools across like leaves.
+ * Leaves are the Simple Icons logos from the Stack. Pure CSS motion; site.ts only
+ * pauses it while the section is off screen. Reduced motion: they rest in place.
+ */
+import TechIcon from './TechIcon.astro';
+
+const NAMES = ['Java', 'Python', 'TypeScript', 'JavaScript', 'Kotlin', 'Rust', 'C', 'C++', 'Go', 'Elixir',
+  'React', 'Astro', 'Node.js', 'Docker', 'Git', 'PostgreSQL', 'Spring Boot', 'Dart'];
+// a fixed seed, so every build scatters the leaves the same way
+let seed = 11;
+const rnd = (): number => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+const leaves = NAMES.map((name, i) => ({
+  name,
+  top: Math.round(4 + rnd() * 86),
+  x: Math.round(rnd() * 96),
+  dur: +(12 + rnd() * 10).toFixed(1),
+  delay: -+(rnd() * 22).toFixed(1),
+  size: Math.round(24 + rnd() * 24),
+  sway: Math.round(16 + rnd() * 34),
+  spin: Math.round((rnd() < 0.5 ? -1 : 1) * (200 + rnd() * 340)),
+  op: +(0.5 + rnd() * 0.4).toFixed(2),
+  accent: i % 6 === 2,
+}));
+---
+<section class="tagline" aria-label="In short" data-wind>
+  <div class="wind" aria-hidden="true">
+    <svg class="wind__streaks" viewBox="0 0 1440 600" preserveAspectRatio="none">
+      <path d="M-100 150 C 220 110 420 190 760 140 S 1260 110 1560 150"></path>
+      <path d="M-100 330 C 260 300 520 370 840 320 S 1300 300 1560 340"></path>
+      <path d="M-100 500 C 180 470 460 540 780 490 S 1240 470 1560 510"></path>
+    </svg>
+    {leaves.map((l) => (
+      <span class="leaf" style={`--top:${l.top}%;--x:${l.x}%;--dur:${l.dur}s;--delay:${l.delay}s;--size:${l.size}px;--sway:${l.sway}px;--spin:${l.spin}deg;--op:${l.op}`}>
+        <span class="leaf__sway"><span class:list={['leaf__spin', { 'leaf__spin--accent': l.accent }]}><TechIcon name={l.name} /></span></span>
+      </span>
+    ))}
+  </div>
+
   <p class="display tagline__text"><span class="tagline__w">Full-stack</span> <span class="tagline__w">today.</span> <span class="tagline__w">AI</span> <span class="tagline__w">engineering</span> <span class="tagline__w">next.</span></p>
+
+  <div class="arete">
+    <p class="arete__word"><span lang="grc">ἀρετή</span><span class="arete__say">arete · say “AR-eh-tay”</span></p>
+    <p class="arete__line">Excellence, or the full realization of one’s potential. It’s the idea I build around, in code and in stories.</p>
+  </div>
 </section>

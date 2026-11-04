@@ -1,6 +1,6 @@
 /**
  * The interactive pieces added in the "mountain" redesign:
- *  - trust value meter (earned by exploring; stored for the visit only)
+ *  - exploration meter (rises as the visitor finds things; stored for the visit only)
  *  - Ka-dugo demo loop (auto-plays on screen, pauses offscreen / on hover)
  *  - episode picker (the picked project pops out) + art-style snap
  *  - copy-the-email button
@@ -9,7 +9,7 @@
 
 const reduceMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------------- trust value ---------------- */
+/* ---------------- exploration meter ---------------- */
 
 const POINTS: Record<string, number> = {
   chapter: 10, // per chapter opened
@@ -21,6 +21,8 @@ const POINTS: Record<string, number> = {
   book: 4, // flipping the About me notebook
   coffee: 2,
   pencil: 2,
+  wave: 2,
+  card: 4, // flipping a character card
 };
 const BASE = 6;
 const KEY = 'trust-earned';
@@ -46,19 +48,42 @@ function initTrust(): void {
     for (const key of earned) total += POINTS[key.split(':')[0]] ?? 0;
     return Math.min(100, total);
   };
-  const rankFor = (n: number): string =>
-    n >= 100 ? 'Rank X: you read the whole file' : n >= 60 ? 'Top ten: keep going' : 'Rookie: open a chapter, play the demo';
+  // What's left to find, in the order a visitor is likely to meet it.
+  const HINTS: [string, string][] = [
+    ['card', 'flip a character card'],
+    ['chapter', 'open a chapter in the Character file'],
+    ['portrait', 'switch the hero to Photo'],
+    ['episode', 'pick a project episode'],
+    ['demo', 'play the Ka-dugo demo'],
+    ['snap', 'hit Snap on a project poster'],
+    ['book', 'flip the notebook in About me'],
+    ['coffee', 'knock over the coffee'],
+    ['pencil', 'click the pencil'],
+    ['copy', 'copy my email'],
+  ];
+  const nextHint = (): string | null => {
+    const found = new Set([...earned].map((k) => k.split(':')[0]));
+    return HINTS.find(([key]) => !found.has(key))?.[1] ?? null;
+  };
+  const rankFor = (n: number): string => {
+    if (n >= 100) return 'You found everything';
+    const hint = nextHint();
+    return hint ? `Next: ${hint}` : 'Almost there: keep looking around';
+  };
 
   const render = (bump = false): void => {
     const n = score();
-    value.textContent = String(n);
+    value.textContent = `${n}%`;
     rank.textContent = rankFor(n);
     segs.forEach((s, i) => s.classList.toggle('is-on', i < Math.round(n / 10)));
     meter.classList.toggle('is-max', n >= 100);
     if (finale) {
       finale.hidden = false;
-      finale.textContent = `Your trust value: ${n} · ${rankFor(n)}`;
+      finale.textContent = n >= 100
+        ? 'You’ve explored 100% of the site. Thanks for looking around.'
+        : `You’ve explored ${n}% of the site. ${rankFor(n)}.`;
     }
+    if (n >= 100) document.dispatchEvent(new CustomEvent('explore:complete'));
     if (bump && !reduceMotion()) {
       meter.classList.remove('is-bump');
       void meter.offsetWidth; // restart the animation
@@ -85,12 +110,16 @@ function initTrust(): void {
     });
   });
 
-  // Show the meter only once the hero has scrolled away.
+  // Show the meter only once the hero has scrolled away, and tuck it away again
+  // at the footer (it would cover the footer, and Contact already shows the progress).
   meter.hidden = false;
+  const footer = document.querySelector<HTMLElement>('[data-footer]');
   if (hero && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => meter.classList.toggle('is-shown', !entry.isIntersecting), {
-      threshold: 0.15,
-    }).observe(hero);
+    let heroIn = true;
+    let footerIn = false;
+    const sync = (): void => { meter.classList.toggle('is-shown', !heroIn && !footerIn); };
+    new IntersectionObserver(([entry]) => { heroIn = entry.isIntersecting; sync(); }, { threshold: 0.15 }).observe(hero);
+    if (footer) new IntersectionObserver(([entry]) => { footerIn = entry.isIntersecting; sync(); }, { threshold: 0.05 }).observe(footer);
   } else {
     meter.classList.add('is-shown');
   }
@@ -226,8 +255,13 @@ function initCopy(): void {
       e.preventDefault();
       try {
         await navigator.clipboard.writeText(text);
-        if (label) label.textContent = 'Copied to your clipboard';
+        if (label) {
+          label.textContent = 'Copied to your clipboard';
+          window.clearTimeout(Number(label.dataset.reset));
+          label.dataset.reset = String(window.setTimeout(() => (label.textContent = 'Click to copy the address'), 2600));
+        }
         earn('copy');
+        document.dispatchEvent(new CustomEvent('email:copied', { detail: link })); // contact.ts: burst + paper plane
       } catch {
         window.location.href = link.href;
       }

@@ -1,13 +1,89 @@
 ---
+/**
+ * The end of the episode:
+ * - the name, drawn as an outline that fills with ink when you reach it; hover it
+ *   and the letters lift one after another;
+ * - a mini screen where Steven runs and jumps over errors (click it to jump);
+ * - end credits;
+ * - an editor status bar, like the one on the hero's monitor, with the build date;
+ * - "Back to the top", with an arrow that climbs.
+ * Logic: src/scripts/footer.ts
+ */
 import { profile, githubUrl } from '../data/profile';
+
 const year = new Date().getFullYear();
+const built = new Date().toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Manila' });
+const letters = Array.from(profile.name);
+const credits: [string, string][] = [
+  ['Written and built by', profile.name],
+  ['Built with', 'Astro, TypeScript and CSS'],
+  ['Icons', 'Simple Icons'],
+  ['Sounds', 'Made in your browser'],
+  ['Coffee', 'Spilled at least once'],
+];
 ---
-<footer class="footer">
-  <p class="display footer__name" aria-hidden="true">{profile.name}</p>
-  <div class="footer__row">
-    <span>© {year} {profile.name}</span>
-    <span class="footer__links"><a href={githubUrl} target="_blank" rel="noopener">GitHub</a> · <a href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a> · <a href={profile.fiverr} target="_blank" rel="noopener">Fiverr</a></span>
-    <span>Built with Astro</span>
-    <span><a href="#main">Back to top</a></span>
+<footer class="footer" data-footer>
+  <p class="display footer__name" aria-hidden="true" data-footer-name>{letters.map((ch, i) => ch === ' ' ? <span class="fl fl--space"> </span> : <span class="fl" style={`--i:${i}`}>{ch}</span>)}</p>
+  <p class="sr-only">{profile.name}</p>
+
+  <div class="footer__body">
+    <figure class="runner" data-runner>
+      <div class="runner__bar" aria-hidden="true"><span>dodge.exe</span><span class="runner__score">bugs dodged <b data-runner-score>000</b></span></div>
+      <button class="runner__screen" type="button" aria-label="Make Steven jump" data-runner-screen>
+        <svg viewBox="0 0 400 150" aria-hidden="true" data-runner-svg>
+          <g class="runner__clouds" data-runner-clouds fill="none" stroke="currentColor" stroke-width="2" opacity="0.35">
+            <path d="M60 34 q8 -10 18 -4 q8 -8 16 2 q8 0 8 8 h-46 q0 -8 4 -6z"></path>
+            <path d="M260 22 q8 -10 18 -4 q8 -8 16 2 q8 0 8 8 h-46 q0 -8 4 -6z"></path>
+          </g>
+          <line x1="0" y1="128" x2="400" y2="128" stroke="currentColor" stroke-width="2.5"></line>
+          <g data-runner-ground stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5">
+            <path d="M10 138 h8 M70 136 h4 M130 140 h10 M200 137 h5 M260 139 h9 M330 136 h4 M390 139 h8"></path>
+          </g>
+          <g data-runner-obstacles></g>
+          <!-- Steven, side view: spiky hair, running -->
+          <g data-runner-guy>
+            <g class="runner__guy" transform="translate(52 74)">
+              <!-- head with spiky hair, a little gap, then the torso -->
+              <path d="M13 12 C13 5 18 1 24 1 L23 -7 L28 -1 L31 -9 L33 0 L38 -5 L37 4 C39 7 39 15 36 19 C33 23 27 24 22 23 C16 22 13 18 13 12 Z" fill="currentColor"></path>
+              <circle cx="31.5" cy="12" r="2.1" fill="var(--paper)"></circle>
+              <rect x="17" y="26" width="15" height="17" rx="4" fill="currentColor"></rect>
+              <path class="runner__arm" d="M26 30 L37 36" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"></path>
+              <g class="runner__legs runner__legs--a" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"><path d="M21 43 L14 54"></path><path d="M28 43 L36 53"></path></g>
+              <g class="runner__legs runner__legs--b" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"><path d="M22 43 L21 54"></path><path d="M27 43 L30 54"></path></g>
+            </g>
+          </g>
+        </svg>
+      </button>
+      <figcaption class="runner__cap">Shipping, one bug at a time. <span class="runner__hint">Click or tap the screen to jump.</span></figcaption>
+    </figure>
+
+    <section class="credits" aria-label="Credits" data-credits>
+      <h2 class="credits__h">Credits</h2>
+      <dl class="credits__list">
+        {credits.map(([role, who], i) => (
+          <div class="credits__row" data-reveal style={`--d:${i}`}>
+            <dt>{role}</dt>
+            <dd>{who}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="credits__end" data-reveal style={`--d:${credits.length}`}>End of file.</p>
+    </section>
   </div>
+
+  <div class="statusbar">
+    <span class="statusbar__item"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3.5" r="2" fill="none" stroke="currentColor" stroke-width="1.6"></circle><circle cx="4" cy="12.5" r="2" fill="none" stroke="currentColor" stroke-width="1.6"></circle><circle cx="12" cy="5" r="2" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M4 5.5 V10.5 M12 7 C12 10 6 9 4.6 10.8" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>main</span>
+    <span class="statusbar__item statusbar__item--ok">0 errors</span>
+    <span class="statusbar__item">Last built {built}</span>
+    <span class="statusbar__links"><a href={githubUrl} target="_blank" rel="noopener">GitHub</a><a href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a><a href={profile.fiverr} target="_blank" rel="noopener">Fiverr</a></span>
+    <span class="statusbar__item statusbar__item--end">© {year} {profile.name}</span>
+  </div>
+
+  <a class="totop" href="#main">
+    <svg class="totop__hill" viewBox="0 0 64 40" aria-hidden="true">
+      <path class="totop__path" d="M2 38 L20 20 L30 28 L48 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+      <path class="totop__flag" d="M48 6 L48 -6 L58 -2 L48 2" fill="var(--accent)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+    </svg>
+    <span>Back to the top</span>
+  </a>
 </footer>

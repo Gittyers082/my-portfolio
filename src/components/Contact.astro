@@ -2,47 +2,98 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Arrow from './Arrow.astro';
+import TechIcon from './TechIcon.astro';
 import { profile, githubUrl } from '../data/profile';
 
 // The résumé link appears once the file exists (public/resume.pdf), so it's never a dead link.
 const hasResume = fs.existsSync(path.join(process.cwd(), 'public', profile.resume.replace(/^\//, '')));
 ---
-<section id="contact" class="section grid12 contact" aria-labelledby="contact-h">
+<section id="contact" class="section grid12 contact has-stars" aria-labelledby="contact-h">
+  <div class="stars" aria-hidden="true" data-stars></div>
   <div class="contact__invite">
-    <h2 id="contact-h" class="display h-section glitch" data-text={'Let’s build\nsomething.'} data-reveal>Let’s build<br>something.</h2>
-    <p class="lede" data-reveal style="--d:1">I’m open to <span class="placeholder">[internships, collaborations, freelance web work]</span>. The fastest way to reach me is email.</p>
+    <!-- The last word rotates (a web app, a world, an AI tool) with the glitch; screen readers get the plain line. -->
+    <h2 id="contact-h" class="display h-section glitch" data-text={'Let’s build\nsomething.'} aria-label="Let’s build something." data-rotate data-reveal>Let’s build<br><span class="contact__word" data-word aria-hidden="true">something.</span></h2>
+    <p class="lede" data-reveal style="--d:1">Have an internship, a project, or a question about something I built? Email is the fastest way to reach me.</p>
+    <p class="contact__status" data-reveal style="--d:2">
+      <span class="status-chip"><span class="status-chip__dot" aria-hidden="true"></span>Open to internships</span>
+      <span class="contact__time" data-localtime>Based in Baguio, Philippines</span>
+    </p>
+    <div class="waver-wrap" data-reveal style="--d:3">
+      <button class="waver" type="button" aria-label="Wave hello" data-wave>
+        <svg viewBox="0 0 260 230" aria-hidden="true">
+          <defs><pattern id="wv-light" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.5" fill="#F4EFE4"></circle></pattern></defs>
+          <!-- shoulders and back, seen from behind like the hero -->
+          <path d="M36 230 C40 172 82 140 132 136 C182 140 222 172 226 230 Z" fill="#15130F"></path>
+          <path d="M70 230 C76 190 100 166 132 160" fill="none" stroke="url(#wv-light)" stroke-width="18"></path>
+          <!-- the waving arm: rotates at the shoulder -->
+          <g class="waver__arm">
+            <path d="M190 160 C206 128 214 96 214 62 L234 60 C238 100 228 138 210 172 Z" fill="#15130F"></path>
+            <path d="M211 82 L209 46 Q209 38 215 38 Q221 38 221 46 L221 36 Q221 28 227 28 Q233 28 233 36 L233 40 Q234 32 240 33 Q246 34 245 42 L243 64 Q247 55 252 57 Q257 60 253 69 L243 88 Q237 96 226 96 Q213 96 211 82 Z" fill="#F4EFE4" stroke="#15130F" stroke-width="4.5" stroke-linejoin="round"></path>
+          </g>
+          <!-- head: spiky hair, one ear -->
+          <path d="M92 150 C78 108 84 66 110 44 L104 14 L126 34 L134 0 L150 30 L170 6 L172 38 L196 22 L188 58 C204 84 206 122 188 150 Z" fill="#15130F"></path>
+          <path d="M94 104 C86 102 82 114 88 124 C92 130 98 128 98 122" fill="#F4EFE4" stroke="#15130F" stroke-width="4"></path>
+          <path d="M116 56 C102 76 100 102 104 128" fill="none" stroke="#F4EFE4" stroke-width="4" stroke-linecap="round"></path>
+        </svg>
+      </button>
+      <span class="waver__bubble" aria-hidden="true">Hi!</span>
+    </div>
+    <div class="contact__stamp" data-explore-stamp hidden aria-hidden="true">
+      <span class="contact__stamp-big">100% explored</span>
+      <span class="contact__stamp-small">Thanks for looking around</span>
+    </div>
   </div>
   <div class="contact__links" data-reveal style="--d:2">
-    <!-- Copies the address; without JavaScript it is a normal mailto link. -->
+    <!-- Email copies the address; without JavaScript it is a normal mailto link. -->
     <a class="contact__link contact__link--copy" href={`mailto:${profile.email}`} data-copy={profile.email}>
+      <span class="contact__icon" aria-hidden="true">
+        <TechIcon name="Gmail" size="lg" />
+        <svg class="contact__check" viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span class="contact__burst">Copied!</span>
+      </span>
       <span class="contact__stack">
-        <span>Email</span>
+        <span class="contact__name">Email</span>
         <span class="contact__sub" data-copy-label>Click to copy the address</span>
       </span>
       <Arrow />
     </a>
     <a class="contact__link" href={githubUrl} target="_blank" rel="noopener">
-      <span>GitHub</span>
+      <span class="contact__icon" aria-hidden="true"><TechIcon name="GitHub" size="lg" /></span>
+      <span class="contact__stack">
+        <span class="contact__name">GitHub</span>
+        <span class="contact__sub">Code, repos and what I’m building now</span>
+      </span>
       <Arrow />
     </a>
     <a class="contact__link" href={profile.linkedin} target="_blank" rel="noopener">
-      <span>LinkedIn</span>
+      <span class="contact__icon" aria-hidden="true"><TechIcon name="LinkedIn" size="lg" /></span>
+      <span class="contact__stack">
+        <span class="contact__name">LinkedIn</span>
+        <span class="contact__sub">Let’s connect: school, projects and experience</span>
+      </span>
       <Arrow />
     </a>
     <a class="contact__link" href={profile.fiverr} target="_blank" rel="noopener">
+      <span class="contact__icon" aria-hidden="true"><TechIcon name="Fiverr" size="lg" /></span>
       <span class="contact__stack">
-        <span>Fiverr</span>
+        <span class="contact__name">Fiverr</span>
         <span class="contact__sub">Lore and worldbuilding commissions</span>
       </span>
       <Arrow />
     </a>
-{hasResume && (
-    <a class="contact__link" href={profile.resume} download>
-      <span>Résumé <span class="contact__fmt">PDF</span></span>
-      <svg class="arrow arrow--down" viewBox="0 0 28 32" aria-hidden="true"><path d="M14 2 V24" stroke="currentColor" stroke-width="5"></path><path d="M3 14 L14 25 L25 14" fill="none" stroke="currentColor" stroke-width="5"></path><path d="M2 30 H26" stroke="currentColor" stroke-width="4"></path></svg>
-    </a>
+    {hasResume && (
+      <a class="contact__link" href={profile.resume} download>
+        <span class="contact__icon" aria-hidden="true"><TechIcon name="Résumé" size="lg" /></span>
+        <span class="contact__stack">
+          <span class="contact__name">Résumé</span>
+          <span class="contact__sub">One page, PDF</span>
+        </span>
+        <svg class="arrow arrow--down" viewBox="0 0 28 32" aria-hidden="true"><path d="M14 2 V24" stroke="currentColor" stroke-width="5"></path><path d="M3 14 L14 25 L25 14" fill="none" stroke="currentColor" stroke-width="5"></path><path d="M2 30 H26" stroke="currentColor" stroke-width="4"></path></svg>
+      </a>
     )}
-    <p class="contact__plain">{profile.email}</p>
-    <p class="contact__trust" data-trust-final hidden></p>
+    <div class="contact__meta">
+      <p class="contact__plain">Or write to <span class="contact__addr">{profile.email}</span></p>
+      <p class="contact__trust" data-trust-final hidden></p>
+    </div>
   </div>
 </section>

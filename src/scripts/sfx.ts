@@ -1,6 +1,6 @@
 /**
  * Quiet sound effects, synthesized with Web Audio: the heading glitch's electric
- * "zzt", and the About desk's page flip, coffee splash and pencil scratch
+ * "zzt", and the About desk's page flip, coffee splash, pencil scratch, and the Contact stamp
  * (no audio file to download).
  *
  * - Browsers only allow sound after the visitor has clicked, tapped or typed
@@ -171,6 +171,36 @@ export function scribble(ms: number): void {
   src.connect(high).connect(g).connect(ctx.destination);
   src.start(t);
   src.stop(t + dur + 0.08);
+}
+
+/** A rubber stamp landing: a low, short thud. */
+export function stamp(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const v = VOLUME * 2;
+  const body = ctx.createOscillator();
+  body.type = 'sine';
+  body.frequency.setValueAtTime(140, t);
+  body.frequency.exponentialRampToValueAtTime(55, t + 0.16);
+  const bg = ctx.createGain();
+  bg.gain.setValueAtTime(0, t);
+  bg.gain.linearRampToValueAtTime(v, t + 0.006);
+  bg.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+  body.connect(bg).connect(ctx.destination);
+  body.start(t);
+  body.stop(t + 0.21);
+  const hit = ctx.createBufferSource();
+  hit.buffer = noise;
+  const low = ctx.createBiquadFilter();
+  low.type = 'lowpass';
+  low.frequency.value = 1200;
+  const hg = ctx.createGain();
+  hg.gain.setValueAtTime(0, t);
+  hg.gain.linearRampToValueAtTime(v * 0.6, t + 0.004);
+  hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+  hit.connect(low).connect(hg).connect(ctx.destination);
+  hit.start(t);
+  hit.stop(t + 0.09);
 }
 
 export function initSound(): void {

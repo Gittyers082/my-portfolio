@@ -1,14 +1,18 @@
 ---
 /**
- * Trust history: the GitHub contribution calendar, drawn as halftone dots
- * (bigger dot = busier day, the busiest in cyan). Data comes from
- * src/data/contributions.ts at build time; a labelled sample until your
- * GitHub username is set in profile.ts.
+ * GitHub activity: the contribution calendar drawn as halftone dots (bigger dot =
+ * busier day, the busiest in cyan), then your latest pushed repos. Both are read
+ * from GitHub at build time (src/data/contributions.ts). If GitHub can't be
+ * reached, the calendar shows a sample pattern and says so, and the repo row hides.
  */
-import { getCalendar } from '../data/contributions';
+import { getCalendar, getRecentRepos } from '../data/contributions';
 import { profile } from '../data/profile';
+import TechIcon from './TechIcon.astro';
+import Arrow from './Arrow.astro';
 
 const cal = await getCalendar();
+const repos = await getRecentRepos();
+const day = (iso: string): string => new Date(iso + 'T00:00:00').toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' });
 const offset = cal.days.length ? new Date(cal.days[0].date + 'T00:00:00').getDay() : 0;
 const weeks = Math.ceil((offset + cal.days.length) / 7);
 const months: { label: string; col: number }[] = [];
@@ -19,19 +23,20 @@ cal.days.forEach((d, i) => {
   }
 });
 const fmt = (iso: string | null): string =>
-  iso ? new Date(iso + 'T00:00:00').toLocaleDateString('en', { day: 'numeric', month: 'short' }) : '[—]';
+  iso ? new Date(iso + 'T00:00:00').toLocaleDateString('en', { day: 'numeric', month: 'short' }) : '–';
 const pads = Array.from({ length: offset });
 ---
-<section id="trust-history" class="section" aria-labelledby="trust-h">
+<section id="github" class="section has-stars" aria-labelledby="github-h">
+  <div class="stars" aria-hidden="true" data-stars></div>
   <div class="section__head">
-    <h2 id="trust-h" class="display h-section h-section--sm glitch" data-text="Trust history" data-reveal>Trust history</h2>
-    <p class="lede" data-reveal style="--d:1">Every dot is a day I pushed code to GitHub. Some weeks are empty. It’s a student’s calendar, and it’s honest.</p>
+    <h2 id="github-h" class="display h-section h-section--sm glitch" data-text="GitHub activity" data-reveal>GitHub activity</h2>
+    <p class="lede" data-reveal style="--d:1">Every dot is a day I pushed code. Some weeks are empty. It’s a student’s calendar, and it’s honest.</p>
   </div>
   <div class="th" data-reveal style="--d:2">
     <div class="th__stats">
-      <div><p class:list={['th__num', { placeholder: cal.sample }]}>{cal.sample || cal.total === null ? '[—]' : cal.total.toLocaleString('en')}</p><p class="th__cap">contributions in the last year</p></div>
-      <div><p class:list={['th__num', { placeholder: cal.sample }]}>{cal.sample ? '[—]' : cal.longestStreak} days</p><p class="th__cap">longest streak</p></div>
-      <div><p class:list={['th__num', { placeholder: cal.sample }]}>{cal.sample ? '[—]' : fmt(cal.busiest)}</p><p class="th__cap">busiest day, in cyan</p></div>
+      <div><p class="th__num">{cal.sample || cal.total === null ? '–' : cal.total.toLocaleString('en')}</p><p class="th__cap">contributions in the last year</p></div>
+      <div><p class="th__num">{cal.sample ? '–' : `${cal.longestStreak} days`}</p><p class="th__cap">longest streak</p></div>
+      <div><p class="th__num">{cal.sample ? '–' : fmt(cal.busiest)}</p><p class="th__cap">busiest day, in cyan</p></div>
     </div>
     <div class="th__scroll">
       <div class="th__cal" style={`--weeks:${weeks}`}>
@@ -39,7 +44,7 @@ const pads = Array.from({ length: offset });
         <div class="th__months" aria-hidden="true">
           {months.map((m) => <span style={`grid-column:${m.col}`}>{m.label}</span>)}
         </div>
-        <div class="th__grid" role="img" aria-label={cal.sample ? 'Sample contribution calendar (not real data yet)' : `GitHub contributions over the last year: longest streak ${cal.longestStreak} days`}>
+        <div class="th__grid" role="img" aria-label={cal.sample ? 'Sample contribution calendar (GitHub was unreachable at build time)' : `GitHub contributions over the last year: longest streak ${cal.longestStreak} days`}>
           {pads.map(() => <span class="th__pad"></span>)}
           {cal.days.map((d) => <span class:list={['th__dot', `th__dot--${d.level}`, { 'th__dot--best': d.date === cal.busiest }]} title={d.date}></span>)}
         </div>
@@ -47,9 +52,30 @@ const pads = Array.from({ length: offset });
     </div>
     <div class="th__foot">
       {cal.sample
-        ? <p class="th__note placeholder">[Sample pattern. Set your GitHub username in src/data/profile.ts and the real calendar is pulled at build time.]</p>
-        : <p class="th__note">From <a href={`https://github.com/${profile.github}`}>github.com/{profile.github}</a>, updated at each build.</p>}
+        ? <p class="th__note">GitHub couldn’t be reached during this build, so this is a sample pattern.</p>
+        : <p class="th__note"><a class="th__src" href={`https://github.com/${profile.github}`} target="_blank" rel="noopener">github.com/{profile.github}</a><span class="th__sep" aria-hidden="true"> · </span>Updates every time the site is built.</p>}
       <div class="th__legend" aria-hidden="true">Less <span class="th__dot th__dot--0"></span><span class="th__dot th__dot--1"></span><span class="th__dot th__dot--2"></span><span class="th__dot th__dot--3"></span><span class="th__dot th__dot--4"></span> More</div>
     </div>
   </div>
+
+  {repos.length > 0 && (
+    <div class="gh-latest" data-reveal style="--d:3">
+      <h3 class="gh-latest__h">Latest pushes</h3>
+      <ul class="gh-repos" role="list">
+        {repos.map((r) => (
+          <li>
+            <a class="gh-repo" href={r.url} target="_blank" rel="noopener">
+              <span class="gh-repo__name">{r.name}</span>
+              <span class:list={['gh-repo__desc', { 'gh-repo__desc--none': !r.description }]}>{r.description ?? 'No description yet.'}</span>
+              <span class="gh-repo__meta">
+                {r.language && <span class="gh-repo__lang"><TechIcon name={r.language} size="sm" />{r.language}</span>}
+                <span>Updated {day(r.pushed)}</span>
+              </span>
+              <Arrow />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
 </section>

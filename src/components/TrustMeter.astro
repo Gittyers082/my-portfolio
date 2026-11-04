@@ -1,18 +1,20 @@
 ---
 /**
- * Trust value: the show's wrist readout. It rises as the visitor explores
- * (opening chapters, picking episodes, using the demo, revealing the portrait,
- * copying the email). Shows only after the hero has scrolled away.
- * Needs JavaScript, so it starts hidden and site.ts reveals it.
+ * Exploration meter: how much of the site the visitor has found. It rises as
+ * they explore (opening chapters, picking episodes, the demo, the photo, the
+ * notebook, the coffee, the pencil, copying the email), and hints at what's
+ * left. Shows only after the hero has scrolled away. Needs JavaScript, so it
+ * starts hidden and features.ts reveals it.
+ * (Internal names still say "trust": that's just the code's history.)
  */
 ---
-<aside class="trust" aria-label="Trust value" hidden data-trust>
+<aside class="trust" aria-label="Exploration progress" hidden data-trust>
   <div class="trust__top">
-    <span class="trust__label">Trust value</span>
-    <span class="trust__value" data-trust-value>0</span>
+    <span class="trust__label">Explored</span>
+    <span class="trust__value" data-trust-value>0%</span>
   </div>
   <div class="trust__bar" aria-hidden="true">
     {Array.from({ length: 10 }, () => <span class="trust__seg"></span>)}
   </div>
-  <span class="trust__rank" data-trust-rank>Rookie: open a chapter, play the demo</span>
+  <span class="trust__rank" data-trust-rank>Next: open a chapter</span>
 </aside>

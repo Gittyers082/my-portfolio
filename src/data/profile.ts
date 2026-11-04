@@ -10,7 +10,7 @@ export const profile = {
   school: 'Saint Louis University',
   year: '3rd-year IT student',
   email: 'dcruzsteven1@gmail.com',
-  github: 'Gittyers082', // also drives the Trust history calendar (pulled at build time)
+  github: 'Gittyers082', // also drives the GitHub activity section (pulled at build time)
   linkedin: 'https://www.linkedin.com/in/el-steven/',
   fiverr: 'https://www.fiverr.com/ryuniii', // public seller profile (not the dashboard, which needs a login)
   resume: '/resume.pdf', // TODO: put your résumé at public/resume.pdf
@@ -34,14 +34,46 @@ export const githubUrl = `https://github.com/${profile.github}`;
 export const isPlaceholder = (value: string): boolean => /^\[.*\]$/.test(value);
 
 /* ---------- Character card: the quick version, right after the hero ---------- */
-export type Fact = { label: string; value: string; note: string; highlight?: boolean; placeholder?: boolean };
+/* The character card. Each fact flips over (click it) to a back side with a
+ * detail and, optionally, a jump to where that part of the story lives.
+ * `back` can use {cleared} and {active}: the quest board counts. */
+export type FactJump = { label: string; chapter: 'stack' | 'training' | 'writing' | 'projects'; target?: string; open?: string };
+export type Fact = {
+  label: string; value: string; note: string;
+  back: string; jump?: FactJump;
+  highlight?: boolean; placeholder?: boolean;
+};
 export const facts: Fact[] = [
-  { label: 'Class', value: '3rd-year IT', note: 'BS Information Technology, Saint Louis University' },
-  { label: 'First language', value: 'Java', note: 'Still the one I’m strongest in' },
-  { label: 'Main quest', value: 'Full-stack', note: 'Web apps, front to back' },
-  { label: 'Next arc', value: 'AI engineering', note: 'Just starting out, learning it properly', highlight: true },
-  { label: 'Side quest', value: 'Lore writing', note: 'Worldbuilding and power systems, on Fiverr' },
-  { label: 'Fun fact', value: '[Something only you’d say]', note: '[A game, a habit, a detail from home]', placeholder: true },
+  // Order matters: on wide screens the grid is 3 × 2, so the 5th fact (Next arc) sits bottom middle.
+  {
+    label: 'Class', value: '3rd-year IT', note: 'BS Information Technology, Saint Louis University',
+    back: '{cleared} major courses cleared, {active} still in training this semester.',
+    jump: { label: 'Open my training', chapter: 'training', target: '#train-academy', open: '.course' },
+  },
+  {
+    label: 'First language', value: 'Java', note: 'Still the one I’m strongest in',
+    back: 'Java came first. Since then: SQL, JavaScript, TypeScript, Python, Kotlin, Elixir and Rust, plus a little C, C#, Go and PHP.',
+    jump: { label: 'See all my languages', chapter: 'stack' },
+  },
+  {
+    label: 'Main quest', value: 'Full-stack', note: 'Web apps, front to back',
+    back: 'Astro, React and Next.js up front. Node, Spring Boot and FastAPI behind.',
+    jump: { label: 'See my stack', chapter: 'stack' },
+  },
+  {
+    label: 'Side quest', value: 'Lore writing', note: 'Worldbuilding and power systems, on Fiverr',
+    back: 'Lore, OCs and power systems for clients, and my own universe: the Otherverse.',
+    jump: { label: 'Read the lore', chapter: 'writing' },
+  },
+  {
+    label: 'Next arc', value: 'AI engineering', note: 'Just starting out, learning it properly', highlight: true,
+    back: 'Studying the core concepts first. A RAG app is my next build.',
+    jump: { label: 'See self-training', chapter: 'training', target: '#train-self' },
+  },
+  {
+    label: 'Fun fact', value: 'Ex tech boomer', note: 'Before college, tech and I were not friends',
+    back: 'Before college I was a complete boomer with tech. Now I build web apps from front to back.',
+  },
 ];
 
 /* ---------- Character file → Stack: four areas, each with its own icon ---------- */

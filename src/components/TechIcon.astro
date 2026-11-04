@@ -6,7 +6,7 @@
  */
 import * as si from 'simple-icons';
 
-interface Props { name: string; size?: 'sm' | 'md' }
+interface Props { name: string; size?: 'sm' | 'md' | 'lg' }
 const { name, size = 'md' } = Astro.props;
 
 // display name → Simple Icons slug (null = no logo available, use a tile)
@@ -22,8 +22,10 @@ const SLUG: Record<string, string | null> = {
   Docker: 'docker', npm: 'npm', Maven: 'apachemaven', Gradle: 'gradle', Ant: 'apacheant', Mix: null,
   Vercel: 'vercel', AWS: null, GitHub: 'github',
   Figma: 'figma', Canva: null, Obsidian: 'obsidian', 'Claude Code': 'claude',
+  // contact links
+  Gmail: 'gmail', Fiverr: null, LinkedIn: null, Résumé: null, // Fiverr's logo is a wordmark, unreadable this small
 };
-const TILE: Record<string, string> = { SQL: 'SQL', 'C#': 'C#', 'VS Code': 'VS', Antigravity: 'AG', Mix: 'mix', AWS: 'AWS', Canva: 'Ca' };
+const TILE: Record<string, string> = { SQL: 'SQL', 'C#': 'C#', 'VS Code': 'VS', Antigravity: 'AG', Mix: 'mix', AWS: 'AWS', Canva: 'Ca', LinkedIn: 'in', Fiverr: 'fi', Résumé: 'CV' };
 
 const known = name in SLUG;
 const slug = SLUG[name];

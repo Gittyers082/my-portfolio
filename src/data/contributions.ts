@@ -1,5 +1,6 @@
 /**
- * The Trust history calendar: your GitHub contributions for the last year.
+ * The GitHub activity section: your contribution calendar for the last year,
+ * plus your most recently pushed repos.
  *
  * At build time this reads the public contribution calendar from
  * github.com/users/<username>/contributions (no token needed). If the username
@@ -77,7 +78,38 @@ export async function getCalendar(): Promise<Calendar> {
     const total = totalMatch ? Number(totalMatch[1].replace(/,/g, '')) : null;
     return { days, sample: false, total, ...stats(days) };
   } catch (err) {
-    console.warn(`[trust history] using the sample calendar: ${(err as Error).message}`);
+    console.warn(`[github activity] using the sample calendar: ${(err as Error).message}`);
     return sample();
+  }
+}
+
+/* ---------- Latest pushes: your most recently updated public repos ---------- */
+export type Repo = { name: string; url: string; description: string | null; language: string | null; pushed: string };
+
+/**
+ * Reads your public repos from the GitHub API at build time (no token needed),
+ * newest push first, skipping forks and archived repos. If GitHub can't be
+ * reached it returns an empty list and the row simply doesn't show.
+ */
+export async function getRecentRepos(limit = 3): Promise<Repo[]> {
+  if (isPlaceholder(profile.github)) return [];
+  try {
+    const res = await fetch(`https://api.github.com/users/${profile.github}/repos?sort=pushed&per_page=30`, {
+      headers: { 'User-Agent': 'portfolio-build', Accept: 'application/vnd.github+json' },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
+    const data = (await res.json()) as {
+      name: string; html_url: string; description: string | null; language: string | null;
+      pushed_at: string; fork: boolean; archived: boolean;
+    }[];
+    return data
+      .filter((r) => !r.fork && !r.archived)
+      .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at))
+      .slice(0, limit)
+      .map((r) => ({ name: r.name, url: r.html_url, description: r.description, language: r.language, pushed: r.pushed_at.slice(0, 10) }));
+  } catch (err) {
+    console.warn(`[github activity] latest pushes hidden: ${(err as Error).message}`);
+    return [];
   }
 }

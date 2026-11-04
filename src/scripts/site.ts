@@ -16,6 +16,10 @@ import { initPortraitReveal } from './portrait-reveal';
 import { initFeatures } from './features';
 import { initSound, zzt } from './sfx';
 import { initNotebook, initCoffee, initPencil } from './notebook';
+import { initContact } from './contact';
+import { initFooter } from './footer';
+import { initCard } from './card';
+import { initStars } from './stars';
 
 const reduceMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -41,6 +45,13 @@ function initReveals(): void {
 }
 
 function initTagline(): void {
+  // the breeze only blows while the section is on screen
+  const wind = document.querySelector<HTMLElement>('[data-wind]');
+  if (wind && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { wind.classList.toggle('is-windy', e.isIntersecting); }).observe(wind);
+  } else {
+    wind?.classList.add('is-windy');
+  }
   const words = document.querySelectorAll<HTMLElement>('.tagline__w');
   if (!words.length) return;
   if (reduceMotion() || !('IntersectionObserver' in window)) {
@@ -389,4 +400,8 @@ export function initSite(): void {
   initNotebook();
   initCoffee();
   initPencil();
+  initContact();
+  initFooter();
+  initCard();
+  initStars();
 }
