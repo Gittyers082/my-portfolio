@@ -47,14 +47,22 @@ const revealEnabled = Boolean(photo) || usePlaceholder;
     </div>
     <svg class="hero__cut hero__cut--phone" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="16" x2="100" y2="0" stroke="#15130F" stroke-width="7" vector-effect="non-scaling-stroke"></line></svg>
 
-    <div class="hero__card" aria-hidden="true">
-      <div class="hero__card-shadow"></div>
-      <svg class="hero__card-streaks" viewBox="0 0 150 60"><polygon points="0,18 150,0 150,8 0,26" fill="#15130F"></polygon><polygon points="0,38 120,40 120,46 0,44" fill="#15130F"></polygon></svg>
-      <svg class="hero__card-pointer" viewBox="0 0 22 30"><polygon points="22,0 0,15 22,30" fill="#15130F"></polygon></svg>
-      <div class="hero__card-body">
-        <span class="hero__card-title hero__card-title--code"><span class="hero__card-prompt" aria-hidden="true">$</span>git commit -m "fix stuff"</span>
-        <span class="hero__card-meta"><span>1 file changed</span><span class="hero__card-sep">{" · "}</span><span>it works, don’t touch it</span></span>
-      </div>
+    <div class="hero__card" data-commit>
+      <div class="hero__card-shadow" aria-hidden="true"></div>
+      <svg class="hero__card-streaks" viewBox="0 0 150 60" aria-hidden="true"><polygon points="0,18 150,0 150,8 0,26" fill="#15130F"></polygon><polygon points="0,38 120,40 120,46 0,44" fill="#15130F"></polygon></svg>
+      <!-- press to flip: the back owns up, then it flips itself back (site.ts) -->
+      <button class="hero__card-flip" type="button" aria-label="A commit message card. Press to flip it." data-commit-btn>
+        <span class="hero__card-body hero__card-face hero__card-face--front">
+          <svg class="hero__card-pointer" viewBox="0 0 22 30" aria-hidden="true"><polygon points="22,0 0,15 22,30" fill="#15130F"></polygon></svg>
+          <span class="hero__card-title hero__card-title--code"><span class="hero__card-prompt" aria-hidden="true">$</span>git commit -m "fix stuff"</span>
+          <span class="hero__card-meta"><span>1 file changed</span><span class="hero__card-sep">{" · "}</span><span>it works, don’t touch it</span></span>
+        </span>
+        <span class="hero__card-body hero__card-face hero__card-face--back" aria-hidden="true">
+          <svg class="hero__card-pointer" viewBox="0 0 22 30" aria-hidden="true"><polygon points="22,0 0,15 22,30" fill="#15130F"></polygon></svg>
+          <span class="hero__card-meta">Just kidding. These days it’s:</span>
+          <span class="hero__card-title hero__card-title--code hero__card-code--stack"><span><span class="hero__card-prompt" aria-hidden="true">$</span> git commit -m</span><span>"feat(hero): flip this card"</span></span>
+        </span>
+      </button>
     </div>
 
     {revealEnabled && (
@@ -80,7 +88,7 @@ const revealEnabled = Boolean(photo) || usePlaceholder;
     <div class="hero__intro">
       <p class="hero__title">{profile.title}</p>
       <p class="lede hero__lede">{profile.intro}</p>
-      <a class="link-arrow" href="#work">
+      <a class="link-arrow" href="#projects">
         <span class="link-arrow__label">View my work</span>
         <Arrow />
       </a>

@@ -3,6 +3,7 @@
  * The page climbs like a story: the character intro, the quick facts,
  * the Character file (with Projects as the peak), then the way down:
  * a pause, the longer story, the GitHub record, and the invitation.
+ * <Climb /> is the little mountain map in the corner that El walks as you scroll.
  */
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
@@ -12,6 +13,8 @@ import Tagline from '../components/Tagline.astro';
 import About from '../components/About.astro';
 import TrustHistory from '../components/TrustHistory.astro';
 import Contact from '../components/Contact.astro';
+import Climb from '../components/Climb.astro';
+import Shortcuts from '../components/Shortcuts.astro';
 ---
 <Base>
   <Hero />
@@ -21,4 +24,6 @@ import Contact from '../components/Contact.astro';
   <About />
   <TrustHistory />
   <Contact />
+  <Climb />
+  <Shortcuts />
 </Base>

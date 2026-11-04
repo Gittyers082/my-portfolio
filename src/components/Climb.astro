@@ -1,0 +1,69 @@
+---
+/**
+ * The climb: a small mountain map in the corner. The page is built as a climb
+ * (up to Projects at the peak, then the way down), so El walks the trail as you
+ * scroll: up the left side, a flag at the summit, down to Contact.
+ * Each stop is a link that jumps to its section; the line under the mountain
+ * names the section you're in. A tab slides it off the edge and back
+ * (remembered). Desktop: bottom right. Phones: a smaller one, bottom left, that
+ * only shows while scrolling (its tab stays put). Needs JavaScript, so it starts hidden.
+ * Logic: src/scripts/climb.ts
+ */
+const STOPS = [
+  { id: 'top', label: 'Start', at: 0 },
+  { id: 'card', label: 'Character card', at: 0.17 },
+  { id: 'file', label: 'Character file', at: 0.34 },
+  { id: 'projects', label: 'Projects', at: 0.5 },
+  { id: 'about', label: 'About me', at: 0.68 },
+  { id: 'github', label: 'GitHub activity', at: 0.84 },
+  { id: 'contact', label: 'Contact', at: 1 },
+];
+const INK = '#15130F';
+// the trail is symmetric, so the summit sits exactly halfway along it
+const TRAIL = 'M24 110 C40 106 44 96 58 90 C72 84 70 70 84 62 C96 55 100 42 110 32 L120 20 L130 32 C140 42 144 55 156 62 C170 70 168 84 182 90 C196 96 200 106 216 110';
+---
+<nav class="climb" aria-label="Trail map of this page" hidden data-climb>
+  <!-- slides the map off the edge and back (remembered) -->
+  <button class="climb__tab" type="button" aria-expanded="true" aria-controls="climb-card" aria-label="Hide the trail map" data-climb-tab>
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path class="climb__tab-arrow" d="M7 4 L13 10 L7 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"></path></svg>
+    <svg class="climb__tab-peak" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 13 L8 3 L11 7 L13 5 L19 13 Z" fill="currentColor"></path></svg>
+  </button>
+  <div class="climb__card" id="climb-card" data-climb-card>
+  <div class="climb__map">
+    <svg viewBox="0 -14 240 132" aria-hidden="true">
+      <defs><pattern id="climb-dots" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1" fill={INK}></circle></pattern></defs>
+      <path d="M0 116 L22 100 L36 104 L62 72 L74 76 L102 32 L120 6 L138 32 L156 58 L168 54 L196 90 L208 86 L240 116 Z" fill="#E6DECF" stroke={INK} stroke-width="3" stroke-linejoin="round"></path>
+      <path d="M120 6 L138 32 L156 58 L168 54 L196 90 L208 86 L240 116 L150 116 L160 84 L128 40 Z" fill="url(#climb-dots)" opacity="0.5"></path>
+      <path d="M0 116 H240" stroke={INK} stroke-width="3"></path>
+      <path class="climb__trail" d={TRAIL} fill="none" stroke={INK} stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round" data-climb-trail></path>
+      <path class="climb__walked" d={TRAIL} fill="none" stroke-width="3" stroke-linecap="round" data-climb-walked></path>
+      <!-- the summit flag (Projects) -->
+      <g class="climb__flag">
+        <path d="M134 26 V-8" stroke={INK} stroke-width="2.5" stroke-linecap="round"></path>
+        <path class="climb__flag-cloth accent-fill" d="M134 -8 L152 -3 L134 2 Z" stroke={INK} stroke-width="1.5" stroke-linejoin="round"></path>
+      </g>
+      <!-- the second flag, at the end of the trail: planted at 100% explored -->
+      <g class="climb__flag2">
+        <path d="M226 110 V82" stroke={INK} stroke-width="2.5" stroke-linecap="round"></path>
+        <path d="M226 82 L242 86.5 L226 91 Z" fill={INK}></path>
+        <path d="M231 85.2 L232 86.8 L233.6 86.9 L232.4 87.9 L232.8 89.5 L231.4 88.6 L230 89.5 L230.4 87.9 L229.2 86.9 L230.8 86.8 Z" fill="#FBF8F1"></path>
+      </g>
+      {STOPS.map((s) => <circle class="climb__dot" r="3.6" fill="#FBF8F1" stroke={INK} stroke-width="2" data-climb-dot={s.at}></circle>)}
+      <!-- El, from behind as always: spiky hair, cyan cape -->
+      <g class="climb__el" data-climb-el>
+        <g class="climb__el-face"><g class="climb__el-bob">
+          <path class="accent-fill" d="M-4.5 -12 L4.5 -12 L8 -3 L-5.5 -3 Z" stroke={INK} stroke-width="1.2" stroke-linejoin="round"></path>
+          <path d="M-3.4 -5 V0 H-0.6 V-5 Z M0.6 -5 V0 H3.4 V-5 Z" fill={INK}></path>
+          <path d="M-4.2 -12 C-5.4 -15 -4.6 -18 -2.4 -19.4 L-3.4 -22.6 L-0.6 -20.4 L0.8 -23.6 L2 -20.4 L4.4 -22.4 L3.8 -18.6 C5.4 -16 5 -13 3.8 -12 Z" fill={INK}></path>
+        </g></g>
+      </g>
+    </svg>
+    {STOPS.map((s) => (
+      <a class="climb__stop" href={`#${s.id}`} data-climb-stop={s.at} data-label={s.label}>
+        <span class="climb__tip">{s.label}</span>
+      </a>
+    ))}
+  </div>
+  <p class="climb__now" aria-live="off"><span class="climb__now-label">Now</span> <span data-climb-now>Start</span></p>
+  </div>
+</nav>

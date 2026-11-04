@@ -10,27 +10,37 @@
 import { profile, isPlaceholder } from './profile';
 
 export type Level = 0 | 1 | 2 | 3 | 4;
-export type Day = { date: string; level: Level };
+export type Day = { date: string; level: Level; count?: number }; // count: read from GitHub's day tooltips, when present
 export type Calendar = {
   days: Day[];
   sample: boolean;
   total: number | null;
   longestStreak: number;
+  streak: [string, string] | null; // first and last ISO dates of the longest streak
   busiest: string | null; // ISO date of the busiest day
 };
 
 const ISO = (d: Date): string => d.toISOString().slice(0, 10);
 
-function stats(days: Day[]): Pick<Calendar, 'longestStreak' | 'busiest'> {
+function stats(days: Day[]): Pick<Calendar, 'longestStreak' | 'streak' | 'busiest'> {
   let run = 0;
+  let runStart = 0;
   let longestStreak = 0;
+  let streak: [string, string] | null = null;
   let busiest: Day | null = null;
-  for (const d of days) {
-    run = d.level > 0 ? run + 1 : 0;
-    longestStreak = Math.max(longestStreak, run);
-    if (!busiest || d.level > busiest.level) busiest = d;
-  }
-  return { longestStreak, busiest: busiest && busiest.level > 0 ? busiest.date : null };
+  const weight = (d: Day): number => d.count ?? d.level; // real counts when we have them
+  days.forEach((d, i) => {
+    if (d.level > 0) {
+      if (run === 0) runStart = i;
+      run += 1;
+      if (run > longestStreak) { longestStreak = run; streak = [days[runStart].date, d.date]; }
+    } else {
+      run = 0;
+    }
+    if (!busiest || weight(d) > weight(busiest)) busiest = d;
+  });
+  const best = busiest as Day | null;
+  return { longestStreak, streak, busiest: best && best.level > 0 ? best.date : null };
 }
 
 /** A deterministic, sparse sample year with a busy stretch near the end. */
@@ -66,11 +76,20 @@ export async function getCalendar(): Promise<Calendar> {
     if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
     const html = await res.text();
     const days: Day[] = [];
+    // Each day's exact count lives in a <tool-tip for="<td id>">, e.g. "3 contributions on October 12th."
+    const counts = new Map<string, number>();
+    for (const m of html.matchAll(/<tool-tip[^>]*\bfor="([^"]+)"[^>]*>([^<]*)<\/tool-tip>/g)) {
+      const text = m[2].trim();
+      const n = text.match(/^(\d[\d,]*)\s+contributions?\b/i);
+      if (n) counts.set(m[1], Number(n[1].replace(/,/g, '')));
+      else if (/^no contributions\b/i.test(text)) counts.set(m[1], 0);
+    }
     // Each day is a <td> with data-date and data-level (in either order).
     for (const tag of html.match(/<td[^>]*data-date="[^"]+"[^>]*>/g) ?? []) {
       const date = tag.match(/data-date="(\d{4}-\d{2}-\d{2})"/)?.[1];
       const level = tag.match(/data-level="([0-4])"/)?.[1];
-      if (date && level) days.push({ date, level: Number(level) as Level });
+      const id = tag.match(/\bid="([^"]+)"/)?.[1];
+      if (date && level) days.push({ date, level: Number(level) as Level, count: id ? counts.get(id) : undefined });
     }
     if (days.length < 300) throw new Error('calendar markup not recognised');
     days.sort((a, b) => a.date.localeCompare(b.date));

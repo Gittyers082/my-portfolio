@@ -23,6 +23,7 @@ const POINTS: Record<string, number> = {
   pencil: 2,
   wave: 2,
   card: 4, // flipping a character card
+  commit: 2, // flipping the hero's commit card
 };
 const BASE = 6;
 const KEY = 'trust-earned';

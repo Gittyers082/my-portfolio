@@ -4,13 +4,16 @@
  * - The set tilts toward your cursor, with a sheen on each tile (mouse only).
  * - Hovering a fact bursts manga speed lines behind it.
  * - Clicking a fact flips it to a back side with a detail and a jump to where
- *   that part of the story lives (opens the right chapter).
+ *   that part of the story lives (opens the right chapter). Clicking anywhere
+ *   else on the back flips it again (a "Flip back" button stays for keyboards).
  * Without JavaScript the backs simply show under each front.
  * Logic: src/scripts/card.ts
  */
-import { facts, course } from '../data/profile';
+import { facts, secretFact, course } from '../data/profile';
 import Arrow from './Arrow.astro';
 
+// the secret 7th card stays hidden until the visitor has explored 100% (card.ts reveals it)
+const cards = [...facts.map((f) => ({ ...f, secret: false })), { ...secretFact, secret: true }];
 const all = course.terms.flatMap((t) => t.quests.map(() => t.status));
 const fill = (text: string): string => text
   .replace('{cleared}', String(all.filter((s) => s === 'cleared').length))
@@ -26,8 +29,8 @@ const SPEED = `<svg class="card__speed" viewBox="0 0 100 100" preserveAspectRati
   <div class="card" data-reveal style="--d:2" data-card>
     <div class="card__tilt">
     <ul class="card__grid" role="list">
-      {facts.map((f) => (
-        <li class:list={['card__fact', { 'card__fact--hi': f.highlight }]} data-fact>
+      {cards.map((f) => (
+        <li class:list={['card__fact', { 'card__fact--hi': f.highlight, 'card__fact--secret': f.secret }]} data-fact data-secret={f.secret ? '' : undefined} hidden={f.secret}>
           <div class="card__flip">
             <button class="card__face card__face--front" type="button" aria-label={`${f.label}: ${f.value}. Flip for more`} data-flip>
               <Fragment set:html={SPEED} />
@@ -36,12 +39,14 @@ const SPEED = `<svg class="card__speed" viewBox="0 0 100 100" preserveAspectRati
               <span class:list={['card__note', { placeholder: f.placeholder }]}>{f.note}</span>
               <svg class="card__corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 A8 8 0 1 1 7 18.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path><path d="M3 14 L7 19 L11 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </button>
-            <div class="card__face card__face--back">
+            <div class="card__face card__face--back" data-back>
               <span class="card__label">{f.label}</span>
+              <svg class="card__corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 A8 8 0 1 1 7 18.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path><path d="M3 14 L7 19 L11 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
               <p class:list={['card__back', { placeholder: f.placeholder }]}>{fill(f.back)}</p>
               <span class="card__actions">
-                {f.jump && (
-                  <a class="card__jump" href="#file" data-jump={f.jump.chapter} data-jump-target={f.jump.target} data-jump-open={f.jump.open}>{f.jump.label} <Arrow /></a>
+                {f.jump && (f.jump.href
+                  ? <a class="card__jump" href={f.jump.href}>{f.jump.label} <Arrow /></a>
+                  : <a class="card__jump" href="#file" data-jump={f.jump.chapter} data-jump-target={f.jump.target} data-jump-open={f.jump.open}>{f.jump.label} <Arrow /></a>
                 )}
                 <button class="card__back-btn" type="button" data-unflip>Flip back</button>
               </span>

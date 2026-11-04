@@ -37,7 +37,8 @@ export const isPlaceholder = (value: string): boolean => /^\[.*\]$/.test(value);
 /* The character card. Each fact flips over (click it) to a back side with a
  * detail and, optionally, a jump to where that part of the story lives.
  * `back` can use {cleared} and {active}: the quest board counts. */
-export type FactJump = { label: string; chapter: 'stack' | 'training' | 'writing' | 'projects'; target?: string; open?: string };
+/** A back-side link: either a Character file chapter to open (chapter, optional target/open), or a plain href. */
+export type FactJump = { label: string; chapter?: 'stack' | 'training' | 'writing' | 'projects'; target?: string; open?: string; href?: string };
 export type Fact = {
   label: string; value: string; note: string;
   back: string; jump?: FactJump;
@@ -75,6 +76,13 @@ export const facts: Fact[] = [
     back: 'Before college I was a complete boomer with tech. Now I build web apps from front to back.',
   },
 ];
+
+/** The secret 7th card: appears only once a visitor has explored 100% of the site. Swap in your own (a blooper works too). */
+export const secretFact: Fact = {
+  label: 'Secret card', value: '100% explorer', note: 'You found everything. Most visitors never see this one.',
+  back: 'Since you made it all the way here, my inbox is open: an internship, a project, or just to say you found the secret card.',
+  jump: { label: 'Say hi', href: '#contact' },
+};
 
 /* ---------- Character file → Stack: four areas, each with its own icon ---------- */
 /** Power levels: placeholders, set your own (0–10). */
@@ -323,13 +331,4 @@ export const episodes: Episode[] = [
     todo: '[Your part · link]',
     placeholder: true,
   },
-];
-
-/* ---------- Field log: dated, newest first ---------- */
-export type LogEntry = { date: string; text: string; tag: string; placeholder?: boolean };
-export const log: LogEntry[] = [
-  { date: '5 Nov 2026', text: 'Due: Team 5’s Apache Ant build system. I’m the codebase architect.', tag: 'ITCS 311L' },
-  { date: '3 Nov 2026', text: 'Presented Ka-dugo, our blood donation web app, to the IT312 class.', tag: 'Ka-dugo' },
-  { date: 'Nov 2026', text: 'Started this portfolio: Astro, TypeScript and a hand-drawn hero.', tag: 'This site' },
-  { date: '[Date]', text: '[Your next entry: a course, a commit, a thing you learned]', tag: '[Tag]', placeholder: true },
 ];

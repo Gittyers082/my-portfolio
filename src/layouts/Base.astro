@@ -8,10 +8,14 @@ import { profile } from '../data/profile';
 interface Props {
   title?: string;
   description?: string;
+  footerGame?: boolean; // the footer's dodge.exe (the 404 page has its own)
+  meter?: boolean; // the Explored meter (nothing to explore on the 404 page)
 }
 
 const {
   title = `${profile.name} · ${profile.title}`,
+  footerGame = true,
+  meter = true,
   description = `${profile.name} is a ${profile.title.toLowerCase()} at ${profile.school} who builds web apps and is exploring AI engineering.`,
 } = Astro.props;
 
@@ -47,8 +51,8 @@ const ogImage = new URL('/og.png', Astro.site ?? profile.site);
     <main id="main">
       <slot />
     </main>
-    <Footer />
-    <TrustMeter />
+    <Footer game={footerGame} />
+    {meter && <TrustMeter />}
     <script>
       import { initSite } from '../scripts/site';
       initSite();

@@ -110,6 +110,30 @@ export function flip(): void {
   tap.stop(t2 + 0.08);
 }
 
+/** A gust of wind: a long, rising rush of air, for the aura farmer. */
+export function gust(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const v = VOLUME * 1.3;
+  const rush = ctx.createBufferSource();
+  rush.buffer = noise;
+  rush.loop = true;
+  rush.playbackRate.value = 0.4;
+  const band = ctx.createBiquadFilter();
+  band.type = 'bandpass';
+  band.Q.value = 0.7;
+  band.frequency.setValueAtTime(400, t);
+  band.frequency.exponentialRampToValueAtTime(1600, t + 0.35);
+  band.frequency.exponentialRampToValueAtTime(600, t + 0.8);
+  const air = ctx.createGain();
+  air.gain.setValueAtTime(0, t);
+  air.gain.linearRampToValueAtTime(v, t + 0.25);
+  air.gain.exponentialRampToValueAtTime(0.0001, t + 0.85);
+  rush.connect(band).connect(air).connect(ctx.destination);
+  rush.start(t);
+  rush.stop(t + 0.9);
+}
+
 /** A short liquid splash: a low swoosh, then a few droplets. */
 export function splash(): void {
   if (muted || !ctx || ctx.state !== 'running' || !noise) return;

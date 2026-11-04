@@ -1,0 +1,87 @@
+---
+/**
+ * The hero, seen from behind as always, standing on a rock in the Tagline's
+ * wind with his arms crossed and a cape that won't stop moving. Aura farming.
+ * - The cape is an SVG path that morphs between shapes (SMIL <animate>), so it
+ *   moves in every browser; aura.ts pauses it off screen and for reduced motion.
+ * - Comments pop up out of nowhere around him while the section is on screen.
+ * - Pressing him sends a gust: the cape snaps and "+100 aura" floats up.
+ * - Typing "arete" anywhere powers him up: an aura, a wild cape, a burst of leaves.
+ * Logic: src/scripts/aura.ts
+ */
+const INK = '#15130F';
+const LIGHT = '#F4EFE4';
+// three cape shapes with the same commands, so the morph is smooth: resting, lifted, settling
+const CAPE = [
+  'M132 140 C122 180 120 222 124 262 C150 272 172 252 198 258 C224 264 248 236 274 232 C290 229 302 214 314 204 C288 196 264 188 242 172 C228 162 216 150 208 140 Z',
+  'M132 140 C120 176 116 214 118 250 C146 256 166 236 194 238 C222 240 246 210 272 204 C290 200 304 182 318 170 C292 168 266 166 244 158 C228 152 216 146 208 140 Z',
+  'M132 140 C124 182 124 226 128 266 C154 274 176 262 202 266 C228 270 250 254 276 252 C292 250 302 240 312 232 C286 218 264 204 244 184 C230 168 216 152 208 140 Z',
+];
+const FOLD = ['M168 146 C162 190 164 226 170 256', 'M168 146 C160 184 160 214 166 240', 'M168 146 C164 192 168 230 176 262'];
+const seq = (f: string[]): string => [f[0], f[1], f[0], f[2], f[0]].join(';');
+const SPLINES = '0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1';
+---
+<div class="farmer" data-aura>
+  <button class="farmer__btn" type="button" aria-label="The hero, aura farming on a rock. Press for a gust of wind." data-aura-btn>
+    <svg viewBox="0 0 340 472" aria-hidden="true" data-aura-svg>
+      <defs>
+        <pattern id="af-dots" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.4" fill={INK}></circle></pattern>
+        <pattern id="af-light" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.2" fill={LIGHT}></circle></pattern>
+      </defs>
+
+      <!-- wind lines streaming past -->
+      <g class="farmer__lines" fill="none" stroke={INK} stroke-width="3" stroke-linecap="round">
+        <path d="M236 112 H306"></path>
+        <path d="M262 146 H336"></path>
+        <path d="M250 286 H322"></path>
+      </g>
+
+      <!-- the rock -->
+      <path d="M24 468 L46 404 L34 374 L74 336 L112 322 L150 316 L204 318 L236 308 L272 330 L304 354 L296 394 L322 432 L330 468 Z" fill="#E6DECF" stroke={INK} stroke-width="5" stroke-linejoin="round"></path>
+      <path d="M236 308 L272 330 L304 354 L296 394 L322 432 L330 468 L252 468 L264 422 L242 376 Z" fill="url(#af-dots)" opacity="0.5"></path>
+      <path d="M150 316 L160 352 L146 384 M236 308 L228 342 L242 376 M74 336 L94 372 L82 410 M200 400 L214 430" fill="none" stroke={INK} stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M0 468 H340" stroke={INK} stroke-width="5"></path>
+
+      <!-- the aura: only shows when he powers up (type "arete") -->
+      <g class="farmer__aura" fill="none" stroke-width="4" stroke-linecap="round">
+        <path class="accent-stroke" d="M110 300 C102 260 116 220 106 178"></path>
+        <path class="accent-stroke" d="M234 300 C242 262 228 222 238 180"></path>
+        <path class="accent-stroke" d="M122 150 C114 120 126 96 116 70"></path>
+        <path class="accent-stroke" d="M218 150 C226 120 214 96 224 70"></path>
+        <path class="accent-stroke" d="M150 86 C146 66 154 48 148 30"></path>
+        <path class="accent-stroke" d="M190 86 C194 66 186 48 192 30"></path>
+        <path class="accent-stroke" d="M96 250 C88 220 98 196 90 170"></path>
+        <path class="accent-stroke" d="M250 250 C258 220 248 196 256 170"></path>
+      </g>
+
+      <!-- legs and shoes, under the cape -->
+      <path d="M128 142 C120 190 122 230 132 252 L208 252 C218 230 220 190 212 142 Z" fill={INK}></path>
+      <path d="M140 246 L138 310 L164 310 L166 246 Z M176 246 L178 310 L204 310 L202 246 Z" fill={INK}></path>
+      <path d="M126 306 H166 V320 H122 Z M176 306 H214 V320 H180 Z" fill={INK}></path>
+
+      <!-- arms crossed in front: from behind, only the left elbow pokes out past the cape -->
+      <path d="M130 166 C114 168 102 184 105 199 C108 210 122 211 130 204 Z" fill={INK}></path>
+
+      <!-- the cape -->
+      <g class="farmer__cape">
+        <path class="accent-fill" d={CAPE[0]} stroke={INK} stroke-width="4.5" stroke-linejoin="round">
+          <animate attributeName="d" dur="2.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.5;0.8;1" keySplines={SPLINES} values={seq(CAPE)}></animate>
+        </path>
+        <path d={FOLD[0]} fill="none" stroke={INK} stroke-width="3" stroke-linecap="round" opacity="0.55">
+          <animate attributeName="d" dur="2.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.5;0.8;1" keySplines={SPLINES} values={seq(FOLD)}></animate>
+        </path>
+      </g>
+
+      <!-- head: the same spiky hair as the hero and the wave in Contact -->
+      <g transform="translate(92 58) scale(0.55)">
+        <path d="M92 150 C78 108 84 66 110 44 L104 14 L126 34 L134 0 L150 30 L170 6 L172 38 L196 22 L188 58 C204 84 206 122 188 150 Z" fill={INK}></path>
+        <path d="M94 104 C86 102 82 114 88 124 C92 130 98 128 98 122" fill={LIGHT} stroke={INK} stroke-width="5"></path>
+        <path d="M116 56 C102 76 100 102 104 128" fill="none" stroke={LIGHT} stroke-width="6" stroke-linecap="round"></path>
+      </g>
+      <!-- cape clasp at the shoulders -->
+      <path d="M130 142 C150 134 190 134 210 142" fill="none" stroke={INK} stroke-width="7" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  <div class="farmer__comments" aria-hidden="true" data-aura-comments></div>
+  <span class="farmer__plus" aria-hidden="true">+100 aura</span>
+</div>

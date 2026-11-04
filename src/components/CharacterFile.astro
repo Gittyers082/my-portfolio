@@ -5,6 +5,10 @@
  * One chapter open at a time, built on native <details name="…"> so it works
  * without JavaScript; site.ts covers browsers without `name` support.
  *
+ * Headers show live counts (area icons, a mini progress bar, lore symbols); on
+ * desktop a closed chapter peeks at what's inside on hover; the first time a
+ * chapter is opened it gets an "Opened" stamp (site.ts).
+ *
  * Inside Projects, the picked episode "pops out" into a big panel. Without
  * JavaScript every episode panel is simply shown, one after another.
  */
@@ -29,9 +33,12 @@ const chapters = [
   { id: 'stack', title: 'Stack', teaser: 'Languages, tools and what I’m learning next', count: `${stack.length} areas` },
   { id: 'training', title: 'Training', teaser: 'School, field missions and self-training', count: 'Training arc' },
   { id: 'writing', title: 'Writing', teaser: 'Lore, worldbuilding and power systems', count: 'Side quest' },
-  { id: 'projects', title: 'Projects', teaser: 'The main event. Pick an episode and it pops out.', count: `${episodes.length} episodes`, open: true },
+  { id: 'projects', title: 'Projects', teaser: 'The main event. What I’ve built so far.', count: `${episodes.length} episodes`, open: true },
 ];
 const segments = Array.from({ length: 10 }, (_, i) => i);
+// header extras: live counts (always shown) and a hover peek (desktop) for the closed chapters
+const activeQuests = course.terms.filter((t) => t.status === 'active').flatMap((t) => t.quests.map((q) => q.name));
+const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boot', 'Node.js', 'PostgreSQL', 'Docker', 'Git'];
 ---
 <section id="file" class="section" aria-labelledby="file-h">
   <div class="section__head">
@@ -45,10 +52,29 @@ const segments = Array.from({ length: 10 }, (_, i) => i);
         <summary class="cf__head">
           <span class="display cf__title">{ch.title}</span>
           <span class="cf__teaser">{ch.teaser}</span>
-          <span class="cf__count">{ch.count}</span>
+          <span class="cf__count">
+            {ch.id === 'stack' && <span class="cf__live"><span class="cf__mini">{stack.map((a) => <StackIcon name={a.id} />)}</span><span class="cf__live-text">{ch.count}</span></span>}
+            {ch.id === 'training' && (
+              <span class="cf__live cf__live--bar">
+                <span class="cf__minibar" aria-hidden="true">{allQuests.map((st) => <span class:list={['cf__minibar-seg', `cf__minibar-seg--${st}`]}></span>)}</span>
+                <span class="cf__live-text">{cleared} cleared · {active} in progress</span>
+              </span>
+            )}
+            {ch.id === 'writing' && <span class="cf__live"><span class="cf__mini">{lore.map((l) => <LoreIcon name={l.kind} />)}</span><span class="cf__live-text">{ch.count}</span></span>}
+            {ch.id === 'projects' && <span class="cf__live-text">{ch.count}</span>}
+          </span>
+          <span class="cf__stamp" aria-hidden="true">Opened</span>
           <span class="cf__icon" aria-hidden="true">
             <svg viewBox="0 0 28 28"><path d="M4 14 H24" stroke="currentColor" stroke-width="4"></path><path class="cf__icon-v" d="M14 4 V24" stroke="currentColor" stroke-width="4"></path></svg>
           </span>
+          {ch.id !== 'projects' && (
+            <span class="cf__peek" aria-hidden="true">
+              <span class="cf__peek-label">Inside</span>
+              {ch.id === 'stack' && <span class="cf__peek-logos">{peekLogos.map((n) => <TechIcon name={n} size="sm" />)}<span class="cf__peek-more">and more</span></span>}
+              {ch.id === 'training' && <span class="cf__peek-list">{activeQuests.map((q) => <span class="cf__peek-chip">{q}</span>)}</span>}
+              {ch.id === 'writing' && <span class="cf__peek-list">{lore.map((l) => <span class="cf__peek-chip"><LoreIcon name={l.kind} />{l.name}</span>)}</span>}
+            </span>
+          )}
         </summary>
 
         {ch.id === 'stack' && (
@@ -68,10 +94,13 @@ const segments = Array.from({ length: 10 }, (_, i) => i);
                     <div class="stat">
                       <span class="stat__name stat__name--tech"><TechIcon name={s.name} />{s.name}</span>
                       <div>
-                        <div class="stat__bar" role="img" aria-label={`Level ${s.level} of 10`}>
-                          {segments.map((n) => (
-                            <span class:list={['stat__seg', { 'stat__seg--on': n < s.level }]} style={`--n:${n}`}></span>
-                          ))}
+                        <div class="stat__meter">
+                          <div class="stat__bar" role="img" aria-label={`Level ${s.level} of 10`}>
+                            {segments.map((n) => (
+                              <span class:list={['stat__seg', { 'stat__seg--on': n < s.level }]} style={`--n:${n}`}></span>
+                            ))}
+                          </div>
+                          <span class="stat__num" aria-hidden="true"><b data-count={s.level}>{s.level}</b>/10</span>
                         </div>
                         <p class:list={['stat__desc', { placeholder: s.placeholderNote }]}>{s.note}</p>
                       </div>
@@ -213,25 +242,28 @@ const segments = Array.from({ length: 10 }, (_, i) => i);
 
             <ul class="lore__grid" role="list">
               {lore.map((w, i) => (
-                <li class:list={['dossier', `dossier--${w.kind}`]} style={`--i:${i}`}>
+                <li class:list={['dossier', `dossier--${w.kind}`]} style={`--i:${i}`} data-dossier>
                   <div class="dossier__top">
                     <LoreIcon name={w.kind} />
                     <span class="dossier__kind">{loreKind[w.kind]}</span>
                     {w.year && <span class:list={['dossier__year', { placeholder: w.placeholder }]}>{w.year}</span>}
                   </div>
-                  <div>
-                    <h3 class:list={['dossier__name', { placeholder: w.placeholder }]}>{w.name}</h3>
-                    {w.epithet && <p class="dossier__epithet">{w.epithet}</p>}
+                  <div class="dossier__head">
+                    <div>
+                      <h3 class:list={['dossier__name', { placeholder: w.placeholder }]}>{w.name}</h3>
+                      {w.epithet && <p class="dossier__epithet">{w.epithet}</p>}
+                    </div>
+                    <span class="dossier__stamp" aria-hidden="true"><span class="dossier__stamp-c">Classified</span><span class="dossier__stamp-d">Declassified</span></span>
                   </div>
-                  <p class:list={['dossier__hook', { placeholder: w.placeholder }]}>{w.hook}</p>
+                  <p class:list={['dossier__hook', { placeholder: w.placeholder }]}><span class="redact">{w.hook}</span></p>
                   {w.quote && (
-                    <blockquote class="dossier__quote"><p>“{w.quote}”</p><footer>{w.name}</footer></blockquote>
+                    <blockquote class="dossier__quote"><p><span class="redact">“{w.quote}”</span></p><footer>{w.name}</footer></blockquote>
                   )}
                   <dl class="dossier__specs">
                     {w.specs.map((sp) => (
                       <div class="dossier__spec">
                         <dt>{sp.label}</dt>
-                        <dd class:list={{ placeholder: w.placeholder }}>{sp.value}</dd>
+                        <dd class:list={{ placeholder: w.placeholder }}><span class="redact">{sp.value}</span></dd>
                       </div>
                     ))}
                   </dl>
