@@ -33,7 +33,9 @@ const ogImage = new URL('/og.png', Astro.site ?? profile.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/archivo-var.woff" as="font" type="font/woff" crossorigin />
-    <meta name="theme-color" content="#F4EFE4" />
+    <meta name="theme-color" content="#F4EFE4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12110E" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -44,6 +46,15 @@ const ogImage = new URL('/og.png', Astro.site ?? profile.site);
 
     <!-- Turns on the reveal-ready states only when scripts run, so nothing hides without JS -->
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <!-- Light or dark before the first paint: the visitor's choice, else their system setting -->
+    <script is:inline>
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'dark' && t !== 'light') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

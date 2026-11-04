@@ -19,7 +19,8 @@ export const profile = {
 
 /**
  * Hero portrait (the second frame of the character intro).
- * Put your photo at public/portrait/steven.jpg (.webp, .avif or .png also work):
+ * Put your photo at public/portrait/steven.jpg (.webp, .avif or .png also work),
+ * and optionally a night version at public/portrait/steven-dark.webp for dark mode:
  * head and shoulders, at least 1200px tall. Until that file exists the public
  * site ships without the reveal; `npm run dev` shows a labelled placeholder.
  */

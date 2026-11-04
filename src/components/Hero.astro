@@ -14,6 +14,10 @@ const nameLines = ['El. Steven', 'D. Cruz'];
 const photo = ['avif', 'webp', 'jpg', 'jpeg', 'png']
   .map((ext) => `portrait/${portrait.basename}.${ext}`)
   .find((file) => fs.existsSync(path.join(process.cwd(), 'public', file)));
+// an optional night version (steven-dark.webp etc.) shows in dark mode
+const photoDark = ['avif', 'webp', 'jpg', 'jpeg', 'png']
+  .map((ext) => `portrait/${portrait.basename}-dark.${ext}`)
+  .find((file) => fs.existsSync(path.join(process.cwd(), 'public', file)));
 const usePlaceholder = !photo && import.meta.env.DEV;
 const revealEnabled = Boolean(photo) || usePlaceholder;
 ---
@@ -30,14 +34,19 @@ const revealEnabled = Boolean(photo) || usePlaceholder;
           <div class="reveal__frame" aria-hidden="true"></div>
           <div class="reveal__portrait" id="hero-portrait" aria-hidden="true">
             {photo ? (
-              <img
-                class="reveal__img"
-                src={`/${photo}`}
-                alt={portrait.alt}
-                style={`--focus:${portrait.focus}`}
-                decoding="async"
-                loading="eager"
-              />
+              <>
+                <img
+                  class:list={['reveal__img', { 'reveal__img--day': photoDark }]}
+                  src={`/${photo}`}
+                  alt={portrait.alt}
+                  style={`--focus:${portrait.focus}`}
+                  decoding="async"
+                  loading="eager"
+                />
+                {photoDark && (
+                  <img class="reveal__img reveal__img--night" src={`/${photoDark}`} alt={portrait.alt} style={`--focus:${portrait.focus}`} decoding="async" loading="lazy" />
+                )}
+              </>
             ) : (
               <DevPortraitPlaceholder focus={portrait.focus} />
             )}

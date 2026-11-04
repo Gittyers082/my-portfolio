@@ -30,6 +30,7 @@ import { initStackBars } from './stack';
 import { initLore } from './lore';
 import { initTyping } from './typing';
 import { initLost } from './lost';
+import { initTheme } from './theme';
 
 const reduceMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -230,17 +231,6 @@ function initCharacterFile(): void {
       longest = Math.max(longest, glide(item, opening, 620, 480, 110));
       holdStill(summary, longest);
     });
-  });
-}
-
-function initThemeToggle(): void {
-  // Placeholder until dark mode ships: say so instead of doing nothing silently.
-  const btn = document.querySelector<HTMLButtonElement>('.theme-toggle:not(.sound-toggle)');
-  const note = document.getElementById('theme-note');
-  if (!btn || !note) return;
-  btn.addEventListener('click', () => {
-    note.textContent = 'Dark mode is coming soon.';
-    window.setTimeout(() => (note.textContent = ''), 2400);
   });
 }
 
@@ -487,7 +477,6 @@ export function initSite(): void {
   initMenu();
   initCharacterFile();
   initGlideDetails();
-  initThemeToggle();
   initHeroBackground();
   initPortraitReveal();
   initFeatures();
@@ -511,4 +500,5 @@ export function initSite(): void {
   initLore();
   initTyping();
   initLost();
+  initTheme();
 }

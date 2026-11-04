@@ -134,6 +134,24 @@ export function gust(): void {
   rush.stop(t + 0.9);
 }
 
+/** A lamp switch: a short, bright click. */
+export function lamp(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const tick = ctx.createBufferSource();
+  tick.buffer = noise;
+  const hi = ctx.createBiquadFilter();
+  hi.type = 'highpass';
+  hi.frequency.value = 2400;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(VOLUME * 1.6, t + 0.003);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+  tick.connect(hi).connect(g).connect(ctx.destination);
+  tick.start(t);
+  tick.stop(t + 0.05);
+}
+
 /** A short liquid splash: a low swoosh, then a few droplets. */
 export function splash(): void {
   if (muted || !ctx || ctx.state !== 'running' || !noise) return;

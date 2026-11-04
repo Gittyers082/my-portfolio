@@ -11,10 +11,11 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 9 H8 L13 5 V19 L8 15 H4 Z" fill="currentColor"></path><path class="sound-toggle__waves" d="M16.5 9 C18 10.5 18 13.5 16.5 15 M19 6.5 C22 9.5 22 14.5 19 17.5"></path><path class="sound-toggle__x" d="M16 9 L22 15 M22 9 L16 15"></path></svg>
       <span class="theme-toggle__label sound-toggle__label">Sound on</span>
     </button>
-    <button type="button" class="theme-toggle" aria-disabled="true" aria-describedby="theme-note" title="Dark mode is coming soon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg>
-      <span class="theme-toggle__label">Light</span>
-      <span class="visually-hidden">theme. Dark mode is coming soon.</span>
+    <!-- light / dark: theme.ts switches it, the <head> script sets it before the page draws -->
+    <button type="button" class="theme-toggle" aria-pressed="false" aria-label="Dark mode" data-theme-toggle>
+      <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg>
+      <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.6 A8.2 8.2 0 1 1 9.4 4 A6.6 6.6 0 0 0 20 14.6 Z"></path></svg>
+      <span class="theme-toggle__label" aria-hidden="true" data-theme-label>Light</span>
     </button>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu-panel" aria-label="Open menu">
       <span class="menu-btn__bars" aria-hidden="true"><span></span><span></span></span>
