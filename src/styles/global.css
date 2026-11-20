@@ -356,8 +356,10 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
 .hero__card.is-flipped .hero__card-flip { transform: perspective(900px) rotateY(180deg); }
 .hero__card-face { grid-area: 1 / 1; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .hero__card-face--back { transform: rotateY(180deg); background: var(--panel-bg); color: var(--on-panel); }
+html.js .hero__card-face { transition: visibility 0s linear 300ms; } /* same midpoint swap as the character cards */
+html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card.is-flipped .hero__card-face--front { visibility: hidden; }
 .hero__card-code--stack { flex-direction: column; align-items: flex-start; gap: 2px; }
-@media (prefers-reduced-motion: reduce) { .hero__card-flip { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .hero__card-flip, html.js .hero__card-face { transition: none; } }
 
 @media (max-width: 1180px) {
   .hero__title { font-size: 24px; line-height: 32px; }
@@ -1273,6 +1275,10 @@ html[data-theme="dark"] .reveal__img--night { display: block; }
 .card__face--front:focus-visible { outline: 3px solid var(--accent); outline-offset: -6px; }
 .card__face--back { transform: rotateY(180deg); cursor: var(--cursor-hand); } /* clicking anywhere on the back flips it again */
 .card__face { grid-area: 1 / 1; } /* both faces share one cell: the card is as tall as its taller side */
+/* Firefox-based browsers (Zen, Firefox) don't always honour backface-visibility, so the
+   hidden side is also switched off at the exact midpoint of the turn, when the tile is edge-on */
+html.js .card__face { transition: visibility 0s linear 320ms; }
+html.js .card__fact:not(.is-flipped) .card__face--back, html.js .card__fact.is-flipped .card__face--front { visibility: hidden; }
 html:not(.js) .card__face--back { grid-area: auto; transform: none; backface-visibility: visible; min-height: 0; padding-top: 0; }
 html:not(.js) .card__corner, html:not(.js) .card__back-btn { display: none; }
 .card__fact--hi .card__face { background: var(--ink); color: var(--ivory); outline: 3px solid var(--ivory); outline-offset: -11px; } /* the inverse tile: dark in light mode, light in dark mode */
@@ -1326,7 +1332,7 @@ html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-
   .card__fact::before { inset: 8px -8px -8px 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .card__flip, .card__tilt, .card__corner { transition: none; }
+  .card__flip, .card__tilt, .card__corner, html.js .card__face { transition: none; }
   .card__speed { display: none; }
 }
 
