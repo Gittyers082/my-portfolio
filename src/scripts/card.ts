@@ -74,8 +74,8 @@ function initFlip(card: HTMLElement): void {
       fact.classList.toggle('is-flipped', flipped);
       front.inert = flipped;
       back.inert = !flipped;
-      // move focus to the side that's now showing (just after the faces swap, mid-turn)
-      window.setTimeout(() => (flipped ? unflip : front).focus({ preventScroll: true }), reduceMotion() ? 0 : 340);
+      // move focus to the side that's now showing (after the faces have swapped)
+      window.setTimeout(() => (flipped ? unflip : front).focus({ preventScroll: true }), reduceMotion() ? 0 : 280);
     };
     front.addEventListener('click', () => { set(true); earn('card'); });
     unflip.addEventListener('click', (e) => { e.stopPropagation(); set(false); });

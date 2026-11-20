@@ -356,7 +356,7 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
 .hero__card.is-flipped .hero__card-flip { transform: perspective(900px) rotateY(180deg); }
 .hero__card-face { grid-area: 1 / 1; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .hero__card-face--back { transform: rotateY(180deg); background: var(--panel-bg); color: var(--on-panel); }
-html.js .hero__card-face { transition: visibility 0s linear 300ms; } /* same midpoint swap as the character cards (Firefox/Zen) */
+html.js .hero__card-face { transition: visibility 0s linear 79ms; } /* same edge-on swap as the character cards: the 600ms turn is at 90deg after 79ms */
 html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card.is-flipped .hero__card-face--front { visibility: hidden; }
 .hero__card-code--stack { flex-direction: column; align-items: flex-start; gap: 2px; }
 @media (prefers-reduced-motion: reduce) { .hero__card-flip, html.js .hero__card-face { transition: none; } }
@@ -1276,9 +1276,10 @@ html[data-theme="dark"] .reveal__img--night { display: block; }
 .card__face--back { transform: rotateY(180deg); cursor: var(--cursor-hand); } /* clicking anywhere on the back flips it again */
 .card__face { grid-area: 1 / 1; } /* both faces share one cell: the card is as tall as its taller side */
 /* Firefox/Zen hide a turned-away face's background but not its text (its children sit in their
-   own layers), so the hidden side is also switched off at the midpoint of the turn, when the
-   tile is edge-on. Same animation in every browser; nothing can show through. */
-html.js .card__face { transition: visibility 0s linear 320ms; }
+   own layers), so the hidden side is also switched off at the moment the tile is edge-on.
+   With the --ease curve the 640ms turn reaches 90deg after only 84ms (it starts fast), so the
+   swap happens then. Same animation in every browser; nothing can show through. */
+html.js .card__face { transition: visibility 0s linear 84ms; }
 html.js .card__fact:not(.is-flipped) .card__face--back, html.js .card__fact.is-flipped .card__face--front { visibility: hidden; }
 html:not(.js) .card__face--back { grid-area: auto; transform: none; backface-visibility: visible; min-height: 0; padding-top: 0; }
 html:not(.js) .card__corner, html:not(.js) .card__back-btn { display: none; }
