@@ -1,8 +1,7 @@
 ---
 /**
  * Ka-dugo demo loop: the app plays through a booking like a muted clip.
- * Built in HTML until a real screen recording exists (then swap the three
- * screens for a <video muted loop playsinline> with a poster frame).
+ * Logic: src/scripts/features.ts (initDemo), shared with ThriftBite.
  * Without JavaScript the first screen shows and the controls stay hidden.
  */
 const steps = ['Find a drive', 'Book a slot', 'Get matched'];
@@ -17,7 +16,7 @@ const times = [
     <div class="screen" data-ui>
       <div class="screen__bar">
         <span class="screen__dot"></span><span class="screen__dot"></span><span class="screen__dot"></span>
-        <span class="screen__url">[ka-dugo app URL]</span>
+        <span class="screen__url">Ka-dugo</span>
         <span class="demo__status" aria-hidden="true"><span class="demo__rec"></span><span class="demo__status-text">Demo loop</span></span>
       </div>
       <div class="screen__body" aria-live="off">
@@ -76,5 +75,5 @@ const times = [
       </button>
     ))}
   </div>
-  <figcaption class="demo__caption placeholder">[Swap for a real screen recording: a muted 10–15 s loop with a poster frame.]</figcaption>
+  <figcaption class="demo__caption">A booking, redrawn from the app and played as a loop. Hover to pause.</figcaption>
 </figure>

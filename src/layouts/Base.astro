@@ -19,9 +19,9 @@ const {
   description = `${profile.name} is a ${profile.title.toLowerCase()} at ${profile.school} who builds web apps and is exploring AI engineering.`,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.site);
-// TODO: add public/og.png (1200×630) and it will be picked up here
-const ogImage = new URL('/og.png', Astro.site ?? profile.site);
+const base = Astro.site ?? Astro.url; // the live domain on Vercel (see astro.config.mjs)
+const canonical = new URL(Astro.url.pathname, base);
+const ogImage = new URL('/og.png', base); // public/og.png, 1200×630
 ---
 <!doctype html>
 <html lang="en">

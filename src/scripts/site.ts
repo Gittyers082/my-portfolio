@@ -385,8 +385,9 @@ function initGlitch(): void {
 }
 
 /**
- * Any link to #projects (hero "View my work", the nav, the case study's
- * "Back to projects") opens the Projects chapter if a visitor closed it.
+ * Any link to #projects (hero "View my work", the nav) opens the Projects
+ * chapter if a visitor closed it. A link to #episode-<id> (e.g. a course in
+ * Training) does the same and then pops that episode out.
  */
 function initProjectLinks(): void {
   const projects = document.querySelector<HTMLDetailsElement>('details[data-chapter="projects"]');
@@ -394,19 +395,30 @@ function initProjectLinks(): void {
   if (!projects || !summary) return;
   const isClosed = (): boolean => !projects.open || projects.classList.contains('is-closing');
   const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pick = (id: string | null): void => {
+    if (id) projects.querySelector<HTMLButtonElement>(`[data-pick="${id}"]`)?.click();
+  };
   // scroll to the chapter first, then open it once it's in view (opening keeps
   // the header still, which would otherwise cancel the scroll)
-  const goOpen = (): void => {
+  const goOpen = (episode: string | null = null): void => {
     summary.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
-    window.setTimeout(() => { if (isClosed()) summary.click(); }, smooth ? 600 : 0);
+    window.setTimeout(() => {
+      if (isClosed()) summary.click();
+      pick(episode);
+    }, smooth ? 600 : 0);
   };
+  const episodeOf = (hash: string): string | null => /^#episode-([\w-]+)$/.exec(hash)?.[1] ?? null;
   document.addEventListener('click', (e) => {
-    if (!(e.target as Element | null)?.closest?.('a[href="#projects"], a[href="/#projects"]') || !isClosed()) return;
+    const link = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href="#projects"], a[href="/#projects"], a[href^="#episode-"], a[href^="/#episode-"]');
+    if (!link) return;
+    const episode = episodeOf(new URL(link.href).hash);
+    if (!episode && !isClosed()) return;
     e.preventDefault();
     history.pushState(null, '', '#projects');
-    goOpen();
+    goOpen(episode);
   });
-  if (location.hash === '#projects' && isClosed()) goOpen();
+  const fromUrl = episodeOf(location.hash);
+  if (fromUrl || (location.hash === '#projects' && isClosed())) goOpen(fromUrl);
 }
 
 /**

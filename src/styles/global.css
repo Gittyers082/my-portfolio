@@ -399,20 +399,13 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
 
 .grid12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-300); }
 
-/* ---------- Selected work ---------- */
-
-.work__shot { grid-column: span 8; position: relative; }
-.work__shot-shadow {
-  position: absolute; inset: 18px -18px -18px 18px;
-  background-image: var(--dots); background-size: 8px 8px;
-}
-
+/* ---------- Project facts ---------- */
 
 .work__facts { display: flex; flex-direction: column; gap: 20px; }
 .work__facts dt { font-size: 16px; line-height: 24px; font-weight: 700; }
 .work__facts dd { margin-top: var(--s-50); font-size: 18px; line-height: 28px; }
 
-/* the Ka-dugo interface, built for real (data-ui keeps app conventions) */
+/* the demo screens (data-ui keeps app conventions) */
 .screen { position: relative; border: var(--ink-line) solid var(--ink); background: var(--paper); }
 .screen__bar { height: 40px; background: var(--panel-bg); color: var(--on-panel); display: flex; align-items: center; gap: var(--s-75); padding: 0 var(--s-200); font-size: 13px; }
 .screen__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--on-panel); }
@@ -424,28 +417,19 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
 .screen__brand svg { width: 20px; height: 24px; }
 .screen__nav { padding: 10px 12px; font-size: 15px; }
 .screen__nav--on { background: var(--panel-bg); color: var(--on-panel); font-weight: 600; }
-.screen__main { flex: 1; min-width: 0; padding: 28px; display: flex; gap: var(--s-300); }
-.screen__list { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
 .screen__h { font-size: 28px; line-height: 32px; font-weight: 700; }
 .screen__sub { margin-top: var(--s-50); font-size: 15px; }
 .screen__filters { display: flex; gap: var(--s-75); flex-wrap: wrap; }
 .screen__chip { padding: 6px 12px; border: 2px solid var(--ink); font-size: 14px; }
 .screen__chip--on { font-weight: 600; }
 .screen__row { display: grid; grid-template-columns: 64px 1fr auto; gap: var(--s-100); align-items: center; padding: 14px; background: var(--sand); font-size: 15px; line-height: 20px; }
-.screen__row--on { background: var(--accent); color: var(--on-accent); }
 .screen__date { font-size: 13px; line-height: 16px; font-weight: 700; }
 .screen__slots { font-size: 14px; }
-.screen__map { width: 236px; flex: none; background: var(--wall); position: relative; overflow: hidden; }
-.screen__map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-@media (max-width: 1100px) { .screen__map { display: none; } }
 @media (max-width: 959px) {
-  .work__shot{ grid-column: 1 / -1; }
   .screen__side { display: none; }
   .screen__body { min-height: 0; }
-  .screen__main { padding: var(--s-200); }
   .screen__h { font-size: 22px; line-height: 28px; }
-  .work__shot-shadow { inset: 10px -10px -10px 10px; }
 }
 
 /* ---------- Character file: the expandable chapters ---------- */
@@ -1653,47 +1637,27 @@ html:not(.js) .dossier__stamp { display: none; }
 .episodes.is-live .pop__ep { display: none; margin-top: 0; }
 .episodes.is-live .pop__ep.is-active { display: block; animation: pop-in 420ms var(--ease); }
 @keyframes pop-in { from { opacity: 0; transform: translateY(18px) scale(0.985); } }
-.pop__kadugo, .pop__poster { display: flex; flex-wrap: wrap; gap: var(--s-500) var(--s-400); align-items: flex-start; }
-.pop__kadugo .demo { flex: 2 1 600px; min-width: 0; }
+.pop__demo { display: flex; flex-wrap: wrap; gap: var(--s-500) var(--s-400); align-items: flex-start; }
+.pop__demo .demo { flex: 2 1 600px; min-width: 0; }
 .pop__info { flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
 .pop__title { font-size: clamp(56px, 5.6vw, 88px); line-height: 0.9; }
+.pop__meta { margin-top: var(--s-100); font-size: 16px; line-height: 24px; font-weight: 700; color: var(--muted); }
 .pop__summary { margin-top: var(--s-100); font-size: 20px; line-height: 30px; }
-.pop__meta { font-size: 18px; line-height: 26px; font-weight: 700; }
-.pop__todo { font-size: 18px; line-height: 28px; }
-.pop__art { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: var(--s-100); }
-.pop__art-frame { position: relative; height: 480px; overflow: hidden; border: var(--ink-line) solid var(--ink); }
-.pop__art-frame.is-snapped { filter: invert(1) contrast(1.1); }
-.snap-btn {
-  align-self: flex-start; min-height: 44px; padding: 0 var(--s-200);
-  background: var(--ivory); border: 3px solid var(--ink); border-radius: 0;
-  font-size: 16px; font-weight: 700; cursor: var(--cursor-hand);
-  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
-}
-.snap-btn:hover { background: var(--sand); }
-.snap-btn[aria-pressed="true"] { background: var(--panel-bg); color: var(--on-panel); }
-.snap-btn:active { transform: translateY(1px); }
+.pop__links { display: flex; flex-direction: column; gap: var(--s-100); }
 
 /* posters (shared by the picker thumbnails and the popped-out panel) */
 .poster { position: absolute; inset: 0; overflow: hidden; color: var(--ink); }
 .poster__ground { position: absolute; inset: 0; }
-.poster__ground--grid {
-  background-color: var(--ink);
-  background-image: radial-gradient(circle, #3A352F 0 1px, transparent 1.4px); background-size: 18px 18px; /* taste-skill-ignore: blueprint dot grid */
-}
 .poster__svg { position: absolute; left: 50%; top: 24px; width: min(100%, 440px); height: auto; transform: translateX(-50%); }
-.poster__dots-disc {
-  position: absolute; left: -40px; top: -60px; width: 360px; height: 360px; border-radius: 50%;
-  background-image: radial-gradient(circle, var(--ink) 0 3px, transparent 3.6px); background-size: 14px 14px; /* taste-skill-ignore: halftone pop poster */
-}
-.poster__glyph { position: absolute; right: 28px; top: 4px; font-size: 300px; line-height: 1; font-weight: 700; font-stretch: 72%; }
+.poster__mascot { position: absolute; right: -8px; bottom: -14px; width: 62%; height: auto; }
 .poster__title {
   position: absolute; left: 24px; right: 24px; bottom: 22px;
   font-size: 56px; line-height: 0.9; font-weight: 700; font-stretch: 72%; letter-spacing: -0.03em;
 }
-.poster--build .poster__title { color: var(--on-panel); }
+.poster--thriftbite .poster__title { color: #FFFFFF; }
 
 /* the episode picker */
-.picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 300px)); gap: 20px; }
 .picker__btn {
   display: flex; flex-direction: column; gap: 10px; padding: 0;
   background: none; border: 0; color: var(--on-panel); text-align: left; cursor: var(--cursor-hand);
@@ -1706,15 +1670,12 @@ html:not(.js) .dossier__stamp { display: none; }
 .picker__btn[aria-pressed="true"] .picker__thumb { border-color: var(--accent); outline: 4px solid var(--accent); outline-offset: 3px; }
 .picker__zoom { position: absolute; inset: 0; }
 .picker .poster__svg { top: 10px; }
-.picker .poster__dots-disc { width: 180px; height: 180px; left: -20px; top: -30px; background-size: 9px 9px; }
-.picker .poster__glyph { font-size: 160px; right: 14px; top: 0; }
 .picker .poster__title { display: none; }
 .picker__name { font-size: 20px; line-height: 24px; font-weight: 700; }
 .picker__btn[aria-pressed="true"] .picker__name { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
 @media (max-width: 959px) {
   .pop__panel { padding: var(--s-200); transform: translate(-4px, -4px); }
   .pop__shadow { inset: 8px -8px -8px 8px; }
-  .pop__art-frame { height: 380px; }
   .poster__title { font-size: 44px; }
   .episodes.is-live .picker { order: -1; }
   .episodes.is-live > .stats__note { order: -2; }
@@ -1755,6 +1716,79 @@ html:not(.js) .dossier__stamp { display: none; }
 .demo__match-body { position: relative; border: var(--ink-line) solid var(--ink); background: var(--ivory); padding: 16px 18px; display: flex; flex-direction: column; gap: var(--s-50); font-size: 16px; }
 .demo__match-title { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
 .demo__match-title svg { width: 18px; height: 22px; }
+
+/* ThriftBite's screen: its own palette, fixed in both themes */
+.screen--tb {
+  --tb-ink: #102326; --tb-bg: #E3F6F5; --tb-teal: #0A7C8A; --tb-lime: #A6D94A; --tb-cream: #FFF4E0; --tb-muted: #3E5557;
+  border-color: var(--tb-ink); background: var(--tb-bg); color: var(--tb-ink);
+}
+.screen--tb .screen__bar { background: var(--tb-ink); color: #FFFFFF; }
+.screen--tb .screen__dot { background: #FFFFFF; }
+.screen--tb .demo__rec { background: var(--tb-lime); }
+.tb { flex-direction: column; }
+.tb__nav { display: flex; align-items: center; gap: var(--s-200); padding: 10px 20px; background: #FFFFFF; border-bottom: 2px solid var(--tb-ink); font-size: 14px; }
+.tb__brand { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; margin-right: var(--s-100); }
+.tb__brand img { width: 28px; height: 28px; }
+.tb__tab { padding: 4px 2px; }
+.tb__tab--on { border-bottom: 3px solid var(--tb-teal); font-weight: 600; }
+.tb__cart { margin-left: auto; padding: 5px 12px; border: 2px solid var(--tb-ink); box-shadow: 3px 3px 0 var(--tb-ink); font-weight: 600; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__screen { padding: 22px; gap: 16px; }
+.tb__hero { position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--s-200); padding: 18px 20px; background: var(--tb-teal); color: #FFFFFF; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); overflow: hidden; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__hero-h { font-size: 26px; line-height: 28px; font-weight: 800; max-width: 340px; }
+.tb__hero-sub { margin-top: 6px; font-size: 14px; line-height: 20px; }
+.tb__mascot { width: 104px; height: auto; flex: none; margin: -12px -6px -26px 0; }
+.tb__count { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--tb-muted); }
+.tb__live, .tb__dot { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--tb-ink); }
+.tb__live::before, .tb__dot { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--tb-lime); box-shadow: 0 0 0 2px var(--tb-ink); } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__dot { margin-right: 8px; }
+.tb__deals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.tb__deal { background: #FFFFFF; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); font-size: 13px; line-height: 18px; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__deal--picked { outline: 4px solid var(--tb-lime); outline-offset: 3px; }
+.demo.is-playing .tb__deal--picked { animation: tb-pick 2600ms var(--ease); }
+@keyframes tb-pick { 0%, 55% { transform: none; } 70% { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--tb-ink); } 85%, 100% { transform: none; } } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__img { position: relative; height: 84px; display: flex; align-items: center; justify-content: center; background: var(--tb-cream); border-bottom: 2px solid var(--tb-ink); }
+.tb__img svg { width: 48px; height: 48px; fill: none; stroke: var(--tb-ink); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.tb__off { position: absolute; left: 8px; top: 8px; padding: 2px 6px; background: var(--tb-lime); border: 2px solid var(--tb-ink); font-size: 11px; font-weight: 800; }
+.tb__deal-body { display: flex; flex-direction: column; gap: 3px; padding: 10px 12px 12px; }
+.tb__deal-body s, .tb__price s { color: var(--tb-muted); }
+.tb__store, .tb__meta { font-size: 12px; color: var(--tb-muted); }
+.tb__detail { display: flex; gap: 22px; align-items: stretch; }
+.tb__img--big { width: 42%; height: auto; min-height: 260px; flex: none; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__img--big svg { width: 110px; height: 110px; }
+.tb__detail-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.tb__detail-h { font-size: 28px; line-height: 30px; font-weight: 800; }
+.tb__price { font-size: 18px; }
+.tb__line { display: flex; justify-content: space-between; padding: 10px 12px; background: #FFFFFF; border: 2px solid var(--tb-ink); font-size: 14px; }
+.tb__stock { position: relative; display: inline-grid; }
+.tb__stock > span { grid-area: 1 / 1; }
+.tb__stock-b { visibility: hidden; }
+.demo[data-step="1"].is-playing .tb__stock-a { animation: tb-out 2600ms steps(1, end) forwards; }
+.demo[data-step="1"].is-playing .tb__stock-b { animation: tb-in 2600ms steps(1, end) forwards; }
+@keyframes tb-out { 0%, 45% { visibility: visible; } 46%, 100% { visibility: hidden; } }
+@keyframes tb-in { 0%, 45% { visibility: hidden; } 46%, 100% { visibility: visible; } }
+.demo[data-step="1"]:not(.is-playing) .tb__stock-a { visibility: hidden; }
+.demo[data-step="1"]:not(.is-playing) .tb__stock-b { visibility: visible; }
+.tb__buy { display: flex; gap: 10px; margin-top: 4px; }
+.tb__qty { padding: 10px 14px; background: #FFFFFF; border: 2px solid var(--tb-ink); font-weight: 700; letter-spacing: 0.1em; }
+.tb__btn { flex: 1; padding: 10px 14px; text-align: center; background: var(--tb-lime); border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); font-weight: 700; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__screen--done { justify-content: center; gap: 22px; padding: 28px 40px; }
+.tb__done { display: flex; align-items: center; gap: 16px; }
+.tb__check { width: 60px; height: 60px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--tb-lime); border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__check svg { width: 32px; height: 32px; }
+.tb__done-h { font-size: 34px; line-height: 36px; font-weight: 800; }
+.tb__ticket { max-width: 420px; display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; background: #FFFFFF; border: 2px dashed var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-teal); transform: rotate(-1.5deg); font-size: 15px; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__ticket-row { display: flex; justify-content: space-between; gap: var(--s-100); }
+.tb__saved { color: var(--tb-teal); }
+@media (max-width: 959px) {
+  .tb__screen { padding: var(--s-200); }
+  .tb__deals { grid-template-columns: 1fr; }
+  .tb__deal:not(.tb__deal--picked) { display: none; }
+  .tb__detail { flex-direction: column; }
+  .tb__img--big { width: 100%; min-height: 140px; }
+  .tb__mascot { display: none; }
+  .tb__screen--done { padding: var(--s-300) var(--s-200); }
+  .tb__nav .tb__tab:not(.tb__tab--on) { display: none; }
+}
 
 .demo__controls { display: flex; align-items: stretch; gap: var(--s-100); margin-top: 10px; }
 .demo__play { width: 52px; min-height: 52px; flex: none; background: var(--panel-bg); border: 0; cursor: var(--cursor-hand); display: flex; align-items: center; justify-content: center; }

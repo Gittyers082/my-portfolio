@@ -13,8 +13,7 @@ export const profile = {
   github: 'Gittyers082', // also drives the GitHub activity section (pulled at build time)
   linkedin: 'https://www.linkedin.com/in/el-steven/',
   fiverr: 'https://www.fiverr.com/ryuniii', // public seller profile (not the dashboard, which needs a login)
-  resume: '/resume.pdf', // TODO: put your résumé at public/resume.pdf
-  site: 'https://example.com', // TODO: your deployed URL (used for canonical + social tags)
+  resume: '/resume.pdf', // drop your résumé at public/resume.pdf and the download link appears
 } as const;
 
 /**
@@ -210,8 +209,8 @@ export const course: { degree: string; school: string; year: string; terms: Term
     },
     {
       label: '3rd year · 1st sem', status: 'active', quests: [
-        { name: 'Applications Development', learned: 'Where the Team 5 build system came from.', link: { href: '/#projects', label: 'See the Team 5 build system' } },
-        { name: 'Web Technologies', learned: 'Where Ka-dugo was built.', link: { href: '/work/ka-dugo/', label: 'See Ka-dugo' } },
+        { name: 'Applications Development', learned: 'Where the Team 5 build system came from.' },
+        { name: 'Web Technologies', learned: 'Where Ka-dugo was built.', link: { href: '/#episode-kadugo', label: 'See Ka-dugo' } },
         { name: 'Software Engineering' },
         { name: 'Social and Professional Issues in IT' },
         { name: 'Technopreneurship' },
@@ -296,40 +295,39 @@ export const lore: LoreEntry[] = [
 
 /* ---------- Character file → Projects: the episodes. The picked one pops out. ---------- */
 export type Episode = {
-  id: 'kadugo' | 'build' | 'lore' | 'three';
+  id: 'thriftbite' | 'kadugo';
   title: string;
-  style: string; // the art style its poster is drawn in
   meta: string;
   summary: string;
-  todo?: string;
-  href?: string;
-  link?: { href: string; label: string }; // an outside link shown in the popped-out panel
-  placeholder?: boolean;
+  facts: { label: string; value: string }[];
+  links: { href: string; label: string }[];
 };
 export const episodes: Episode[] = [
   {
-    id: 'kadugo', title: 'Ka-dugo', style: 'comic ink',
-    meta: 'Team project for IT312 Web Technologies, 2026',
-    summary: 'A blood donation web app that installs like a phone app.',
-    href: '/work/ka-dugo/',
+    id: 'thriftbite', title: 'ThriftBite',
+    meta: 'Team 7 school project, rebuilt as a full-stack web app · 2026',
+    summary: 'Tonight’s surplus, saved before closing. End-of-day food from Baguio bakeries and carinderias at a portion of the usual price: reserve it now, pick it up tonight.',
+    facts: [
+      { label: 'Who it helps', value: 'People after a cheap dinner, and the bakeries and carinderias that would rather sell their leftovers than throw them out.' },
+      { label: 'What I built', value: 'It started as Team 7’s Java socket project, where I wrote the whole backend. I rebuilt it into a real web app with live stock: when someone reserves, every open page updates.' },
+      { label: 'Stack', value: 'Java 21 · Spring Boot (REST + WebSockets) · Spring Security · PostgreSQL · React + TypeScript · Vite' },
+    ],
+    links: [
+      { href: 'https://thriftbite.vercel.app/', label: 'Try the live app' },
+      { href: 'https://github.com/Gittyers082/thriftbite-sockets', label: 'Read the code' },
+    ],
   },
   {
-    id: 'build', title: 'Team 5 build system', style: 'blueprint',
-    meta: 'Java · Apache Ant · ITCS 311L',
-    summary: 'Team 5’s build pipeline. I was the codebase architect; teammates ran the build, compile, run, docs and packaging stages.',
-    todo: '[What the build does, and a link to the repo]',
-  },
-  {
-    id: 'lore', title: 'Power systems, on commission', style: 'sketchbook',
-    meta: 'Lore · OCs · Worldbuilding',
-    summary: 'Outside code, I write lore, original characters, worldbuilding and power systems for clients on Fiverr. My own universe, the Otherverse, is in the Writing chapter.',
-    link: { href: 'https://www.fiverr.com/ryuniii', label: 'See my Fiverr profile' },
-  },
-  {
-    id: 'three', title: '[Project three]', style: 'halftone pop',
-    meta: '[Stack · year]',
-    summary: '[One line on what it does and who it’s for]',
-    todo: '[Your part · link]',
-    placeholder: true,
+    id: 'kadugo', title: 'Ka-dugo',
+    meta: 'Team project for IT312 Web Technologies · 2026 · upgrade in progress',
+    summary: 'A blood donation web app that installs like a phone app. Donors book a drive and carry a QR donor card; blood banks scan it and log the donation, even with no signal.',
+    facts: [
+      { label: 'Who it helps', value: 'Donors booking a drive, the organizers running it, and the blood banks logging every donation: one app, a dashboard for each.' },
+      { label: 'What I built', value: 'Most of the backend: the PHP API behind all three dashboards and its login and session security. I also got the offline donation queue syncing once the connection comes back, and made the QR scan log a donor in one go.' },
+      { label: 'Stack', value: 'Vanilla JavaScript · HTML · CSS · PHP · MySQL · a service worker for offline use. A rebuild is planned this semester.' },
+    ],
+    links: [
+      { href: 'https://github.com/Gittyers082/ka-dugo', label: 'Read the code' },
+    ],
   },
 ];

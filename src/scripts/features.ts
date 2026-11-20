@@ -1,8 +1,8 @@
 /**
  * The interactive pieces added in the "mountain" redesign:
  *  - exploration meter (rises as the visitor finds things; stored for the visit only)
- *  - Ka-dugo demo loop (auto-plays on screen, pauses offscreen / on hover)
- *  - episode picker (the picked project pops out) + art-style snap
+ *  - project demo loops: ThriftBite and Ka-dugo (auto-play on screen, pause offscreen / on hover)
+ *  - episode picker (the picked project pops out)
  *  - copy-the-email button
  * Each one is progressive: the page reads fine without JavaScript.
  */
@@ -15,7 +15,6 @@ const POINTS: Record<string, number> = {
   chapter: 10, // per chapter opened
   episode: 6, // per episode picked
   demo: 10,
-  snap: 6,
   portrait: 10,
   copy: 20,
   book: 4, // flipping the About me notebook
@@ -55,8 +54,7 @@ function initTrust(): void {
     ['chapter', 'open a chapter in the Character file'],
     ['portrait', 'switch the hero to Photo'],
     ['episode', 'pick a project episode'],
-    ['demo', 'play the Ka-dugo demo'],
-    ['snap', 'hit Snap on a project poster'],
+    ['demo', 'pause or step through a project demo'],
     ['book', 'flip the notebook in About me'],
     ['coffee', 'knock over the coffee'],
     ['pencil', 'click the pencil'],
@@ -131,13 +129,15 @@ const earn = (key: string): void => {
   document.dispatchEvent(new CustomEvent('trust:earn', { detail: key }));
 };
 
-/* ---------------- Ka-dugo demo loop ---------------- */
+/* ---------------- project demo loops (ThriftBite, Ka-dugo) ---------------- */
 
 const STEP_MS = 2600;
 
-function initDemo(): void {
-  const demo = document.querySelector<HTMLElement>('[data-demo]');
-  if (!demo) return;
+function initDemos(): void {
+  document.querySelectorAll<HTMLElement>('[data-demo]').forEach(initDemo);
+}
+
+function initDemo(demo: HTMLElement): void {
   const controls = demo.querySelector<HTMLElement>('.demo__controls');
   const playBtn = demo.querySelector<HTMLButtonElement>('[data-demo-play]');
   const stepBtns = Array.from(demo.querySelectorAll<HTMLButtonElement>('[data-demo-step]'));
@@ -233,16 +233,6 @@ function initEpisodes(): void {
       earn(`episode:${id}`);
     }),
   );
-
-  root.querySelectorAll<HTMLButtonElement>('[data-snap]').forEach((btn) =>
-    btn.addEventListener('click', () => {
-      const frame = btn.closest('.pop__art')?.querySelector<HTMLElement>('[data-snap-target]');
-      const on = btn.getAttribute('aria-pressed') !== 'true';
-      btn.setAttribute('aria-pressed', String(on));
-      frame?.classList.toggle('is-snapped', on);
-      earn('snap');
-    }),
-  );
 }
 
 /* ---------------- copy the email ---------------- */
@@ -280,7 +270,7 @@ function initHistory(): void {
 export function initFeatures(): void {
   initHistory();
   initTrust();
-  initDemo();
+  initDemos();
   initEpisodes();
   initCopy();
 }

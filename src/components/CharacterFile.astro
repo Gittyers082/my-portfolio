@@ -17,6 +17,7 @@ import StackIcon from './StackIcon.astro';
 import TechIcon from './TechIcon.astro';
 import EpisodeArt from './EpisodeArt.astro';
 import KadugoDemo from './KadugoDemo.astro';
+import ThriftbiteDemo from './ThriftbiteDemo.astro';
 import LoreIcon from './LoreIcon.astro';
 import { stack, episodes, profile, lore, course, missions, selfTraining } from '../data/profile';
 
@@ -294,47 +295,29 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
               <div class="pop__panel">
                 {episodes.map((ep, j) => (
                   <div class:list={['pop__ep', { 'is-active': j === 0 }]} data-episode={ep.id} id={`episode-${ep.id}`} role="region" aria-label={ep.title}>
-                    {ep.id === 'kadugo' ? (
-                      <div class="pop__kadugo">
-                        <KadugoDemo />
-                        <article class="pop__info">
-                          <div>
-                            <h3 class="display pop__title">{ep.title}</h3>
-                            <p class="lede pop__summary">{ep.summary}</p>
-                          </div>
-                          <dl class="work__facts">
-                            <div><dt>Who it helps</dt><dd class="placeholder">[Who uses it: e.g. donors looking for a nearby drive, and the staff who run them]</dd></div>
-                            <div><dt>What I built</dt><dd class="placeholder">[Your part: e.g. the drive finder, slot booking and offline support]</dd></div>
-                            <div><dt>Context</dt><dd>{ep.meta} · <span class="placeholder">[Stack]</span></dd></div>
-                          </dl>
-                          <a class="link-arrow" href={ep.href}>
-                            <span class="link-arrow__label">View case study</span>
-                            <Arrow />
-                          </a>
-                        </article>
-                      </div>
-                    ) : (
-                      <div class="pop__poster">
-                        <div class="pop__art">
-                          <div class="pop__art-frame" data-snap-target>
-                            <EpisodeArt id={ep.id} title={ep.title} uid={`big-${ep.id}`} />
-                          </div>
-                          <button type="button" class="snap-btn" data-snap aria-pressed="false">Snap the art style</button>
+                    <div class="pop__demo">
+                      {ep.id === 'thriftbite' ? <ThriftbiteDemo /> : <KadugoDemo />}
+                      <article class="pop__info">
+                        <div>
+                          <h3 class="display pop__title">{ep.title}</h3>
+                          <p class="pop__meta">{ep.meta}</p>
+                          <p class="lede pop__summary">{ep.summary}</p>
                         </div>
-                        <article class="pop__info">
-                          <h3 class:list={['display pop__title', { placeholder: ep.placeholder }]}>{ep.title}</h3>
-                          <p class:list={['pop__meta', { placeholder: ep.placeholder }]}>{ep.meta} · Style: {ep.style}</p>
-                          <p class:list={['pop__summary', { placeholder: ep.placeholder }]}>{ep.summary}</p>
-                          {ep.todo && <p class="pop__todo placeholder">{ep.todo}</p>}
-                          {ep.link && (
-                            <a class="link-arrow" href={ep.link.href} target="_blank" rel="noopener">
-                              <span class="link-arrow__label">{ep.link.label}</span>
-                              <Arrow />
-                            </a>
-                          )}
-                        </article>
-                      </div>
-                    )}
+                        <dl class="work__facts">
+                          {ep.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+                        </dl>
+                        {ep.links.length > 0 && (
+                          <div class="pop__links">
+                            {ep.links.map((l) => (
+                              <a class="link-arrow" href={l.href} target="_blank" rel="noopener">
+                                <span class="link-arrow__label">{l.label}</span>
+                                <Arrow />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </article>
+                    </div>
                   </div>
                 ))}
               </div>

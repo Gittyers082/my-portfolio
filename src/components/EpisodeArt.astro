@@ -1,7 +1,7 @@
 ---
 /**
- * Episode posters. In the show every hero is drawn in their own style;
- * here every project is. Pure markup + SVG, so it scales to the thumbnail
+ * Episode posters for the picker thumbnails, one per project, each drawn in
+ * that project's own colours. Pure markup + SVG, so it scales to the thumbnail
  * (CSS zoom) and to the popped-out panel without separate assets.
  */
 import type { Episode } from '../data/profile';
@@ -9,6 +9,22 @@ interface Props { id: Episode['id']; title: string; uid: string }
 const { id, title, uid } = Astro.props;
 ---
 <div class:list={['poster', `poster--${id}`]}>
+  {id === 'thriftbite' && (
+    <>
+      <div class="poster__ground" style="background:#0A7C8A"></div>
+      <svg class="poster__svg" viewBox="0 0 380 300" aria-hidden="true">
+        <defs><pattern id={`tb-dots-${uid}`} width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="2" fill="#102326" opacity=".35"></circle></pattern></defs>
+        <rect x="0" y="0" width="380" height="300" fill={`url(#tb-dots-${uid})`}></rect>
+        <g transform="rotate(-9 120 150)">
+          <path d="M40 92 H170 L206 150 L170 208 H40 Z" fill="#102326" transform="translate(8 8)"></path>
+          <path d="M40 92 H170 L206 150 L170 208 H40 Z" fill="#A6D94A" stroke="#102326" stroke-width="5" stroke-linejoin="round"></path>
+          <circle cx="174" cy="150" r="9" fill="#0A7C8A" stroke="#102326" stroke-width="4"></circle>
+          <text x="102" y="167" text-anchor="middle" font-family="Archivo, sans-serif" font-size="52" font-weight="800" fill="#102326">-50%</text>
+        </g>
+      </svg>
+      <img class="poster__mascot" src="/projects/thryx-full.webp" alt="" width="360" height="352" loading="lazy" decoding="async">
+    </>
+  )}
   {id === 'kadugo' && (
     <>
       <div class="poster__ground" style="background:#E7DFCF"></div>
@@ -25,44 +41,6 @@ const { id, title, uid } = Astro.props;
           <rect x="250" y="250" width="50" height="16" fill="#15130F"></rect>
         </g>
       </svg>
-    </>
-  )}
-  {id === 'build' && (
-    <>
-      <div class="poster__ground poster__ground--grid"></div>
-      <svg class="poster__svg" viewBox="0 0 380 300" aria-hidden="true">
-        <g fill="none" stroke="#F4EFE4" stroke-width="2.5">
-          <rect x="30" y="40" width="96" height="58"></rect><rect x="150" y="40" width="96" height="58"></rect><rect x="270" y="40" width="80" height="58"></rect>
-          <path d="M126 69 H146 M140 63 L146 69 L140 75"></path><path d="M246 69 H266 M260 63 L266 69 L260 75"></path>
-          <rect x="150" y="170" width="96" height="58"></rect><path d="M198 98 V166 M192 160 L198 166 L204 160"></path>
-          <path d="M310 98 V140 H246" stroke-dasharray="6 6"></path>
-        </g>
-        <g fill="#F4EFE4" font-family="Archivo, sans-serif" font-size="16" font-weight="700">
-          <text x="50" y="74">src/</text><text x="168" y="74">javac</text><text x="292" y="74">.jar</text><text x="164" y="204">build.xml</text>
-        </g>
-        <text x="30" y="270" fill="#F4EFE4" font-family="Archivo, sans-serif" font-size="14">init → compile → run → doc → package</text>
-      </svg>
-    </>
-  )}
-  {id === 'lore' && (
-    <>
-      <div class="poster__ground" style="background:#FBF8F1"></div>
-      <svg class="poster__svg" viewBox="0 0 380 320" aria-hidden="true">
-        <g fill="none" stroke="#15130F" stroke-width="2" stroke-linecap="round" opacity=".85">
-          <circle cx="190" cy="150" r="98"></circle><circle cx="190" cy="150" r="60" stroke-dasharray="4 7"></circle>
-          <circle cx="190" cy="52" r="20"></circle><circle cx="283" cy="120" r="20"></circle><circle cx="248" cy="230" r="20"></circle><circle cx="132" cy="230" r="20"></circle><circle cx="97" cy="120" r="20"></circle>
-          <path d="M190 72 L262 116 M266 138 L254 210 M228 232 L152 232 M126 210 L110 138 M114 108 L172 60"></path>
-          <path d="M190 120 C210 140 170 160 190 180"></path>
-        </g>
-        <g font-family="Archivo, sans-serif" font-size="13" fill="#15130F" font-weight="700"><text x="178" y="22">Ember</text><text x="306" y="106">Tide</text><text x="270" y="270">Root</text><text x="80" y="270">Gale</text><text x="30" y="106">Stone</text></g>
-      </svg>
-    </>
-  )}
-  {id === 'three' && (
-    <>
-      <div class="poster__ground" style="background:#E7DFCF"></div>
-      <div class="poster__dots-disc"></div>
-      <p class="poster__glyph" aria-hidden="true">?</p>
     </>
   )}
   <p class="poster__title">{title}</p>
