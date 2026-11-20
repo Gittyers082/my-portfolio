@@ -356,8 +356,10 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
 .hero__card.is-flipped .hero__card-flip { transform: perspective(900px) rotateY(180deg); }
 .hero__card-face { grid-area: 1 / 1; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .hero__card-face--back { transform: rotateY(180deg); background: var(--panel-bg); color: var(--on-panel); }
+html.js .hero__card-face { transition: visibility 0s linear 300ms; } /* same midpoint swap as the character cards (Firefox/Zen) */
+html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card.is-flipped .hero__card-face--front { visibility: hidden; }
 .hero__card-code--stack { flex-direction: column; align-items: flex-start; gap: 2px; }
-@media (prefers-reduced-motion: reduce) { .hero__card-flip { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .hero__card-flip, html.js .hero__card-face { transition: none; } }
 
 @media (max-width: 1180px) {
   .hero__title { font-size: 24px; line-height: 32px; }
@@ -1273,6 +1275,11 @@ html[data-theme="dark"] .reveal__img--night { display: block; }
 .card__face--front:focus-visible { outline: 3px solid var(--accent); outline-offset: -6px; }
 .card__face--back { transform: rotateY(180deg); cursor: var(--cursor-hand); } /* clicking anywhere on the back flips it again */
 .card__face { grid-area: 1 / 1; } /* both faces share one cell: the card is as tall as its taller side */
+/* Firefox/Zen hide a turned-away face's background but not its text (its children sit in their
+   own layers), so the hidden side is also switched off at the midpoint of the turn, when the
+   tile is edge-on. Same animation in every browser; nothing can show through. */
+html.js .card__face { transition: visibility 0s linear 320ms; }
+html.js .card__fact:not(.is-flipped) .card__face--back, html.js .card__fact.is-flipped .card__face--front { visibility: hidden; }
 html:not(.js) .card__face--back { grid-area: auto; transform: none; backface-visibility: visible; min-height: 0; padding-top: 0; }
 html:not(.js) .card__corner, html:not(.js) .card__back-btn { display: none; }
 .card__fact--hi .card__face { background: var(--ink); color: var(--ivory); outline: 3px solid var(--ivory); outline-offset: -11px; } /* the inverse tile: dark in light mode, light in dark mode */
@@ -1287,8 +1294,8 @@ html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-
 .card__note { position: relative; z-index: 1; margin-top: auto; font-size: 16px; line-height: 24px; }
 .card__corner { position: absolute; top: 18px; right: 18px; z-index: 1; width: 24px; height: 24px; opacity: 0.4; transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
 .card__face--front:hover .card__corner, .card__face--front:focus-visible .card__corner, .card__face--back:hover .card__corner { opacity: 1; transform: rotate(-40deg); }
-.card__back { position: relative; margin: 0; font-size: 20px; line-height: 28px; font-weight: 600; text-wrap: pretty; }
-.card__actions { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px var(--s-200); }
+.card__back { position: relative; z-index: 1; margin: 0; font-size: 20px; line-height: 28px; font-weight: 600; text-wrap: pretty; }
+.card__actions { position: relative; z-index: 1; margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px var(--s-200); }
 .card__jump { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 16px; line-height: 22px; font-weight: 700; color: inherit; text-decoration: none; }
 .card__jump .arrow { width: 40px; height: 20px; }
 .card__jump:hover .arrow { transform: translateX(6px); }
@@ -1327,7 +1334,7 @@ html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-
   .card__fact::before { inset: 8px -8px -8px 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .card__flip, .card__tilt, .card__corner { transition: none; }
+  .card__flip, .card__tilt, .card__corner, html.js .card__face { transition: none; }
   .card__speed { display: none; }
 }
 
