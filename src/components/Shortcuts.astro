@@ -1,0 +1,32 @@
+---
+/**
+ * The "?" panel: keyboard shortcuts, as a comic panel. Opened and closed by
+ * keys.ts (press ?, or Esc to close). A native <dialog>, so focus and Esc
+ * work for free. None of the letters are in "arete", so typing it never
+ * triggers a shortcut.
+ */
+const KEYS: [string[], string][] = [
+  [['?'], 'Show or hide this panel'],
+  [['J', 'K'], 'Next / previous section'],
+  [['H'], 'Back to the top'],
+  [['P'], 'Projects'],
+  [['G'], 'GitHub activity'],
+  [['C'], 'Contact'],
+  [['Esc'], 'Close'],
+];
+---
+<dialog class="keys" aria-labelledby="keys-h" data-keys>
+  <div class="keys__panel">
+    <h2 id="keys-h" class="display keys__h">Shortcuts</h2>
+    <dl class="keys__list">
+      {KEYS.map(([keys, what]) => (
+        <div class="keys__row">
+          <dt>{keys.map((k, i) => <>{i > 0 && <span class="keys__or">/</span>}<kbd>{k}</kbd></>)}</dt>
+          <dd>{what}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="keys__secret">There’s one more, but you’ll have to find it yourself.</p>
+    <form method="dialog"><button class="keys__close" type="submit">Close</button></form>
+  </div>
+</dialog>

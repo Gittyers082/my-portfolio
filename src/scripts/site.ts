@@ -14,12 +14,23 @@
 
 import { initPortraitReveal } from './portrait-reveal';
 import { initFeatures } from './features';
-import { initSound, zzt } from './sfx';
+import { initSound, zzt, flip as flipSound, stamp as stampSound } from './sfx';
 import { initNotebook, initCoffee, initPencil } from './notebook';
 import { initContact } from './contact';
 import { initFooter } from './footer';
 import { initCard } from './card';
 import { initStars } from './stars';
+import { initAura } from './aura';
+import { initCursor } from './cursor';
+import { initClimb } from './climb';
+import { initCalendar } from './calendar';
+import { initKeys } from './keys';
+import { initDevtools } from './devtools';
+import { initStackBars } from './stack';
+import { initLore } from './lore';
+import { initTyping } from './typing';
+import { initLost } from './lost';
+import { initTheme } from './theme';
 
 const reduceMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -223,17 +234,6 @@ function initCharacterFile(): void {
   });
 }
 
-function initThemeToggle(): void {
-  // Placeholder until dark mode ships: say so instead of doing nothing silently.
-  const btn = document.querySelector<HTMLButtonElement>('.theme-toggle:not(.sound-toggle)');
-  const note = document.getElementById('theme-note');
-  if (!btn || !note) return;
-  btn.addEventListener('click', () => {
-    note.textContent = 'Dark mode is coming soon.';
-    window.setTimeout(() => (note.textContent = ''), 2400);
-  });
-}
-
 function initHeroBackground(): void {
   // The halftone drift only runs while the hero is on screen.
   const hero = document.querySelector<HTMLElement>('.hero');
@@ -384,6 +384,102 @@ function initGlitch(): void {
   heads.forEach((el) => io.observe(el));
 }
 
+/**
+ * Any link to #projects (hero "View my work", the nav) opens the Projects
+ * chapter if a visitor closed it. A link to #episode-<id> (e.g. a course in
+ * Training) does the same and then pops that episode out.
+ */
+function initProjectLinks(): void {
+  const projects = document.querySelector<HTMLDetailsElement>('details[data-chapter="projects"]');
+  const summary = projects?.querySelector<HTMLElement>(':scope > summary');
+  if (!projects || !summary) return;
+  const isClosed = (): boolean => !projects.open || projects.classList.contains('is-closing');
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pick = (id: string | null): void => {
+    if (id) projects.querySelector<HTMLButtonElement>(`[data-pick="${id}"]`)?.click();
+  };
+  // scroll to the chapter first, then open it once it's in view (opening keeps
+  // the header still, which would otherwise cancel the scroll)
+  const goOpen = (episode: string | null = null): void => {
+    summary.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
+    window.setTimeout(() => {
+      if (isClosed()) summary.click();
+      pick(episode);
+    }, smooth ? 600 : 0);
+  };
+  const episodeOf = (hash: string): string | null => /^#episode-([\w-]+)$/.exec(hash)?.[1] ?? null;
+  document.addEventListener('click', (e) => {
+    const link = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href="#projects"], a[href="/#projects"], a[href^="#episode-"], a[href^="/#episode-"]');
+    if (!link) return;
+    const episode = episodeOf(new URL(link.href).hash);
+    if (!episode && !isClosed()) return;
+    e.preventDefault();
+    history.pushState(null, '', '#projects');
+    goOpen(episode);
+  });
+  const fromUrl = episodeOf(location.hash);
+  if (fromUrl || (location.hash === '#projects' && isClosed())) goOpen(fromUrl);
+}
+
+/**
+ * The hero's commit card: press it and it flips to own up ("Just kidding"),
+ * then flips itself back after a few seconds. Press again to flip back early.
+ */
+function initCommitCard(): void {
+  const card = document.querySelector<HTMLElement>('[data-commit]');
+  const btn = card?.querySelector<HTMLButtonElement>('[data-commit-btn]');
+  const front = card?.querySelector<HTMLElement>('.hero__card-face--front');
+  const back = card?.querySelector<HTMLElement>('.hero__card-face--back');
+  if (!card || !btn || !front || !back) return;
+  let timer = 0;
+  const set = (flipped: boolean): void => {
+    card.classList.toggle('is-flipped', flipped);
+    front.setAttribute('aria-hidden', String(flipped));
+    back.setAttribute('aria-hidden', String(!flipped));
+    btn.setAttribute('aria-label', flipped
+      ? 'Just kidding. These days it’s: git commit -m "feat(hero): flip this card". Press to flip back.'
+      : 'A commit message card. Press to flip it.');
+    flipSound();
+  };
+  btn.addEventListener('click', () => {
+    window.clearTimeout(timer);
+    const flipped = !card.classList.contains('is-flipped');
+    set(flipped);
+    if (flipped) {
+      document.dispatchEvent(new CustomEvent('trust:earn', { detail: 'commit' }));
+      timer = window.setTimeout(() => set(false), 4200);
+    }
+  });
+}
+
+/**
+ * "Opened" stamps: the first time a visitor opens a chapter of the Character
+ * file, a stamp slams onto its header (with the stamp sound) and stays for the
+ * rest of the visit. Projects starts open, so it only counts once reopened.
+ */
+function initChapterStamps(): void {
+  const KEY = 'cf-stamped';
+  let stamped = new Set<string>();
+  try { stamped = new Set(JSON.parse(sessionStorage.getItem(KEY) || '[]') as string[]); } catch { /* no storage: stamps last for this page view */ }
+  const items = Array.from(document.querySelectorAll<HTMLDetailsElement>('details[data-chapter]'));
+  items.forEach((item) => { if (stamped.has(item.dataset.chapter ?? '')) item.classList.add('is-stamped'); });
+  let ready = false;
+  window.setTimeout(() => { ready = true; }, 600); // ignore the toggle fired for Projects being open on load
+  items.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      const id = item.dataset.chapter ?? '';
+      if (!ready || !item.open || stamped.has(id)) return;
+      stamped.add(id);
+      try { sessionStorage.setItem(KEY, JSON.stringify([...stamped])); } catch { /* fine */ }
+      window.setTimeout(() => {
+        item.classList.add('is-stamped', 'is-stamping');
+        stampSound();
+        window.setTimeout(() => item.classList.remove('is-stamping'), 500);
+      }, 380); // lands just after the ink slash crosses the header
+    });
+  });
+}
+
 export function initSite(): void {
   initSound();
   initGlitch();
@@ -393,7 +489,6 @@ export function initSite(): void {
   initMenu();
   initCharacterFile();
   initGlideDetails();
-  initThemeToggle();
   initHeroBackground();
   initPortraitReveal();
   initFeatures();
@@ -404,4 +499,18 @@ export function initSite(): void {
   initFooter();
   initCard();
   initStars();
+  initProjectLinks();
+  initAura();
+  initCursor();
+  initCommitCard();
+  initClimb();
+  initCalendar();
+  initChapterStamps();
+  initKeys();
+  initDevtools();
+  initStackBars();
+  initLore();
+  initTyping();
+  initLost();
+  initTheme();
 }

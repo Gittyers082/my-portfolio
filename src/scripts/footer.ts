@@ -2,7 +2,7 @@
  * Footer life:
  * - the big name fills with ink when it scrolls in; hovering (or tapping) it
  *   lifts the letters one after another;
- * - the mini screen: Steven runs and auto-jumps over errors, and jumps when you
+ * - the mini screen: El runs and auto-jumps over errors, and jumps when you
  *   click; it only runs while it's on screen.
  * Reduced motion: the name is simply filled, and the screen shows one still frame.
  */
@@ -49,15 +49,14 @@ function makeObstacle(label: string): { g: SVGGElement; w: number } {
   return { g, w };
 }
 
-function initRunner(): void {
-  const root = document.querySelector<HTMLElement>('[data-runner]');
+function initRunner(root: HTMLElement): void {
   const screen = root?.querySelector<HTMLButtonElement>('[data-runner-screen]');
   const layer = root?.querySelector<SVGGElement>('[data-runner-obstacles]');
   const guy = root?.querySelector<SVGGElement>('[data-runner-guy]');
   const ground = root?.querySelector<SVGGElement>('[data-runner-ground]');
   const clouds = root?.querySelector<SVGGElement>('[data-runner-clouds]');
   const scoreEl = root?.querySelector<HTMLElement>('[data-runner-score]');
-  if (!root || !screen || !layer || !guy || !ground || !clouds || !scoreEl) return;
+  if (!screen || !layer || !guy || !ground || !clouds || !scoreEl) return;
 
   const GUY_X = 52, GUY_W = 42, GROUND_Y = 128, OB_H = 24;
   const SPEED = 170; // svg units per second
@@ -157,5 +156,5 @@ function initRunner(): void {
 
 export function initFooter(): void {
   initName();
-  initRunner();
+  document.querySelectorAll<HTMLElement>('[data-runner]').forEach(initRunner);
 }

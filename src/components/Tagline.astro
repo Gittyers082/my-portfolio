@@ -1,11 +1,13 @@
 ---
 /**
  * The pause between the climb and the longer story: the tagline, the idea it all
- * rests on (arete), and a breeze carrying the tools across like leaves.
+ * rests on (arete), a breeze carrying the tools across like leaves, and the hero
+ * on a rock to the right, aura farming in it.
  * Leaves are the Simple Icons logos from the Stack. Pure CSS motion; site.ts only
  * pauses it while the section is off screen. Reduced motion: they rest in place.
  */
 import TechIcon from './TechIcon.astro';
+import AuraFarmer from './AuraFarmer.astro';
 
 const NAMES = ['Java', 'Python', 'TypeScript', 'JavaScript', 'Kotlin', 'Rust', 'C', 'C++', 'Go', 'Elixir',
   'React', 'Astro', 'Node.js', 'Docker', 'Git', 'PostgreSQL', 'Spring Boot', 'Dart'];
@@ -45,4 +47,6 @@ const leaves = NAMES.map((name, i) => ({
     <p class="arete__word"><span lang="grc">ἀρετή</span><span class="arete__say">arete · say “AR-eh-tay”</span></p>
     <p class="arete__line">Excellence, or the full realization of one’s potential. It’s the idea I build around, in code and in stories.</p>
   </div>
+
+  <AuraFarmer />
 </section>

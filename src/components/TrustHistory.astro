@@ -1,7 +1,10 @@
 ---
 /**
  * GitHub activity: the contribution calendar drawn as halftone dots (bigger dot =
- * busier day, the busiest in cyan), then your latest pushed repos. Both are read
+ * busier day, the busiest in cyan with a pulsing ring), then your latest pushed repos.
+ * Hover (or tap) a dot for its count and date; hover the longest streak to light
+ * up those days. Logic: src/scripts/calendar.ts. Repo descriptions type out like a
+ * terminal (src/scripts/typing.ts). Both are read
  * from GitHub at build time (src/data/contributions.ts). If GitHub can't be
  * reached, the calendar shows a sample pattern and says so, and the repo row hides.
  */
@@ -25,6 +28,8 @@ cal.days.forEach((d, i) => {
 const fmt = (iso: string | null): string =>
   iso ? new Date(iso + 'T00:00:00').toLocaleDateString('en', { day: 'numeric', month: 'short' }) : '–';
 const pads = Array.from({ length: offset });
+// the longest streak's days light up when its number is hovered (not for the sample)
+const inStreak = (iso: string): boolean => !cal.sample && !!cal.streak && iso >= cal.streak[0] && iso <= cal.streak[1];
 ---
 <section id="github" class="section has-stars" aria-labelledby="github-h">
   <div class="stars" aria-hidden="true" data-stars></div>
@@ -32,10 +37,13 @@ const pads = Array.from({ length: offset });
     <h2 id="github-h" class="display h-section h-section--sm glitch" data-text="GitHub activity" data-reveal>GitHub activity</h2>
     <p class="lede" data-reveal style="--d:1">Every dot is a day I pushed code. Some weeks are empty. It’s a student’s calendar, and it’s honest.</p>
   </div>
-  <div class="th" data-reveal style="--d:2">
+  <div class="th" data-reveal style="--d:2" data-cal data-sample={cal.sample ? 'true' : undefined}>
+    <span class="th__tip" aria-hidden="true" data-cal-tip></span>
     <div class="th__stats">
       <div><p class="th__num">{cal.sample || cal.total === null ? '–' : cal.total.toLocaleString('en')}</p><p class="th__cap">contributions in the last year</p></div>
-      <div><p class="th__num">{cal.sample ? '–' : `${cal.longestStreak} days`}</p><p class="th__cap">longest streak</p></div>
+      {cal.sample || !cal.streak
+        ? <div><p class="th__num">–</p><p class="th__cap">longest streak</p></div>
+        : <button class="th__trace" type="button" aria-pressed="false" data-trace><span class="th__num">{cal.longestStreak} days</span><span class="th__cap">longest streak <span class="th__trace-hint">· {fmt(cal.streak[0])} to {fmt(cal.streak[1])}</span></span></button>}
       <div><p class="th__num">{cal.sample ? '–' : fmt(cal.busiest)}</p><p class="th__cap">busiest day, in cyan</p></div>
     </div>
     <div class="th__scroll">
@@ -46,7 +54,7 @@ const pads = Array.from({ length: offset });
         </div>
         <div class="th__grid" role="img" aria-label={cal.sample ? 'Sample contribution calendar (GitHub was unreachable at build time)' : `GitHub contributions over the last year: longest streak ${cal.longestStreak} days`}>
           {pads.map(() => <span class="th__pad"></span>)}
-          {cal.days.map((d) => <span class:list={['th__dot', `th__dot--${d.level}`, { 'th__dot--best': d.date === cal.busiest }]} title={d.date}></span>)}
+          {cal.days.map((d) => <span class:list={['th__dot', `th__dot--${d.level}`, { 'th__dot--best': d.date === cal.busiest, 'th__dot--streak': inStreak(d.date) }]} data-date={d.date} data-level={d.level} data-count={d.count}></span>)}
         </div>
       </div>
     </div>
@@ -66,7 +74,10 @@ const pads = Array.from({ length: offset });
           <li>
             <a class="gh-repo" href={r.url} target="_blank" rel="noopener">
               <span class="gh-repo__name">{r.name}</span>
-              <span class:list={['gh-repo__desc', { 'gh-repo__desc--none': !r.description }]}>{r.description ?? 'No description yet.'}</span>
+              <span class:list={['gh-repo__desc', { 'gh-repo__desc--none': !r.description }]}>
+                <span class="sr-only">{r.description ?? 'No description yet.'}</span>
+                <span class="gh-repo__type" aria-hidden="true"><span class="gh-repo__ghost">{r.description ?? 'No description yet.'}</span><span class="gh-repo__typed" data-type={r.description ?? 'No description yet.'}>{r.description ?? 'No description yet.'}</span></span>
+              </span>
               <span class="gh-repo__meta">
                 {r.language && <span class="gh-repo__lang"><TechIcon name={r.language} size="sm" />{r.language}</span>}
                 <span>Updated {day(r.pushed)}</span>

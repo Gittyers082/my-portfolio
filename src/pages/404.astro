@@ -1,15 +1,88 @@
 ---
+/**
+ * 404: El is lost on the mountain, holding his map upside down at a fork in the
+ * trail. Press him and he turns the map the right way up. Below, dodge.exe, so a
+ * broken link is at least something to play with. (The footer leaves its own
+ * copy of the game out on this page.) Logic: src/scripts/lost.ts
+ */
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
+import Runner from '../components/Runner.astro';
+
+const INK = '#15130F';
+const LIGHT = '#F4EFE4';
+// El, from behind, built at the aura farmer's scale (feet at 170,320), then shrunk onto the trail
+const CAPE = 'M132 140 C122 180 120 222 124 262 C150 272 172 252 198 258 C224 264 248 236 274 232 C290 229 302 214 314 204 C288 196 264 188 242 172 C228 162 216 150 208 140 Z';
 ---
-<Base title="Page not found · El. Steven D. Cruz" description="This page doesn’t exist.">
+<Base title="Page not found · El. Steven D. Cruz" description="This page doesn’t exist." footerGame={false} meter={false}>
   <section class="lost" aria-labelledby="lost-h">
-    <p class="display lost__code" aria-hidden="true">404</p>
-    <h1 id="lost-h" class="display h-section">This panel was never drawn.</h1>
-    <p class="lede">The page you’re looking for isn’t here. The rest of the story is.</p>
-    <a class="link-arrow" href="/">
-      <span class="link-arrow__label">Back to the start</span>
-      <Arrow />
-    </a>
+    <div class="lost__grid">
+      <div class="lost__text">
+        <p class="display lost__code" aria-hidden="true">404</p>
+        <h1 id="lost-h" class="display h-section">This panel was never drawn.</h1>
+        <p class="lede">El took a wrong turn, and his map is upside down. The page you wanted isn’t here, but the rest of the story is.</p>
+        <a class="link-arrow lost__home" href="/" data-lost-home>
+          <span class="link-arrow__label">Back to the start</span>
+          <Arrow />
+        </a>
+        <p class="lost__more">Or jump to <a href="/#projects">Projects</a>, <a href="/#about">About me</a> or <a href="/#contact">Contact</a>.</p>
+      </div>
+
+      <button class="lost__art" type="button" aria-label="El, lost on the mountain with his map upside down. Press to help him turn it around." data-lost>
+        <svg viewBox="0 0 440 400" aria-hidden="true">
+          <defs><pattern id="lost-dots" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.4" fill={INK}></circle></pattern></defs>
+          <!-- the mountain, the trail, the summit flag he's missing -->
+          <path d="M0 400 L52 330 L80 342 L140 250 L168 266 L226 160 L262 104 L300 168 L326 156 L384 262 L440 296 L440 400 Z" fill="#E6DECF" stroke={INK} stroke-width="4" stroke-linejoin="round"></path>
+          <path d="M262 104 L300 168 L326 156 L384 262 L440 296 L440 400 L330 400 L344 300 L290 200 Z" fill="url(#lost-dots)" opacity="0.5"></path>
+          <path d="M0 398 H440" stroke={INK} stroke-width="4"></path>
+          <path d="M30 396 C60 380 70 360 96 346 C120 334 120 300 140 290 C160 280 176 272 196 266" fill="none" stroke={INK} stroke-width="2.5" stroke-dasharray="4 6" stroke-linecap="round"></path>
+          <path d="M262 104 V74" stroke={INK} stroke-width="3" stroke-linecap="round"></path>
+          <path class="accent-fill" d="M262 74 L284 80 L262 86 Z" stroke={INK} stroke-width="2" stroke-linejoin="round"></path>
+          <!-- the fork in the trail -->
+          <g class="lost__sign" transform="translate(48 0)">
+            <path d="M262 268 V206" stroke={INK} stroke-width="4" stroke-linecap="round"></path>
+            <path d="M262 210 H232 L224 218 L232 226 H262 Z" fill="#FBF8F1" stroke={INK} stroke-width="3" stroke-linejoin="round"></path>
+            <text x="246" y="222" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="12" fill={INK}>?</text>
+            <path d="M262 232 H294 L302 240 L294 248 H262 Z" fill="#FBF8F1" stroke={INK} stroke-width="3" stroke-linejoin="round"></path>
+            <text x="280" y="244" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="11" fill={INK}>404</text>
+          </g>
+          <!-- El, from behind, holding the map up -->
+          <g transform="translate(196 268) scale(0.5) translate(-170 -320)">
+            <path d="M140 246 L138 310 L164 310 L166 246 Z M176 246 L178 310 L204 310 L202 246 Z" fill={INK}></path>
+            <path d="M126 306 H166 V320 H122 Z M176 306 H214 V320 H180 Z" fill={INK}></path>
+            <path d="M128 142 C120 190 122 230 132 252 L208 252 C218 230 220 190 212 142 Z" fill={INK}></path>
+            <path class="accent-fill" d={CAPE} stroke={INK} stroke-width="5" stroke-linejoin="round"></path>
+            <path d="M204 150 C226 156 238 172 244 196" fill="none" stroke={INK} stroke-width="16" stroke-linecap="round"></path>
+            <!-- the map: turns the right way up when you press him -->
+            <g transform="translate(232 108) rotate(-10)">
+              <g class="lost__map">
+                <rect x="0" y="0" width="96" height="70" fill="#FBF8F1" stroke={INK} stroke-width="6"></rect>
+                <path d="M32 0 V70 M64 0 V70" stroke={INK} stroke-width="3" opacity="0.35"></path>
+                <path d="M12 58 L40 22 L52 36 L62 26 L86 58 Z" fill="#E6DECF" stroke={INK} stroke-width="4" stroke-linejoin="round"></path>
+                <path d="M40 22 V8 L52 12 L40 16" fill="none" stroke={INK} stroke-width="3.5" stroke-linejoin="round"></path>
+                <circle cx="22" cy="58" r="5" class="accent-fill"></circle>
+              </g>
+            </g>
+            <g transform="translate(92 58) scale(0.55)">
+              <path d="M92 150 C78 108 84 66 110 44 L104 14 L126 34 L134 0 L150 30 L170 6 L172 38 L196 22 L188 58 C204 84 206 122 188 150 Z" fill={INK}></path>
+              <path d="M94 104 C86 102 82 114 88 124 C92 130 98 128 98 122" fill={LIGHT} stroke={INK} stroke-width="5"></path>
+            </g>
+            <path d="M130 142 C150 134 190 134 210 142" fill="none" stroke={INK} stroke-width="8" stroke-linecap="round"></path>
+          </g>
+          <!-- confused, then not -->
+          <g class="lost__marks" font-family="Archivo, sans-serif" font-weight="800">
+            <text class="lost__q" x="156" y="132" font-size="32" fill={INK}>?</text>
+            <text class="lost__q lost__q--2 accent-fill" x="136" y="116" font-size="22">?</text>
+            <text class="lost__bang" x="158" y="130" font-size="34" fill={INK}>!</text>
+          </g>
+        </svg>
+        <span class="lost__caption" aria-live="polite" data-lost-caption>Press El to help him out.</span>
+      </button>
+    </div>
+
+    <div class="lost__game">
+      <h2 class="lost__game-h">While you’re here</h2>
+      <Runner caption="Dodge a few bugs before you head back." />
+    </div>
   </section>
 </Base>
