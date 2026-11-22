@@ -113,8 +113,11 @@ export type Repo = { name: string; url: string; description: string | null; lang
 export async function getRecentRepos(limit = 3): Promise<Repo[]> {
   if (isPlaceholder(profile.github)) return [];
   try {
+    // GitHub allows ~60 unauthenticated API calls an hour per address, and build servers share
+    // addresses, so a token (Vercel env var GITHUB_TOKEN, no permissions needed) keeps this reliable
+    const token = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.GITHUB_TOKEN;
     const res = await fetch(`https://api.github.com/users/${profile.github}/repos?sort=pushed&per_page=30`, {
-      headers: { 'User-Agent': 'portfolio-build', Accept: 'application/vnd.github+json' },
+      headers: { 'User-Agent': 'portfolio-build', Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
