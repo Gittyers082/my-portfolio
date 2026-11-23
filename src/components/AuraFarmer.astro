@@ -17,6 +17,21 @@ import Lightning from './Lightning.astro';
 
 const INK = '#15130F';
 const LIGHT = '#F4EFE4';
+// El's heater shield, propped against the front of the rock with two arrows in it. Same drawing as the
+// GitHub profile banner's (scripts/art.py, shield_by_rock). It tips over when the rock splits.
+const HEATER = 'M-36 0 L36 0 L36 30 C36 58 20 78 0 92 C-20 78 -36 58 -36 30 Z';
+const HEATER_IN = 'M-28 7 L28 7 L28 31 C28 54 15 71 0 82 C-15 71 -28 54 -28 31 Z';
+/** An arrow buried at (x, y), its shaft sticking out at ang degrees, with cracks where it hit. */
+const arrow = (x: number, y: number, ang: number, ln = 44) => {
+  const r = (a: number) => (a * Math.PI) / 180;
+  const [ex, ey] = [x + ln * Math.cos(r(ang)), y + ln * Math.sin(r(ang))];
+  return {
+    cracks: [ang + 150, ang + 210].map((k) => `M${x} ${y} l${(7 * Math.cos(r(k))).toFixed(1)} ${(7 * Math.sin(r(k))).toFixed(1)}`).join(' '),
+    shaft: `M${x} ${y} L${ex.toFixed(1)} ${ey.toFixed(1)}`,
+    tail: `translate(${ex.toFixed(1)} ${ey.toFixed(1)}) rotate(${ang})`,
+  };
+};
+const ARROWS = [arrow(-12, 26, -150), arrow(10, 46, -115)];
 // three cape shapes with the same commands, so the morph is smooth: resting, lifted, settling
 const CAPE = [
   'M132 140 C122 180 120 222 124 262 C150 272 172 252 198 258 C224 264 248 236 274 232 C290 229 302 214 314 204 C288 196 264 188 242 172 C228 162 216 150 208 140 Z',
@@ -48,6 +63,26 @@ const SPLINES = '0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1';
         <path d="M-200 468 H340" stroke={INK} stroke-width="5"></path>
         <g transform="translate(244 316)"><path class="af-deb af-deb0" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g><g transform="translate(254 318)"><path class="af-deb af-deb1" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g><g transform="translate(238 324)"><path class="af-deb af-deb2" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g><g transform="translate(260 326)"><path class="af-deb af-deb3" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g>
         <path class="af-crackC" d="M300 352 L284 380 L298 404 L286 436 L294 468" fill="none" stroke="#15130F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+        <!-- the shield, propped on its point against the rock; tips over when the rock splits -->
+        <g class="af-shield"><g transform="translate(64 375) rotate(-10)">
+          <path d={HEATER} fill={LIGHT}></path>
+          <path d="M0 0 L36 0 L36 30 C36 58 20 78 0 92 Z" class="accent-fill"></path>
+          <path d={HEATER} fill="none" stroke={INK} stroke-width="5" stroke-linejoin="round"></path>
+          <path d={HEATER_IN} fill="none" stroke={INK} stroke-width="2.5"></path>
+          <path d="M0 0 V92" stroke={INK} stroke-width="3"></path>
+          {ARROWS.map((a) => (
+            <g>
+              <path d={a.cracks} stroke={INK} stroke-width="2" stroke-linecap="round"></path>
+              <path d={a.shaft} stroke={INK} stroke-width="4" stroke-linecap="round"></path>
+              <g transform={a.tail}>
+                <path d="M2 0 L-18 0 L-4 -9 L2 -9 Z" class="accent-fill" stroke={INK} stroke-width="2.5" stroke-linejoin="round"></path>
+                <path d="M2 0 L-18 0 L-4 9 L2 9 Z" fill={LIGHT} stroke={INK} stroke-width="2.5" stroke-linejoin="round"></path>
+                <path d="M2 -3 L7 0 L2 3" fill="none" stroke={INK} stroke-width="2.5"></path>
+              </g>
+            </g>
+          ))}
+        </g></g>
 
         <!-- the leap down: ground cracks, speed lines, after-images -->
         <path class="af-gcrack" d="M56 468 l-34 -2 l-18 10 M56 468 l30 -4 l22 8 M46 468 l-12 -8 M70 468 l10 -9" fill="none" stroke="#15130F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
