@@ -9,7 +9,7 @@ export const profile = {
   intro: 'I build web apps and I’m exploring AI engineering.',
   school: 'Saint Louis University',
   year: '3rd-year IT student',
-  email: 'dcruzsteven1@gmail.com',
+  email: 'dev.malemanape@gmail.com',
   github: 'Gittyers082', // also drives the GitHub activity section (pulled at build time)
   linkedin: 'https://www.linkedin.com/in/el-steven/',
   fiverr: 'https://www.fiverr.com/ryuniii', // public seller profile (not the dashboard, which needs a login)
