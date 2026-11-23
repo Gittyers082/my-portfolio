@@ -7,7 +7,7 @@
  * is still a placeholder, or GitHub can't be reached, it returns a clearly
  * labelled SAMPLE so the design can still be seen.
  */
-import { profile, isPlaceholder } from './profile';
+import { profile, isPlaceholder } from "./profile";
 
 export type Level = 0 | 1 | 2 | 3 | 4;
 export type Day = { date: string; level: Level; count?: number }; // count: read from GitHub's day tooltips, when present
@@ -22,7 +22,9 @@ export type Calendar = {
 
 const ISO = (d: Date): string => d.toISOString().slice(0, 10);
 
-function stats(days: Day[]): Pick<Calendar, 'longestStreak' | 'streak' | 'busiest'> {
+function stats(
+  days: Day[],
+): Pick<Calendar, "longestStreak" | "streak" | "busiest"> {
   let run = 0;
   let runStart = 0;
   let longestStreak = 0;
@@ -33,14 +35,21 @@ function stats(days: Day[]): Pick<Calendar, 'longestStreak' | 'streak' | 'busies
     if (d.level > 0) {
       if (run === 0) runStart = i;
       run += 1;
-      if (run > longestStreak) { longestStreak = run; streak = [days[runStart].date, d.date]; }
+      if (run > longestStreak) {
+        longestStreak = run;
+        streak = [days[runStart].date, d.date];
+      }
     } else {
       run = 0;
     }
     if (!busiest || weight(d) > weight(busiest)) busiest = d;
   });
   const best = busiest as Day | null;
-  return { longestStreak, streak, busiest: best && best.level > 0 ? best.date : null };
+  return {
+    longestStreak,
+    streak,
+    busiest: best && best.level > 0 ? best.date : null,
+  };
 }
 
 /** A deterministic, sparse sample year with a busy stretch near the end. */
@@ -69,19 +78,24 @@ function sample(): Calendar {
 export async function getCalendar(): Promise<Calendar> {
   if (isPlaceholder(profile.github)) return sample();
   try {
-    const res = await fetch(`https://github.com/users/${profile.github}/contributions`, {
-      headers: { 'User-Agent': 'portfolio-build' },
-      signal: AbortSignal.timeout(8000),
-    });
+    const res = await fetch(
+      `https://github.com/users/${profile.github}/contributions`,
+      {
+        headers: { "User-Agent": "portfolio-build" },
+        signal: AbortSignal.timeout(8000),
+      },
+    );
     if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
     const html = await res.text();
     const days: Day[] = [];
     // Each day's exact count lives in a <tool-tip for="<td id>">, e.g. "3 contributions on October 12th."
     const counts = new Map<string, number>();
-    for (const m of html.matchAll(/<tool-tip[^>]*\bfor="([^"]+)"[^>]*>([^<]*)<\/tool-tip>/g)) {
+    for (const m of html.matchAll(
+      /<tool-tip[^>]*\bfor="([^"]+)"[^>]*>([^<]*)<\/tool-tip>/g,
+    )) {
       const text = m[2].trim();
       const n = text.match(/^(\d[\d,]*)\s+contributions?\b/i);
-      if (n) counts.set(m[1], Number(n[1].replace(/,/g, '')));
+      if (n) counts.set(m[1], Number(n[1].replace(/,/g, "")));
       else if (/^no contributions\b/i.test(text)) counts.set(m[1], 0);
     }
     // Each day is a <td> with data-date and data-level (in either order).
@@ -89,21 +103,36 @@ export async function getCalendar(): Promise<Calendar> {
       const date = tag.match(/data-date="(\d{4}-\d{2}-\d{2})"/)?.[1];
       const level = tag.match(/data-level="([0-4])"/)?.[1];
       const id = tag.match(/\bid="([^"]+)"/)?.[1];
-      if (date && level) days.push({ date, level: Number(level) as Level, count: id ? counts.get(id) : undefined });
+      if (date && level)
+        days.push({
+          date,
+          level: Number(level) as Level,
+          count: id ? counts.get(id) : undefined,
+        });
     }
-    if (days.length < 300) throw new Error('calendar markup not recognised');
+    if (days.length < 300) throw new Error("calendar markup not recognised");
     days.sort((a, b) => a.date.localeCompare(b.date));
-    const totalMatch = html.match(/([\d,]+)\s+contributions?\s+in the last year/);
-    const total = totalMatch ? Number(totalMatch[1].replace(/,/g, '')) : null;
+    const totalMatch = html.match(
+      /([\d,]+)\s+contributions?\s+in the last year/,
+    );
+    const total = totalMatch ? Number(totalMatch[1].replace(/,/g, "")) : null;
     return { days, sample: false, total, ...stats(days) };
   } catch (err) {
-    console.warn(`[github activity] using the sample calendar: ${(err as Error).message}`);
+    console.warn(
+      `[github activity] using the sample calendar: ${(err as Error).message}`,
+    );
     return sample();
   }
 }
 
 /* ---------- Latest pushes: your most recently updated public repos ---------- */
-export type Repo = { name: string; url: string; description: string | null; language: string | null; pushed: string };
+export type Repo = {
+  name: string;
+  url: string;
+  description: string | null;
+  language: string | null;
+  pushed: string;
+};
 
 /**
  * Reads your public repos from the GitHub API at build time (no token needed),
@@ -115,23 +144,50 @@ export async function getRecentRepos(limit = 3): Promise<Repo[]> {
   try {
     // GitHub allows ~60 unauthenticated API calls an hour per address, and build servers share
     // addresses, so a token (Vercel env var GITHUB_TOKEN, no permissions needed) keeps this reliable
-    const token = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.GITHUB_TOKEN;
-    const res = await fetch(`https://api.github.com/users/${profile.github}/repos?sort=pushed&per_page=30`, {
-      headers: { 'User-Agent': 'portfolio-build', Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-      signal: AbortSignal.timeout(8000),
-    });
+    const token = (
+      globalThis as { process?: { env?: Record<string, string | undefined> } }
+    ).process?.env?.GITHUB_TOKEN;
+    const res = await fetch(
+      `https://api.github.com/users/${profile.github}/repos?sort=pushed&per_page=30`,
+      {
+        headers: {
+          "User-Agent": "portfolio-build",
+          Accept: "application/vnd.github+json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        signal: AbortSignal.timeout(8000),
+      },
+    );
     if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
     const data = (await res.json()) as {
-      name: string; html_url: string; description: string | null; language: string | null;
-      pushed_at: string; fork: boolean; archived: boolean;
+      name: string;
+      html_url: string;
+      description: string | null;
+      language: string | null;
+      pushed_at: string;
+      fork: boolean;
+      archived: boolean;
     }[];
     return data
-      .filter((r) => !r.fork && !r.archived)
+      .filter(
+        (r) =>
+          !r.fork &&
+          !r.archived &&
+          r.name.toLowerCase() !== profile.github.toLowerCase(),
+      )
       .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at))
       .slice(0, limit)
-      .map((r) => ({ name: r.name, url: r.html_url, description: r.description, language: r.language, pushed: r.pushed_at.slice(0, 10) }));
+      .map((r) => ({
+        name: r.name,
+        url: r.html_url,
+        description: r.description,
+        language: r.language,
+        pushed: r.pushed_at.slice(0, 10),
+      }));
   } catch (err) {
-    console.warn(`[github activity] latest pushes hidden: ${(err as Error).message}`);
+    console.warn(
+      `[github activity] latest pushes hidden: ${(err as Error).message}`,
+    );
     return [];
   }
 }
