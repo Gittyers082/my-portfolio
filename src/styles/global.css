@@ -27,7 +27,7 @@
   --track: #DDD4C4;      /* demo progress track */
   --star: rgb(21 19 15 / 0.2);
   --glass: rgb(244 239 228 / 0.97);
-  --scroll-dots: radial-gradient(circle, rgb(21 19 15 / 0.2) 0 1px, transparent 1.4px); /* taste-skill-ignore: faint halftone in the scrollbar track */
+  --scroll-dots: radial-gradient(circle, rgb(21 19 15 / 0.2) 0 1px, transparent 1.4px);
   color-scheme: light;
 
   /* type */
@@ -50,7 +50,7 @@
   --dur-fast: 300ms;
 
   /* halftone */
-  --dots: radial-gradient(circle, var(--ink) 0 1.6px, transparent 2px); /* taste-skill-ignore: halftone dots are the brief's texture, not a gradient wash */
+  --dots: radial-gradient(circle, var(--ink) 0 1.6px, transparent 2px);
 
   /* the cursor: an inked arrow with a solid offset, cyan over anything you can press */
   --cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M4 3 L4 25 L9.6 19.8 L13.4 28.4 L17.6 26.6 L13.8 18.2 L21.4 18.2 Z' transform='translate(2.5 2.5)' fill='%2315130F'/%3E%3Cpath d='M4 3 L4 25 L9.6 19.8 L13.4 28.4 L17.6 26.6 L13.8 18.2 L21.4 18.2 Z' fill='%23FBF8F1' stroke='%2315130F' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto;
@@ -74,7 +74,7 @@ html[data-theme="dark"] {
   --track: #3A352F;
   --star: rgb(237 230 216 / 0.22);
   --glass: rgb(18 17 14 / 0.97);
-  --scroll-dots: radial-gradient(circle, rgb(237 230 216 / 0.16) 0 1px, transparent 1.4px); /* taste-skill-ignore: faint halftone in the scrollbar track */
+  --scroll-dots: radial-gradient(circle, rgb(237 230 216 / 0.16) 0 1px, transparent 1.4px);
   color-scheme: dark;
 }
 /* drawings: colours written straight into the SVGs follow the theme too */
@@ -140,13 +140,8 @@ button { font: inherit; color: inherit; }
 }
 .skip-link:focus { clip-path: none; }
 
-.visually-hidden {
-  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
-  clip: rect(0 0 0 0); white-space: nowrap;
-}
-
 .placeholder { color: var(--muted); }
- .cf__item[open] .placeholder { color: #BDB4A6; }
+.cf__item[open] .placeholder { color: #BDB4A6; }
 
 /* ---------- type roles ---------- */
 .display {
@@ -159,7 +154,7 @@ button { font: inherit; color: inherit; }
 .h-section { font-size: clamp(64px, 8.9vw, 128px); }
 .lede { font-size: 20px; line-height: 28px; text-wrap: pretty; }
 
-/* ---------- the arrow link (hero, case study, contact) ---------- */
+/* ---------- the arrow link (hero, projects, 404) ---------- */
 .link-arrow {
   display: inline-flex; align-items: center; gap: var(--s-200);
   min-height: 48px; width: fit-content;
@@ -296,7 +291,7 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
   content: attr(data-shadow); white-space: pre;
   position: absolute; left: 0; top: 0; z-index: -1; transform: translate(0.08em, 0.08em);
   color: transparent; background-image: var(--dots); background-size: 7px 7px;
-  -webkit-background-clip: text; background-clip: text; /* taste-skill-ignore: halftone shadow on the name, asked for in the brief */
+  -webkit-background-clip: text; background-clip: text;
   user-select: none; pointer-events: none;
 }
 .hero__intro {
@@ -332,7 +327,7 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
 .hero__card-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; }
 .hero__card-title svg { width: 20px; height: 20px; }
 /* literal code (the monitor's file, the commit command): the one place monospace is right */
-.code-text, .hero__card-title--code { font-family: ui-monospace, Consolas, Menlo, monospace; } /* taste-skill-ignore: literal code */
+.code-text, .hero__card-title--code { font-family: ui-monospace, Consolas, Menlo, monospace; }
 /* the commit card: same code voice as the monitor */
 .hero__card-title--code { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
 .hero__card-prompt { color: var(--accent); }
@@ -518,7 +513,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .cf__minibar { display: inline-flex; gap: 2px; }
 .cf__minibar-seg { width: 7px; height: 14px; background: currentColor; }
 .cf__minibar-seg--active { background: var(--accent); }
-.cf__minibar-seg--locked { background: transparent; box-shadow: inset 0 0 0 2px currentColor; } /* taste-skill-ignore: an outlined segment, not a drop shadow */
+.cf__minibar-seg--locked { background: transparent; box-shadow: inset 0 0 0 2px currentColor; }
 /* the "Opened" stamp: slams on the first time a chapter is opened, then stays for the visit */
 .cf__stamp {
   position: absolute; top: 14px; right: calc(var(--s-500) + 96px); z-index: 2;
@@ -1097,7 +1092,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 }
 /* halftone dots under the frame, offset down-right like the rest of the art */
 .reveal__dots {
-  background-image: var(--dots); background-size: 7px 7px; /* taste-skill-ignore: halftone edge of the reveal */
+  background-image: var(--dots); background-size: 7px 7px;
   clip-path: polygon(calc(var(--rx) - var(--rf) + 12px) calc(var(--ry) + 12px), calc(var(--rx) + 12px) calc(var(--ry) - var(--rf) + 12px),
                      calc(var(--rx) + var(--rf) + 12px) calc(var(--ry) + 12px), calc(var(--rx) + 12px) calc(var(--ry) + var(--rf) + 12px));
 }
@@ -1112,7 +1107,7 @@ html[data-theme="dark"] .reveal__img--night { display: block; }
 /* development placeholder: clearly not a face, marks where the face will sit */
 .portrait-placeholder {
   background-color: var(--sand);
-  background-image: var(--dots); background-size: 9px 9px; /* taste-skill-ignore: placeholder texture */
+  background-image: var(--dots); background-size: 9px 9px;
   color: var(--ink);
 }
 .portrait-placeholder__face {
@@ -1154,7 +1149,7 @@ html[data-theme="dark"] .reveal__img--night { display: block; }
 .hero__bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .hero__bg-dots {
   position: absolute; inset: -48px;
-  background-image: radial-gradient(circle, rgb(0 120 154 / 0.18) 0 1.3px, transparent 1.7px); /* taste-skill-ignore: faint halftone drift, asked for */
+  background-image: radial-gradient(circle, rgb(0 120 154 / 0.18) 0 1.3px, transparent 1.7px);
   background-size: 14px 14px;
   animation: hero-drift 9s linear infinite;
 }
@@ -1267,7 +1262,7 @@ html[data-theme="dark"] .reveal__img--night { display: block; }
 /* the sheen that follows the cursor, placed per tile by card.ts */
 .card__face::after {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; /* under the text, which sits at z-index 1 */
-  background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.5), transparent 55%); /* taste-skill-ignore: a moving highlight is the tilt interaction itself, not a decorative wash */
+  background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.5), transparent 55%);
   transition: opacity 300ms var(--ease); /* no mix-blend-mode here: in Firefox/Zen a blending child breaks the 3D flip (bug 1556956) */
 }
 .card.is-tilting .card__face::after { opacity: 1; }
@@ -1284,12 +1279,12 @@ html.js .card__fact:not(.is-flipped) .card__face--back, html.js .card__fact.is-f
 html:not(.js) .card__face--back { grid-area: auto; transform: none; backface-visibility: visible; min-height: 0; padding-top: 0; }
 html:not(.js) .card__corner, html:not(.js) .card__back-btn { display: none; }
 .card__fact--hi .card__face { background: var(--ink); color: var(--ivory); outline: 3px solid var(--ivory); outline-offset: -11px; } /* the inverse tile: dark in light mode, light in dark mode */
-.card__fact--hi .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.18), transparent 55%); } /* taste-skill-ignore: same tilt highlight, tuned for the ink tile */
+.card__fact--hi .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.18), transparent 55%); }
 .card__fact--hi::before { background-image: none; background: var(--accent); }
 .card__fact--hi .placeholder { color: #BDB4A6; }
 html[data-theme="dark"] .card__fact--hi .placeholder { color: var(--muted); }
-html[data-theme="dark"] .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.1), transparent 55%); } /* taste-skill-ignore: the tilt highlight, dimmer on dark tiles */
-html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.42), transparent 55%); } /* taste-skill-ignore: the tilt highlight on the light tile */
+html[data-theme="dark"] .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.1), transparent 55%); }
+html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.42), transparent 55%); }
 .card__label { position: relative; z-index: 1; font-size: 16px; line-height: 24px; font-weight: 700; }
 .card__value { position: relative; z-index: 1; font-size: 48px; line-height: 0.95; font-weight: 700; font-stretch: 75%; letter-spacing: -0.02em; }
 .card__note { position: relative; z-index: 1; margin-top: auto; font-size: 16px; line-height: 24px; }
@@ -1345,7 +1340,7 @@ html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-
 .star { position: absolute; height: 2px; border-radius: 2px; background: var(--star); transform-origin: 0 50%; }
 .star--accent { background: rgb(0 120 154 / 0.45); }
 
-/* ---------- Stack: four areas with icons ---------- */
+/* ---------- Stack: one area per kind of tool, with icons ---------- */
 .cf__body > .stats__note { margin-bottom: var(--s-200); }
 .areas { display: flex; flex-wrap: wrap; gap: var(--s-200); align-items: stretch; }
 .area { flex: 1 1 300px; display: flex; flex-direction: column; gap: 22px; padding: 28px; background: #24211C; }
@@ -1557,7 +1552,7 @@ summary.quest__head::-webkit-details-marker { display: none; }
 .dossier { position: relative; }
 .redact { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .js .dossier .redact {
-  background: linear-gradient(#0B0A08, #0B0A08) no-repeat right / 100% 100%; /* taste-skill-ignore: a solid bar whose width animates, not a gradient wash */
+  background: linear-gradient(#0B0A08, #0B0A08) no-repeat right / 100% 100%;
   color: transparent; transition: background-size 520ms var(--ease), color 200ms linear;
 }
 .js .dossier.is-revealed .redact { background-size: 0% 100%; color: inherit; transition: background-size 520ms var(--ease), color 220ms linear 260ms; }
@@ -1637,7 +1632,7 @@ html:not(.js) .dossier__stamp { display: none; }
 .pop { position: relative; }
 .pop__shadow {
   position: absolute; inset: 14px -14px -14px 14px;
-  background-image: radial-gradient(circle, var(--on-panel) 0 1.5px, transparent 1.9px); background-size: 7px 7px; /* taste-skill-ignore: halftone under the popped-out panel */
+  background-image: radial-gradient(circle, var(--on-panel) 0 1.5px, transparent 1.9px); background-size: 7px 7px;
 }
 .pop__panel { position: relative; background: var(--ivory); color: var(--ink); padding: var(--s-400); transform: translate(-6px, -6px); }
 .pop__panel :focus-visible { outline-color: var(--ink); }
@@ -1694,7 +1689,7 @@ html:not(.js) .dossier__stamp { display: none; }
   .picker__name { font-size: 16px; line-height: 20px; }
 }
 
-/* ---------- Ka-dugo demo loop ---------- */
+/* ---------- Project demo loops (ThriftBite and Ka-dugo) ---------- */
 .demo { margin: 0; display: flex; flex-direction: column; gap: 18px; }
 .demo__frame { position: relative; }
 .demo__shadow { position: absolute; inset: 18px -18px -18px 18px; background-image: var(--dots); background-size: 8px 8px; }
@@ -1726,7 +1721,7 @@ html:not(.js) .dossier__stamp { display: none; }
 .demo__match-title { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
 .demo__match-title svg { width: 18px; height: 22px; }
 
-/* ThriftBite's screen: its own palette, fixed in both themes */
+/* ThriftBite's screen: that app's own palette and hard 4px shadows, fixed in both themes */
 .screen--tb {
   --tb-ink: #102326; --tb-bg: #E3F6F5; --tb-teal: #0A7C8A; --tb-lime: #A6D94A; --tb-cream: #FFF4E0; --tb-muted: #3E5557;
   border-color: var(--tb-ink); background: var(--tb-bg); color: var(--tb-ink);
@@ -1740,21 +1735,21 @@ html:not(.js) .dossier__stamp { display: none; }
 .tb__brand img { width: 28px; height: 28px; }
 .tb__tab { padding: 4px 2px; }
 .tb__tab--on { border-bottom: 3px solid var(--tb-teal); font-weight: 600; }
-.tb__cart { margin-left: auto; padding: 5px 12px; border: 2px solid var(--tb-ink); box-shadow: 3px 3px 0 var(--tb-ink); font-weight: 600; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__cart { margin-left: auto; padding: 5px 12px; border: 2px solid var(--tb-ink); box-shadow: 3px 3px 0 var(--tb-ink); font-weight: 600; }
 .tb__screen { padding: 22px; gap: 16px; }
-.tb__hero { position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--s-200); padding: 18px 20px; background: var(--tb-teal); color: #FFFFFF; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); overflow: hidden; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__hero { position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--s-200); padding: 18px 20px; background: var(--tb-teal); color: #FFFFFF; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); overflow: hidden; }
 .tb__hero-h { font-size: 26px; line-height: 28px; font-weight: 800; max-width: 340px; }
 .tb__hero-sub { margin-top: 6px; font-size: 14px; line-height: 20px; }
 .tb__mascot { width: 104px; height: auto; flex: none; margin: -12px -6px -26px 0; }
 .tb__count { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--tb-muted); }
 .tb__live, .tb__dot { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--tb-ink); }
-.tb__live::before, .tb__dot { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--tb-lime); box-shadow: 0 0 0 2px var(--tb-ink); } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__live::before, .tb__dot { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--tb-lime); box-shadow: 0 0 0 2px var(--tb-ink); }
 .tb__dot { margin-right: 8px; }
 .tb__deals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.tb__deal { background: #FFFFFF; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); font-size: 13px; line-height: 18px; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__deal { background: #FFFFFF; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); font-size: 13px; line-height: 18px; }
 .tb__deal--picked { outline: 4px solid var(--tb-lime); outline-offset: 3px; }
 .demo.is-playing .tb__deal--picked { animation: tb-pick 2600ms var(--ease); }
-@keyframes tb-pick { 0%, 55% { transform: none; } 70% { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--tb-ink); } 85%, 100% { transform: none; } } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+@keyframes tb-pick { 0%, 55% { transform: none; } 70% { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--tb-ink); } 85%, 100% { transform: none; } }
 .tb__img { position: relative; height: 84px; display: flex; align-items: center; justify-content: center; background: var(--tb-cream); border-bottom: 2px solid var(--tb-ink); }
 .tb__img svg { width: 48px; height: 48px; fill: none; stroke: var(--tb-ink); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
 .tb__off { position: absolute; left: 8px; top: 8px; padding: 2px 6px; background: var(--tb-lime); border: 2px solid var(--tb-ink); font-size: 11px; font-weight: 800; }
@@ -1762,7 +1757,7 @@ html:not(.js) .dossier__stamp { display: none; }
 .tb__deal-body s, .tb__price s { color: var(--tb-muted); }
 .tb__store, .tb__meta { font-size: 12px; color: var(--tb-muted); }
 .tb__detail { display: flex; gap: 22px; align-items: stretch; }
-.tb__img--big { width: 42%; height: auto; min-height: 260px; flex: none; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__img--big { width: 42%; height: auto; min-height: 260px; flex: none; border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); }
 .tb__img--big svg { width: 110px; height: 110px; }
 .tb__detail-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 .tb__detail-h { font-size: 28px; line-height: 30px; font-weight: 800; }
@@ -1779,13 +1774,13 @@ html:not(.js) .dossier__stamp { display: none; }
 .demo[data-step="1"]:not(.is-playing) .tb__stock-b { visibility: visible; }
 .tb__buy { display: flex; gap: 10px; margin-top: 4px; }
 .tb__qty { padding: 10px 14px; background: #FFFFFF; border: 2px solid var(--tb-ink); font-weight: 700; letter-spacing: 0.1em; }
-.tb__btn { flex: 1; padding: 10px 14px; text-align: center; background: var(--tb-lime); border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); font-weight: 700; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__btn { flex: 1; padding: 10px 14px; text-align: center; background: var(--tb-lime); border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); font-weight: 700; }
 .tb__screen--done { justify-content: center; gap: 22px; padding: 28px 40px; }
 .tb__done { display: flex; align-items: center; gap: 16px; }
-.tb__check { width: 60px; height: 60px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--tb-lime); border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__check { width: 60px; height: 60px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--tb-lime); border: 2px solid var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-ink); }
 .tb__check svg { width: 32px; height: 32px; }
 .tb__done-h { font-size: 34px; line-height: 36px; font-weight: 800; }
-.tb__ticket { max-width: 420px; display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; background: #FFFFFF; border: 2px dashed var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-teal); transform: rotate(-1.5deg); font-size: 15px; } /* taste-skill-ignore: ThriftBite's own UI (hard 4px shadow), drawn as a screen of that app */
+.tb__ticket { max-width: 420px; display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; background: #FFFFFF; border: 2px dashed var(--tb-ink); box-shadow: 4px 4px 0 var(--tb-teal); transform: rotate(-1.5deg); font-size: 15px; }
 .tb__ticket-row { display: flex; justify-content: space-between; gap: var(--s-100); }
 .tb__saved { color: var(--tb-teal); }
 @media (max-width: 959px) {
@@ -1832,7 +1827,7 @@ html:not(.js) .dossier__stamp { display: none; }
   .demo__shadow { inset: 10px -10px -10px 10px; }
 }
 
-/* ---------- Trust value meter ---------- */
+/* ---------- Explored meter (TrustMeter.astro) ---------- */
 .trust {
   position: fixed; left: var(--s-300); bottom: var(--s-300); z-index: 12; width: 204px;
   padding: 12px 14px; display: flex; flex-direction: column; gap: var(--s-75);
@@ -2003,7 +1998,7 @@ html:not(.js) .dossier__stamp { display: none; }
 }
 .gh-repo:hover { transform: translateY(-3px); }
 /* descriptions type out like a terminal: an invisible copy holds the space, the typed copy sits on top */
-.gh-repo__type { position: relative; display: block; font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 14px; line-height: 21px; } /* taste-skill-ignore: terminal text */
+.gh-repo__type { position: relative; display: block; font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 14px; line-height: 21px; }
 .gh-repo__ghost { visibility: hidden; }
 .gh-repo__typed { position: absolute; inset: 0; }
 .gh-repo__typed.is-typing::after { content: ""; display: inline-block; width: 8px; height: 15px; margin-left: 2px; vertical-align: -2px; background: var(--accent); animation: caret-blink 700ms steps(1) infinite; }
@@ -2025,14 +2020,14 @@ html:not(.js) .dossier__stamp { display: none; }
   .gh-repo:hover, .gh-repo:hover .arrow { transform: none; }
 }
 
-/* ---------- Contact additions ---------- */
+/* ---------- Contact: link labels and the trust line ---------- */
 .contact__stack { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .contact__sub { font-size: 15px; line-height: 20px; font-weight: 500; color: var(--muted); }
 .arrow--down { width: 28px; height: 32px; }
 .contact__link:hover .arrow--down { transform: translateY(4px); }
 .contact__trust { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; }
 
-/* ---------- Hero: Ink / Photo frame selector (from the show site's visual selector) ---------- */
+/* ---------- Hero: Ink / Photo frame selector ---------- */
 .frames {
   position: absolute; z-index: 8; right: var(--gutter); bottom: 32px;
   display: flex; align-items: flex-end; gap: 10px; padding: 10px;
@@ -2041,7 +2036,7 @@ html:not(.js) .dossier__stamp { display: none; }
 .frames__btn { display: flex; flex-direction: column; gap: 6px; padding: 0; background: none; border: 0; color: var(--ink); cursor: var(--cursor-hand); }
 .frames__thumb { position: relative; display: block; width: 84px; height: 56px; border: 3px solid var(--ink); background: var(--wall); overflow: hidden; }
 .frames__thumb svg { width: 100%; height: 100%; }
-.frames__thumb--photo { background-color: var(--sand); background-image: radial-gradient(circle, var(--ink) 0 1px, transparent 1.4px); background-size: 6px 6px; } /* taste-skill-ignore: photo frame thumbnail */
+.frames__thumb--photo { background-color: var(--sand); background-image: radial-gradient(circle, var(--ink) 0 1px, transparent 1.4px); background-size: 6px 6px; }
 .frames__thumb--photo span { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--ivory); border: 3px solid var(--ink); }
 .frames__btn[aria-pressed="true"] .frames__thumb { outline: 3px solid var(--accent); outline-offset: 2px; }
 .frames__label { font-size: 14px; line-height: 16px; font-weight: 700; }
@@ -2083,7 +2078,7 @@ html:not(.js) .dossier__stamp { display: none; }
 .keys__row dd { margin: 0; font-size: 16px; line-height: 22px; }
 .keys kbd, .statusbar__keys kbd {
   display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 8px;
-  border: 3px solid var(--ink); background: var(--ivory); font: 700 15px/1 ui-monospace, Consolas, Menlo, monospace; /* taste-skill-ignore: keys are literal code */
+  border: 3px solid var(--ink); background: var(--ivory); font: 700 15px/1 ui-monospace, Consolas, Menlo, monospace;
 }
 .keys__or { color: var(--muted); font-weight: 700; }
 .keys__secret { margin: var(--s-300) 0 0; font-size: 15px; line-height: 22px; color: var(--muted); }
