@@ -409,24 +409,9 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .screen__dot + .screen__dot { opacity: 0.5; }
 .screen__url { margin-left: var(--s-200); }
 .screen__body { display: flex; min-height: 560px; }
-.screen__side { width: 196px; flex: none; background: var(--sand); padding: var(--s-300) var(--s-200); display: flex; flex-direction: column; gap: 6px; }
-.screen__brand { display: flex; align-items: center; gap: 10px; margin-bottom: var(--s-300); font-size: 20px; font-weight: 700; }
-.screen__brand svg { width: 20px; height: 24px; }
-.screen__nav { padding: 10px 12px; font-size: 15px; }
-.screen__nav--on { background: var(--panel-bg); color: var(--on-panel); font-weight: 600; }
-.screen__h { font-size: 28px; line-height: 32px; font-weight: 700; }
-.screen__sub { margin-top: var(--s-50); font-size: 15px; }
-.screen__filters { display: flex; gap: var(--s-75); flex-wrap: wrap; }
-.screen__chip { padding: 6px 12px; border: 2px solid var(--ink); font-size: 14px; }
-.screen__chip--on { font-weight: 600; }
-.screen__row { display: grid; grid-template-columns: 64px 1fr auto; gap: var(--s-100); align-items: center; padding: 14px; background: var(--sand); font-size: 15px; line-height: 20px; }
-.screen__date { font-size: 13px; line-height: 16px; font-weight: 700; }
-.screen__slots { font-size: 14px; }
 
 @media (max-width: 959px) {
-  .screen__side { display: none; }
   .screen__body { min-height: 0; }
-  .screen__h { font-size: 22px; line-height: 28px; }
 }
 
 /* ---------- Character file: the expandable chapters ---------- */
@@ -1858,23 +1843,15 @@ html:not(.js) .dossier__stamp { display: none; }
   display: flex; animation: screen-in 360ms var(--ease);
 }
 @keyframes screen-in { from { opacity: 0; transform: translateX(14px); } }
-.screen__row--ink { background: var(--panel-bg); color: var(--on-panel); }
-.demo__times { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-75); }
-.demo__time { padding: 14px 0; text-align: center; border: 2px solid var(--ink); font-size: 16px; }
-.demo__time--taken { border-color: transparent; background: var(--sand); text-decoration: line-through; color: var(--muted); }
-.demo__time--picked { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 700; }
-.demo__line { display: flex; justify-content: space-between; padding: 14px; background: var(--sand); font-size: 16px; }
-.demo__confirm { align-self: flex-start; margin-top: 6px; padding: 14px 22px; background: var(--panel-bg); color: var(--on-panel); font-size: 16px; font-weight: 700; }
-.demo__screen--match { justify-content: center; gap: 26px; padding: 28px 40px; }
-.demo__booked { display: flex; align-items: center; gap: 18px; }
-.demo__check { width: 64px; height: 64px; flex: none; background: var(--accent); display: flex; align-items: center; justify-content: center; }
-.demo__check svg { width: 34px; height: 34px; }
-.demo__booked-h { font-size: 34px; line-height: 36px; font-weight: 700; }
-.demo__match { position: relative; max-width: 400px; transform: rotate(-2.5deg); }
-.demo__match-shadow { position: absolute; inset: 10px -10px -10px 10px; background-image: var(--dots); background-size: 6px 6px; }
-.demo__match-body { position: relative; border: var(--ink-line) solid var(--ink); background: var(--ivory); padding: 16px 18px; display: flex; flex-direction: column; gap: var(--s-50); font-size: 16px; }
-.demo__match-title { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
-.demo__match-title svg { width: 18px; height: 22px; }
+
+/* Ka-dugo's screen: screenshots of the real app, framed in its own oxblood and bone */
+.screen--kd { border-color: #2a0605; }
+.screen--kd .screen__bar { background: #2a0605; color: #f2eeea; }
+.screen--kd .screen__dot { background: #f2eeea; }
+.screen--kd .demo__rec { background: #c42433; }
+.demo .screen__body.kd { display: block; min-height: 0; background: #e4ddd6; aspect-ratio: 1280 / 880; }
+.demo .kd__shot { padding: 0; }
+.kd__shot img { display: block; width: 100%; height: auto; }
 
 /* ThriftBite's screen: that app's own palette and hard 4px shadows, fixed in both themes */
 .screen--tb {
@@ -1970,11 +1947,6 @@ html:not(.js) .dossier__stamp { display: none; }
 @media (max-width: 959px) {
   .demo .screen__body { min-height: 0; }
   .demo__screen { padding: var(--s-200); }
-  .demo__screen--match { padding: var(--s-300) var(--s-200); }
-  .demo__booked-h { font-size: 26px; line-height: 30px; }
-  .demo__time { padding: 10px 0; font-size: 14px; }
-  .demo .screen__row { grid-template-columns: 52px 1fr; }
-  .demo .screen__slots { grid-column: 2; }
   .cf__item--projects .cf__body { padding-left: var(--s-100); padding-right: var(--s-100); }
   .demo__step { padding: 8px; }
   .demo__step-label { font-size: 14px; line-height: 18px; }
