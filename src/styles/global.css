@@ -409,24 +409,9 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .screen__dot + .screen__dot { opacity: 0.5; }
 .screen__url { margin-left: var(--s-200); }
 .screen__body { display: flex; min-height: 560px; }
-.screen__side { width: 196px; flex: none; background: var(--sand); padding: var(--s-300) var(--s-200); display: flex; flex-direction: column; gap: 6px; }
-.screen__brand { display: flex; align-items: center; gap: 10px; margin-bottom: var(--s-300); font-size: 20px; font-weight: 700; }
-.screen__brand svg { width: 20px; height: 24px; }
-.screen__nav { padding: 10px 12px; font-size: 15px; }
-.screen__nav--on { background: var(--panel-bg); color: var(--on-panel); font-weight: 600; }
-.screen__h { font-size: 28px; line-height: 32px; font-weight: 700; }
-.screen__sub { margin-top: var(--s-50); font-size: 15px; }
-.screen__filters { display: flex; gap: var(--s-75); flex-wrap: wrap; }
-.screen__chip { padding: 6px 12px; border: 2px solid var(--ink); font-size: 14px; }
-.screen__chip--on { font-weight: 600; }
-.screen__row { display: grid; grid-template-columns: 64px 1fr auto; gap: var(--s-100); align-items: center; padding: 14px; background: var(--sand); font-size: 15px; line-height: 20px; }
-.screen__date { font-size: 13px; line-height: 16px; font-weight: 700; }
-.screen__slots { font-size: 14px; }
 
 @media (max-width: 959px) {
-  .screen__side { display: none; }
   .screen__body { min-height: 0; }
-  .screen__h { font-size: 22px; line-height: 28px; }
 }
 
 /* ---------- Character file: the expandable chapters ---------- */
@@ -1844,7 +1829,7 @@ html:not(.js) .dossier__stamp { display: none; }
   .picker__name { font-size: 16px; line-height: 20px; }
 }
 
-/* ---------- Project demo loops (ThriftBite and Ka-dugo) ---------- */
+/* ---------- Project demo loops (Merlin, ThriftBite and Ka-dugo) ---------- */
 .demo { margin: 0; display: flex; flex-direction: column; gap: 18px; }
 .demo__frame { position: relative; }
 .demo__shadow { position: absolute; inset: 18px -18px -18px 18px; background-image: var(--dots); background-size: 8px 8px; }
@@ -1858,23 +1843,15 @@ html:not(.js) .dossier__stamp { display: none; }
   display: flex; animation: screen-in 360ms var(--ease);
 }
 @keyframes screen-in { from { opacity: 0; transform: translateX(14px); } }
-.screen__row--ink { background: var(--panel-bg); color: var(--on-panel); }
-.demo__times { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-75); }
-.demo__time { padding: 14px 0; text-align: center; border: 2px solid var(--ink); font-size: 16px; }
-.demo__time--taken { border-color: transparent; background: var(--sand); text-decoration: line-through; color: var(--muted); }
-.demo__time--picked { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 700; }
-.demo__line { display: flex; justify-content: space-between; padding: 14px; background: var(--sand); font-size: 16px; }
-.demo__confirm { align-self: flex-start; margin-top: 6px; padding: 14px 22px; background: var(--panel-bg); color: var(--on-panel); font-size: 16px; font-weight: 700; }
-.demo__screen--match { justify-content: center; gap: 26px; padding: 28px 40px; }
-.demo__booked { display: flex; align-items: center; gap: 18px; }
-.demo__check { width: 64px; height: 64px; flex: none; background: var(--accent); display: flex; align-items: center; justify-content: center; }
-.demo__check svg { width: 34px; height: 34px; }
-.demo__booked-h { font-size: 34px; line-height: 36px; font-weight: 700; }
-.demo__match { position: relative; max-width: 400px; transform: rotate(-2.5deg); }
-.demo__match-shadow { position: absolute; inset: 10px -10px -10px 10px; background-image: var(--dots); background-size: 6px 6px; }
-.demo__match-body { position: relative; border: var(--ink-line) solid var(--ink); background: var(--ivory); padding: 16px 18px; display: flex; flex-direction: column; gap: var(--s-50); font-size: 16px; }
-.demo__match-title { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
-.demo__match-title svg { width: 18px; height: 22px; }
+
+/* Ka-dugo's screen: screenshots of the real app, framed in its own oxblood and bone */
+.screen--kd { border-color: #2a0605; }
+.screen--kd .screen__bar { background: #2a0605; color: #f2eeea; }
+.screen--kd .screen__dot { background: #f2eeea; }
+.screen--kd .demo__rec { background: #c42433; }
+.demo .screen__body.kd { display: block; min-height: 0; background: #e4ddd6; aspect-ratio: 1280 / 880; }
+.demo .kd__shot { padding: 0; }
+.kd__shot img { display: block; width: 100%; height: auto; }
 
 /* ThriftBite's screen: that app's own palette and hard 4px shadows, fixed in both themes */
 .screen--tb {
@@ -1970,17 +1947,98 @@ html:not(.js) .dossier__stamp { display: none; }
 @media (max-width: 959px) {
   .demo .screen__body { min-height: 0; }
   .demo__screen { padding: var(--s-200); }
-  .demo__screen--match { padding: var(--s-300) var(--s-200); }
-  .demo__booked-h { font-size: 26px; line-height: 30px; }
-  .demo__time { padding: 10px 0; font-size: 14px; }
-  .demo .screen__row { grid-template-columns: 52px 1fr; }
-  .demo .screen__slots { grid-column: 2; }
   .cf__item--projects .cf__body { padding-left: var(--s-100); padding-right: var(--s-100); }
   .demo__step { padding: 8px; }
   .demo__step-label { font-size: 14px; line-height: 18px; }
   .demo__status-text { display: none; }
   .demo__shadow { inset: 10px -10px -10px 10px; }
 }
+
+/* Merlin's screen: a dev's desktop in his own colours (navy, bone, cyan fire), fixed in both themes */
+.screen--mer { --mer-navy: #14213D; --mer-desk: #1B2742; --mer-night: #0B1222; --mer-bone: #F1EDE3; --mer-cyan: #2EC4D6; border-color: var(--mer-navy); }
+.screen--mer .screen__bar { background: var(--mer-navy); color: var(--mer-bone); }
+.screen--mer .screen__dot { background: var(--mer-bone); }
+.screen--mer .demo__rec { background: var(--mer-cyan); }
+.mer { position: relative; overflow: hidden; background: var(--mer-desk); color: #C9D6F0; }
+.demo .screen__body.mer { min-height: 540px; } /* everything in it is placed absolutely, so it sets its own height */
+.mer__editor { position: absolute; left: 24px; top: 24px; width: min(62%, 440px); border: 2px solid var(--mer-night); background: #0F1830; }
+.mer__tabs { display: flex; background: var(--mer-night); font-size: 12px; line-height: 16px; }
+.mer__tab { padding: 8px 14px; color: #7F8DB0; }
+.mer__tab--on { background: #0F1830; color: var(--mer-bone); box-shadow: inset 0 2px 0 var(--mer-cyan); }
+.mer__code { margin: 0; padding: 14px 16px 18px; font: 13px/22px ui-monospace, Consolas, Menlo, monospace; white-space: pre; overflow: hidden; color: #C9D6F0; }
+.mer__ln { display: inline-block; width: 22px; color: #4C5A7E; user-select: none; }
+.mer__k { color: #8BE9F3; }
+.mer__f { color: #F1EDE3; font-weight: 700; }
+.mer__s { color: #A6D98A; }
+.mer__t { color: #F4C77B; }
+.mer__c { color: #6F7FA3; font-style: italic; }
+.mer__taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; background: var(--mer-night); font-size: 12px; line-height: 16px; color: var(--mer-bone); }
+.mer__start, .mer__app { width: 18px; height: 18px; border: 2px solid #4C5A7E; }
+.mer__app--on { border-color: var(--mer-cyan); }
+.mer__playing { display: inline-flex; align-items: center; gap: 8px; margin-left: 12px; padding: 4px 10px; border: 1px solid #2B3A60; opacity: 0.35; transition: opacity 300ms var(--ease); }
+.mer__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.mer__eq span { width: 3px; height: 4px; background: var(--mer-cyan); }
+.mer__clock { margin-left: auto; color: #7F8DB0; }
+/* the three beats: full-size layers over the desktop; only the chat one holds anything */
+.demo--merlin .mer__beat { position: absolute; inset: 0; z-index: 3; padding: 0; pointer-events: none; }
+.mer__pet { position: absolute; right: 7%; bottom: 52px; z-index: 2; width: min(34%, 220px); }
+.mer__pet svg { display: block; width: 100%; height: auto; overflow: visible; }
+.mer__circle, .mer__beam { opacity: 0; }
+.mer__circle { transform-box: fill-box; transform-origin: center; }
+.mer__spark { opacity: 0; animation: mer-spark 1.6s ease-out infinite; }
+.mer__note { position: absolute; top: 14%; font-size: 24px; line-height: 1; font-weight: 700; color: var(--mer-cyan); opacity: 0; }
+.mer__note--1 { left: 6%; } .mer__note--2 { left: 46%; } .mer__note--3 { right: 4%; }
+.mer__ask, .mer__say { position: absolute; margin: 0; max-width: 300px; padding: 10px 14px; font-size: 14px; line-height: 20px; opacity: 0; }
+.mer__ask { right: 34%; bottom: 330px; background: #0F1830; border: 2px solid #4C5A7E; color: var(--mer-bone); font-family: ui-monospace, Consolas, Menlo, monospace; }
+.mer__say { right: 6%; bottom: 236px; background: var(--mer-bone); border: 3px solid var(--mer-navy); color: var(--mer-navy); font-weight: 600; }
+.mer__say::after { content: ""; position: absolute; right: 64px; bottom: -14px; border: 7px solid transparent; border-top-color: var(--mer-navy); border-right-color: var(--mer-navy); }
+.mer__say code { font: 700 13px/20px ui-monospace, Consolas, Menlo, monospace; }
+:is(.mer__float, .mer__jaw, .mer__eyes) { transform-box: fill-box; }
+.mer__float { animation: mer-bob 3.4s ease-in-out infinite; }
+/* beat 1, summon: the circle draws in and spins, the beam rises, he fades up out of it */
+.demo--merlin[data-step="0"] .mer__circle { animation: mer-circle 2.6s linear both; }
+.demo--merlin[data-step="0"] .mer__beam { animation: mer-beam 2.6s var(--ease) both; }
+.demo--merlin[data-step="0"] .mer__float { animation: mer-summon 1.5s var(--ease) both; }
+/* beat 2, vibe: the music plays, he bobs to it, notes float up */
+.demo--merlin[data-step="1"] .mer__playing { opacity: 1; }
+.demo--merlin[data-step="1"] .mer__eq span { animation: mer-eq 0.5s ease-in-out infinite alternate; }
+.demo--merlin[data-step="1"] .mer__eq span:nth-child(2) { animation-delay: -0.2s; }
+.demo--merlin[data-step="1"] .mer__eq span:nth-child(3) { animation-delay: -0.35s; }
+.demo--merlin[data-step="1"] .mer__float { animation: mer-vibe 0.52s ease-in-out infinite alternate; }
+.demo--merlin[data-step="1"] .mer__note { animation: mer-note 1.6s ease-out infinite; }
+.demo--merlin[data-step="1"] .mer__note--2 { animation-delay: 0.5s; }
+.demo--merlin[data-step="1"] .mer__note--3 { animation-delay: 1s; }
+/* beat 3, chat: the question, then his reply, jaw going while he talks */
+.demo--merlin[data-step="2"] .mer__ask { animation: mer-in 300ms var(--ease) both; }
+.demo--merlin[data-step="2"] .mer__say { animation: mer-say 900ms var(--ease) 450ms both; }
+.demo--merlin[data-step="2"] .mer__jaw { animation: mer-talk 0.2s steps(2, end) 450ms 8; }
+.demo--merlin[data-step="2"] .mer__eyes { transform: translate(-4px, -3px); transition: transform 300ms var(--ease); }
+/* the clip pauses with the loop: off screen, on hover, or paused */
+.demo--merlin:not(.is-playing) :is(.mer *, .mer__note) { animation-play-state: paused; }
+@keyframes mer-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes mer-vibe { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-8px) rotate(4deg); } }
+@keyframes mer-summon { 0%, 30% { opacity: 0; transform: translateY(30px) scale(0.6); } 70% { opacity: 1; transform: translateY(-6px) scale(1.04); } 100% { opacity: 1; transform: none; } }
+@keyframes mer-circle { 0% { opacity: 0; transform: rotate(0deg) scale(0.6); } 15% { opacity: 1; transform: rotate(40deg) scale(1); } 75% { opacity: 1; } 100% { opacity: 0; transform: rotate(240deg) scale(1); } }
+@keyframes mer-beam { 0%, 10% { opacity: 0; } 30%, 55% { opacity: 1; } 85%, 100% { opacity: 0; } }
+@keyframes mer-spark { 0% { opacity: 0; transform: translate(0, 0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx, 0px), -34px); } }
+@keyframes mer-eq { from { height: 3px; } to { height: 12px; } }
+@keyframes mer-note { 0% { opacity: 0; transform: translateY(16px) rotate(-10deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-40px) rotate(10deg); } }
+@keyframes mer-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes mer-say { 0% { opacity: 0; transform: translateY(10px) scale(0.9); clip-path: inset(0 100% 0 0); } 30% { opacity: 1; transform: none; } 100% { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+@keyframes mer-talk { from { transform: none; } to { transform: translateY(5px); } }
+@media (max-width: 719px) {
+  .demo .screen__body.mer { min-height: 460px; }
+  .mer__playing { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mer__editor { width: 78%; }
+  .mer__pet { width: 42%; right: 4%; }
+  .mer__ask { right: 30%; bottom: 300px; max-width: 220px; }
+  .mer__say { right: 4%; bottom: 210px; max-width: 240px; font-size: 13px; line-height: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo--merlin :is(.mer *, .mer__note) { animation: none !important; transition: none !important; }
+  .demo--merlin[data-step="1"] .mer__note, .demo--merlin[data-step="2"] :is(.mer__ask, .mer__say) { opacity: 1; }
+}
+.poster--merlin .poster__title { color: #F1EDE3; }
 
 /* ---------- Explored meter (TrustMeter.astro) ---------- */
 .trust {

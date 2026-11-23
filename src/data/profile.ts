@@ -9,7 +9,7 @@ export const profile = {
   intro: 'I build web apps and I’m exploring AI engineering.',
   school: 'Saint Louis University',
   year: '3rd-year IT student',
-  email: 'dcruzsteven1@gmail.com',
+  email: 'dev.malemanape@gmail.com',
   github: 'Gittyers082', // also drives the GitHub activity section (pulled at build time)
   linkedin: 'https://www.linkedin.com/in/el-steven/',
   fiverr: 'https://www.fiverr.com/ryuniii', // public seller profile (not the dashboard, which needs a login)
@@ -68,7 +68,7 @@ export const facts: Fact[] = [
   },
   {
     label: 'Next arc', value: 'AI engineering', note: 'Just starting out, learning it properly', highlight: true,
-    back: 'Studying the core concepts first. A RAG app is my next build.',
+    back: 'Studying the core concepts first. Merlin, my AI desktop companion, is out; a RAG app is next.',
     jump: { label: 'See self-training', chapter: 'training', target: '#train-self' },
   },
   {
@@ -145,6 +145,7 @@ export const stack: StackArea[] = [
     id: 'ai', title: 'Next arc', line: 'Where I’m heading',
     groups: [
       { label: 'Studying', items: ['AI engineering concepts'] },
+      { label: 'Built', items: ['Merlin, an AI desktop companion'] },
       { label: 'Next build', items: ['A RAG app'] },
       { label: 'Daily', items: ['Claude Code', 'Prompt engineering'] },
     ],
@@ -240,7 +241,7 @@ export const missions: Mission[] = [
 
 /* Self-training: what you're teaching yourself. */
 export const selfTraining: { title: string; note: string }[] = [
-  { title: 'AI engineering', note: 'Studying the core concepts first. A RAG app is my next build.' },
+  { title: 'AI engineering', note: 'Studying the core concepts first. Merlin came first; a RAG app is my next build.' },
   { title: 'DevOps and cloud', note: 'Containers, deploys and the cloud, with Docker and AWS, alongside the AWS Learning Club.' },
   { title: 'Hobbies into apps', note: 'I take the things I love doing and build apps around them that solve real-life problems.' },
 ];
@@ -294,7 +295,7 @@ export const lore: LoreEntry[] = [
 
 /* ---------- Character file → Projects: the episodes. The picked one pops out. ---------- */
 export type Episode = {
-  id: 'thriftbite' | 'kadugo';
+  id: 'merlin' | 'thriftbite' | 'kadugo';
   title: string;
   meta: string;
   summary: string;
@@ -302,6 +303,20 @@ export type Episode = {
   links: { href: string; label: string }[];
 };
 export const episodes: Episode[] = [
+  {
+    id: 'merlin', title: 'Merlin',
+    meta: 'Solo project · desktop companion for Windows · 2026 · v0.1',
+    summary: 'The skull of a long-dead archmage, haunting your desktop. Merlin floats on your screen, vibes to your music, falls asleep when you leave, rages when your CPU maxes out, and talks back.',
+    facts: [
+      { label: 'Who it’s for', value: 'Developers who want company while they code: a companion with a personality that lives on the desktop, not another window to manage.' },
+      { label: 'What I built', value: 'All of it, from the art to the release. His flame is generated in code and never stops moving, he has ten-plus moods, he senses music, idle time and CPU load through Windows, and his replies stream from a local Ollama model or the Claude API. Every sense can be switched off, and the API key lives in the Windows Credential Manager.' },
+      { label: 'Stack', value: 'Tauri 2 (Rust) · TypeScript · SVG and CSS animation · Web Audio · Ollama / Claude API · GitHub Actions releases' },
+    ],
+    links: [
+      { href: 'https://github.com/Gittyers082/merlin-desktop-companion/releases/latest', label: 'Download for Windows' },
+      { href: 'https://github.com/Gittyers082/merlin-desktop-companion', label: 'Read the code' },
+    ],
+  },
   {
     id: 'thriftbite', title: 'ThriftBite',
     meta: 'Team 7 school project, rebuilt as a full-stack web app · 2026',

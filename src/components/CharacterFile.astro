@@ -17,6 +17,7 @@ import StackIcon from './StackIcon.astro';
 import TechIcon from './TechIcon.astro';
 import EpisodeArt from './EpisodeArt.astro';
 import KadugoDemo from './KadugoDemo.astro';
+import MerlinDemo from './MerlinDemo.astro';
 import ThriftbiteDemo from './ThriftbiteDemo.astro';
 import LoreIcon from './LoreIcon.astro';
 import { stack, episodes, profile, lore, course, missions, selfTraining } from '../data/profile';
@@ -296,7 +297,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                 {episodes.map((ep, j) => (
                   <div class:list={['pop__ep', { 'is-active': j === 0 }]} data-episode={ep.id} id={`episode-${ep.id}`} role="region" aria-label={ep.title}>
                     <div class="pop__demo">
-                      {ep.id === 'thriftbite' ? <ThriftbiteDemo /> : <KadugoDemo />}
+                      {ep.id === 'merlin' ? <MerlinDemo /> : ep.id === 'thriftbite' ? <ThriftbiteDemo /> : <KadugoDemo />}
                       <article class="pop__info">
                         <div>
                           <h3 class="display pop__title">{ep.title}</h3>

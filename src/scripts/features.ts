@@ -1,7 +1,7 @@
 /**
  * The interactive pieces added in the "mountain" redesign:
  *  - exploration meter (rises as the visitor finds things; stored for the visit only)
- *  - project demo loops: ThriftBite and Ka-dugo (auto-play on screen, pause offscreen / on hover)
+ *  - project demo loops: Merlin, ThriftBite and Ka-dugo (auto-play on screen, pause offscreen / on hover)
  *  - episode picker (the picked project pops out)
  *  - copy-the-email button
  * Each one is progressive: the page reads fine without JavaScript.
@@ -131,7 +131,7 @@ const earn = (key: string): void => {
   document.dispatchEvent(new CustomEvent('trust:earn', { detail: key }));
 };
 
-/* ---------------- project demo loops (ThriftBite, Ka-dugo) ---------------- */
+/* ---------------- project demo loops (Merlin, ThriftBite, Ka-dugo) ---------------- */
 
 const STEP_MS = 2600;
 
@@ -169,6 +169,8 @@ function initDemo(demo: HTMLElement): void {
     window.clearTimeout(timer);
     const on = playing();
     demo.classList.toggle('is-playing', on);
+    // SMIL (Merlin's morphing flame) follows the clip: frozen off screen, on hover, when paused
+    demo.querySelectorAll<SVGSVGElement>('svg').forEach((s) => (on ? s.unpauseAnimations() : s.pauseAnimations()));
     playBtn.setAttribute('aria-label', userPaused ? 'Play demo' : 'Pause demo');
     playBtn.classList.toggle('is-paused', userPaused);
     if (status) status.textContent = userPaused ? 'Demo loop · paused' : 'Demo loop';
