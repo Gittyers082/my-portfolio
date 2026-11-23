@@ -674,14 +674,16 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 /* ---------- the aura power-up: ten gusts (or "arete") and El goes Super Saiyan ----------
  * aura.ts adds .is-powering for one run (.is-compact on narrow screens, where he stays on the rock)
  * and sets data-weapon. Every part sits at 0 0 of its own group, so transforms pivot there. */
-.farmer svg :is(.af-shake, .af-move, .af-lean, .af-rig, .af-wpop, .af-halfL, .af-halfR, .af-impact, .af-impactC, .af-krak, .af-zz, .af-plus, .af-speed, .af-shock, .af-shock2, .af-dust, .af-doom, .af-deb, .af-flick, .af-ptc, .af-flap) { transform-box: view-box; transform-origin: 0 0; }
+.farmer svg :is(.af-shake, .af-move, .af-lean, .af-rig, .af-wpop, .af-halfL, .af-halfR, .af-impact, .af-impactC, .af-krak, .af-zz, .af-plus, .af-speed, .af-shock, .af-shock2, .af-dust, .af-doom, .af-deb, .af-flick, .af-ptc, .af-flap, .af-shot) { transform-box: view-box; transform-origin: 0 0; }
 .farmer svg .af-flick { transform-origin: 170px 330px; }
 .farmer svg .af-flap { transform-origin: 208px 140px; }
 .farmer svg .af-rig { transform: rotate(150deg); }
 .af-aura, .af-w { display: none; }
 .farmer:is(.is-powering, .is-still-power) .af-aura { display: inline; }
-.farmer[data-weapon="sword"] .af-w[data-w="sword"], .farmer[data-weapon="axe"] .af-w[data-w="axe"], .farmer[data-weapon="hammer"] .af-w[data-w="hammer"],
-.farmer[data-weapon="halberd"] .af-w[data-w="halberd"], .farmer[data-weapon="keyboard"] .af-w[data-w="keyboard"] { display: inline; }
+.farmer[data-weapon="sword"] .af-w[data-w="sword"], .farmer[data-weapon="zweihander"] .af-w[data-w="zweihander"],
+.farmer[data-weapon="axe"] .af-w[data-w="axe"], .farmer[data-weapon="hammer"] .af-w[data-w="hammer"],
+.farmer[data-weapon="halberd"] .af-w[data-w="halberd"], .farmer[data-weapon="greatbow"] .af-w[data-w="greatbow"],
+.farmer[data-weapon="keyboard"] .af-w[data-w="keyboard"] { display: inline; }
 :is(.af-capeWild, .af-arm, .af-armFront, .af-bolt, .af-boltC, .af-spark, .af-swoosh, .af-halves, .af-impact, .af-impactC, .af-krak, .af-zz, .af-plus, .af-deb, .af-gh, .af-speed, .af-gcrack, .af-crackC, .af-shock, .af-shock2, .af-dust, .af-doom) { opacity: 0; }
 .af-krak, .af-zz, .af-doom, .af-plus { font-family: inherit; font-weight: 800; font-stretch: var(--display-stretch); }
 /* the living aura: three flame layers in El's own shape, edges boiling (SMIL turbulence), pulsing upward */
@@ -814,6 +816,24 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering.is-compact .af-shake { animation: af-shake-c 3.6s linear both; }
 @keyframes af-plus-c { 0.0% { opacity: 0; transform: translateY(0px); } 77.78% { opacity: 0; transform: translateY(0px); } 81.94% { opacity: 1; transform: translateY(0px); } 100% { opacity: 0; transform: translateY(-40px); } }
 .farmer.is-powering.is-compact .af-plus { animation: af-plus-c 3.6s linear both; }
+/* each bolt in the strike crackles on its own beat (the whole strike's timing is af-bolt / af-boltC) */
+@keyframes af-strand { 0%, 100% { opacity: 1; } 40% { opacity: 0.15; } 60% { opacity: 0.9; } }
+.farmer.is-powering .af-strand { animation: af-strand 0.18s steps(1) infinite; }
+.farmer.is-powering .af-strand1 { animation-duration: 0.23s; animation-delay: -0.07s; }
+.farmer.is-powering .af-strand2 { animation-duration: 0.15s; animation-delay: -0.11s; }
+.farmer.is-powering .af-strand3 { animation-duration: 0.27s; animation-delay: -0.04s; }
+/* the greatbow doesn't swing: El lowers it at the spot the other weapons hit, holds, and looses one
+ * arrow that lands as the rock splits (58% of the run; 51.67% on the rock) */
+@keyframes af-rig-bow { 0.0% { transform: rotate(150deg); } 30.0% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 35.83% { transform: rotate(14deg); } 45.0% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.3,0,.2,1); } 51.67% { transform: rotate(84deg); } 58.0% { transform: rotate(84deg); } 59.5% { transform: rotate(90deg); } 62.0% { transform: rotate(84deg); } 66.67% { transform: rotate(84deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 70.83% { transform: rotate(20deg); } 72.5% { transform: rotate(20deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 77.0% { transform: rotate(150deg); } 100% { transform: rotate(150deg); } }
+.farmer[data-weapon="greatbow"].is-powering:not(.is-compact) .af-rig { animation-name: af-rig-bow; }
+.farmer[data-weapon="greatbow"] .af-swoosh { display: none; }
+@keyframes af-shot { 0%, 55% { transform: translateY(0); opacity: 1; } 58% { transform: translateY(-56px); opacity: 1; } 58.5%, 100% { transform: translateY(-56px); opacity: 0; } }
+.farmer.is-powering:not(.is-compact) .af-shot { animation: af-shot 6.0s linear both; }
+@keyframes af-rig-bow-c { 0.0% { transform: rotate(150deg); } 13.89% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 22.22% { transform: rotate(14deg); } 34.72% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.3,0,.2,1); } 43.06% { transform: rotate(150deg); } 51.67% { transform: rotate(150deg); } 54.0% { transform: rotate(144deg); } 57.78% { transform: rotate(150deg); } 100% { transform: rotate(150deg); } }
+.farmer[data-weapon="greatbow"].is-powering.is-compact .af-rig { animation-name: af-rig-bow-c; }
+@keyframes af-shot-c { 0%, 48% { transform: translateY(0); opacity: 1; } 51.67% { transform: translateY(-56px); opacity: 1; } 52.5%, 100% { transform: translateY(-56px); opacity: 0; } }
+.farmer.is-powering.is-compact .af-shot { animation: af-shot-c 3.6s linear both; }
+.farmer.is-still-power .af-shot { transform: translateY(-56px); }
 /* reduced motion: no run, one still frame of the result */
 .farmer.is-still-power .af-capeCalm, .farmer.is-still-power .af-armX { opacity: 0; }
 .farmer.is-still-power :is(.af-capeWild, .af-arm, .af-armFront, .af-plus, .af-wpop) { opacity: 1; }
