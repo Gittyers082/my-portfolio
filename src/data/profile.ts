@@ -1,6 +1,6 @@
 /**
- * Everything personal lives here. Swap the [bracketed] placeholders for the
- * real thing; the components read from this file.
+ * Everything personal lives here; the components read from this file.
+ * A value in [brackets] counts as a placeholder: it shows muted, or not at all.
  */
 
 export const profile = {
@@ -77,15 +77,15 @@ export const facts: Fact[] = [
   },
 ];
 
-/** The secret 7th card: appears only once a visitor has explored 100% of the site. Swap in your own (a blooper works too). */
+/** The secret 7th card: appears only once a visitor has explored 100% of the site. */
 export const secretFact: Fact = {
   label: 'Secret card', value: '100% explorer', note: 'You found everything. Most visitors never see this one.',
   back: 'Since you made it all the way here, my inbox is open: an internship, a project, or just to say you found the secret card.',
   jump: { label: 'Say hi', href: '#contact' },
 };
 
-/* ---------- Character file → Stack: four areas, each with its own icon ---------- */
-/** Power levels: placeholders, set your own (0–10). */
+/* ---------- Character file → Stack: one area per kind of tool, each with its own icon ---------- */
+/** Power levels run 0–10. */
 export type Skill = { name: string; level: number; note: string; placeholderNote?: boolean };
 export type StackId = 'languages' | 'web' | 'backend' | 'data' | 'tools' | 'design' | 'ai';
 export type StackArea = {
@@ -221,7 +221,7 @@ export const course: { degree: string; school: string; year: string; terms: Term
   ],
 };
 
-/* Field missions: hands-on work outside class. Fill the [brackets] when you're ready. */
+/* Field missions: hands-on work outside class. */
 export type Mission = { kind: string; title: string; role: string; when: string; note: string; current?: boolean; placeholder?: boolean };
 export const missions: Mission[] = [
   {
@@ -246,8 +246,7 @@ export const selfTraining: { title: string; note: string }[] = [
 ];
 
 /* ---------- Character file → Writing: the lore archive ----------
- * A few worlds, power systems and OCs you've made over the years.
- * Swap the placeholders for your own. Keep each hook to one line.
+ * A few worlds, power systems and OCs made over the years. Keep each hook to one line.
  * Add or remove entries freely; the grid adapts (best at 3 or 6).
  * `link` is optional (a doc, a post, a Fiverr gig sample). */
 export type LoreKind = 'universe' | 'power' | 'oc';
