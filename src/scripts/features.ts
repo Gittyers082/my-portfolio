@@ -23,6 +23,7 @@ const POINTS: Record<string, number> = {
   wave: 2,
   card: 4, // flipping a character card
   commit: 2, // flipping the hero's commit card
+  powerup: 8, // powering up the aura farmer (ten gusts, or arete)
 };
 const BASE = 6;
 const KEY = 'trust-earned';
@@ -55,6 +56,7 @@ function initTrust(): void {
     ['portrait', 'switch the hero to Photo'],
     ['episode', 'pick a project episode'],
     ['demo', 'pause or step through a project demo'],
+    ['powerup', 'click El on the rock ten times'],
     ['book', 'flip the notebook in About me'],
     ['coffee', 'knock over the coffee'],
     ['pencil', 'click the pencil'],
