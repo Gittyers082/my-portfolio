@@ -17,6 +17,7 @@ pnpm-debug.log*
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 
 # design-check output
 .taste-skill/
