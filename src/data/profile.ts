@@ -10,7 +10,7 @@ export const profile = {
   school: 'Saint Louis University',
   year: '3rd-year IT student',
   email: 'dev.malemanape@gmail.com',
-  github: 'Gittyers082', // also drives the GitHub activity section (pulled at build time)
+  github: 'malemanape', // also drives the GitHub activity section (pulled at build time)
   linkedin: 'https://www.linkedin.com/in/el-steven/',
   fiverr: 'https://www.fiverr.com/ryuniii', // public seller profile (not the dashboard, which needs a login)
   resume: '/resume.pdf', // drop your résumé at public/resume.pdf and the download link appears
@@ -313,8 +313,8 @@ export const episodes: Episode[] = [
       { label: 'Stack', value: 'Tauri 2 (Rust) · TypeScript · SVG and CSS animation · Web Audio · Ollama / Claude API · GitHub Actions releases' },
     ],
     links: [
-      { href: 'https://github.com/Gittyers082/merlin-desktop-companion/releases/latest', label: 'Download for Windows' },
-      { href: 'https://github.com/Gittyers082/merlin-desktop-companion', label: 'Read the code' },
+      { href: 'https://github.com/malemanape/merlin-desktop-companion/releases/latest', label: 'Download for Windows' },
+      { href: 'https://github.com/malemanape/merlin-desktop-companion', label: 'Read the code' },
     ],
   },
   {
@@ -328,7 +328,7 @@ export const episodes: Episode[] = [
     ],
     links: [
       { href: 'https://thriftbite.vercel.app/', label: 'Try the live app' },
-      { href: 'https://github.com/Gittyers082/thriftbite-sockets', label: 'Read the code' },
+      { href: 'https://github.com/malemanape/thriftbite-sockets', label: 'Read the code' },
     ],
   },
   {
@@ -341,7 +341,7 @@ export const episodes: Episode[] = [
       { label: 'Stack', value: 'Vanilla JavaScript · HTML · CSS · PHP · MySQL · a service worker for offline use. A rebuild is planned this semester.' },
     ],
     links: [
-      { href: 'https://github.com/Gittyers082/ka-dugo', label: 'Read the code' },
+      { href: 'https://github.com/malemanape/ka-dugo', label: 'Read the code' },
     ],
   },
 ];
