@@ -1,0 +1,34 @@
+# Type-checks and builds the site on every pull request (and on main), so a broken build
+# shows up as a red X on the PR instead of reaching Vercel. Same command Vercel runs.
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: astro check, then astro build
+        run: npm run build
+        env:
+          # the GitHub activity on the site is fetched at build time; the token only avoids rate limits
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
