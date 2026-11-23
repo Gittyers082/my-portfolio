@@ -816,6 +816,12 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering.is-compact .af-shake { animation: af-shake-c 3.6s linear both; }
 @keyframes af-plus-c { 0.0% { opacity: 0; transform: translateY(0px); } 77.78% { opacity: 0; transform: translateY(0px); } 81.94% { opacity: 1; transform: translateY(0px); } 100% { opacity: 0; transform: translateY(-40px); } }
 .farmer.is-powering.is-compact .af-plus { animation: af-plus-c 3.6s linear both; }
+/* each bolt in the strike crackles on its own beat (the whole strike's timing is af-bolt / af-boltC) */
+@keyframes af-strand { 0%, 100% { opacity: 1; } 40% { opacity: 0.15; } 60% { opacity: 0.9; } }
+.farmer.is-powering .af-strand { animation: af-strand 0.18s steps(1) infinite; }
+.farmer.is-powering .af-strand1 { animation-duration: 0.23s; animation-delay: -0.07s; }
+.farmer.is-powering .af-strand2 { animation-duration: 0.15s; animation-delay: -0.11s; }
+.farmer.is-powering .af-strand3 { animation-duration: 0.27s; animation-delay: -0.04s; }
 /* the greatbow doesn't swing: El lowers it at the spot the other weapons hit, holds, and looses one
  * arrow that lands as the rock splits (58% of the run; 51.67% on the rock) */
 @keyframes af-rig-bow { 0.0% { transform: rotate(150deg); } 30.0% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 35.83% { transform: rotate(14deg); } 45.0% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.3,0,.2,1); } 51.67% { transform: rotate(84deg); } 58.0% { transform: rotate(84deg); } 59.5% { transform: rotate(90deg); } 62.0% { transform: rotate(84deg); } 66.67% { transform: rotate(84deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 70.83% { transform: rotate(20deg); } 72.5% { transform: rotate(20deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 77.0% { transform: rotate(150deg); } 100% { transform: rotate(150deg); } }

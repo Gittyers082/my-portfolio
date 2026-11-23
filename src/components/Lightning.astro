@@ -1,35 +1,41 @@
 ---
 /**
- * The bolt that strikes El's raised hand in the aura power-up: a dark ink outline, the accent
- * glow, and a white-hot core, on a main channel with forks and twigs (src/data/lightning.ts).
- * A burst of light sits where it hits. The class (af-bolt / af-boltC) times its flicker in global.css.
+ * The lightning that strikes El's raised hand in the aura power-up: several bolts from different
+ * points in the sky, all landing on his fist. Each is a dark ink outline, the accent glow and a
+ * white-hot core, on a jagged channel with forks and twigs (src/data/lightning.ts), and each
+ * crackles on its own beat. A burst of light sits where they hit.
+ * The class (af-bolt / af-boltC) times the whole strike in global.css.
  */
 import { bolt } from '../data/lightning';
 
 interface Props {
   cls: string;
-  from: [number, number];
+  /** where each bolt starts, usually off the top */
+  from: [number, number][];
+  /** where they all land: his hand */
   to: [number, number];
   seed: number;
   forks?: number;
 }
-const { cls, from, to, seed, forks = 7 } = Astro.props;
-const b = bolt(from, to, seed, forks);
+const { cls, from, to, seed, forks = 3 } = Astro.props;
+const bolts = from.map((f, i) => bolt(f, to, seed + i * 17, forks));
 const INK = '#15130F';
 const HOT = '#FFFFFF';
 ---
 <g class={cls} fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path d={b.main} class="accent-stroke" stroke-width="18" opacity="0.3" filter="url(#af-glow)"></path>
-  {b.forks.map((d) => <path d={d} class="accent-stroke" stroke-width="8" opacity="0.25" filter="url(#af-glow)"></path>)}
-  {b.twigs.map((d) => <path d={d} stroke={INK} stroke-width="2.2"></path>)}
-  {b.forks.map((d) => <path d={d} stroke={INK} stroke-width="3.6"></path>)}
-  <path d={b.main} stroke={INK} stroke-width="7"></path>
-  {b.twigs.map((d) => <path d={d} class="accent-stroke" stroke-width="0.9"></path>)}
-  {b.forks.map((d) => <path d={d} class="accent-stroke" stroke-width="1.8"></path>)}
-  <path d={b.main} class="accent-stroke" stroke-width="4"></path>
-  {b.forks.map((d) => <path d={d} stroke={HOT} stroke-width="0.7"></path>)}
-  <path d={b.main} stroke={HOT} stroke-width="1.6"></path>
-  <!-- where it hits his hand -->
-  <circle cx={to[0]} cy={to[1]} r="26" class="accent-fill" opacity="0.35" filter="url(#af-glow)"></circle>
-  <circle cx={to[0]} cy={to[1]} r="11" fill={HOT} opacity="0.9" filter="url(#af-glow)"></circle>
+  {bolts.map((b, i) => (
+    <g class={`af-strand af-strand${i % 4}`}>
+      <path d={b.main} class="accent-stroke" stroke-width="12" opacity="0.28" filter="url(#af-glow)"></path>
+      {b.twigs.map((d) => <path d={d} stroke={INK} stroke-width="1.8"></path>)}
+      {b.forks.map((d) => <path d={d} stroke={INK} stroke-width="2.8"></path>)}
+      <path d={b.main} stroke={INK} stroke-width="5"></path>
+      {b.twigs.map((d) => <path d={d} class="accent-stroke" stroke-width="0.7"></path>)}
+      {b.forks.map((d) => <path d={d} class="accent-stroke" stroke-width="1.4"></path>)}
+      <path d={b.main} class="accent-stroke" stroke-width="2.8"></path>
+      <path d={b.main} stroke={HOT} stroke-width="1.1"></path>
+    </g>
+  ))}
+  <!-- where they hit his hand -->
+  <circle cx={to[0]} cy={to[1]} r="30" class="accent-fill" opacity="0.4" filter="url(#af-glow)"></circle>
+  <circle cx={to[0]} cy={to[1]} r="13" fill={HOT} opacity="0.9" filter="url(#af-glow)"></circle>
 </g>
