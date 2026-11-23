@@ -328,7 +328,7 @@ export const episodes: Episode[] = [
     ],
     links: [
       { href: 'https://thriftbite.vercel.app/', label: 'Try the live app' },
-      { href: 'https://github.com/malemanape/thriftbite-sockets', label: 'Read the code' },
+      { href: 'https://github.com/malemanape/ThriftBite', label: 'Read the code' },
     ],
   },
   {
