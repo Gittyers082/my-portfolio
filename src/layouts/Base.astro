@@ -3,7 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import TrustMeter from '../components/TrustMeter.astro';
-import { profile } from '../data/profile';
+import { profile, githubUrl } from '../data/profile';
 
 interface Props {
   title?: string;
@@ -22,6 +22,22 @@ const {
 const base = Astro.site ?? Astro.url; // the live domain on Vercel (see astro.config.mjs)
 const canonical = new URL(Astro.url.pathname, base);
 const ogImage = new URL('/og.png', base); // public/og.png, 1200×630
+
+// Structured data for search engines (schema.org Person), on the homepage only: who this site is about,
+// and which accounts are the same person, so a search for the name can connect them. Built from profile.ts.
+const person = Astro.url.pathname === '/' && {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  alternateName: ['El', profile.github],
+  jobTitle: profile.title,
+  description,
+  url: new URL('/', base).href,
+  image: ogImage.href,
+  affiliation: { '@type': 'CollegeOrUniversity', name: profile.school },
+  knowsAbout: ['Full-stack web development', 'Java', 'TypeScript', 'Python', 'AI engineering', 'Worldbuilding'],
+  sameAs: [githubUrl, profile.linkedin, profile.fiverr],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -43,6 +59,7 @@ const ogImage = new URL('/og.png', base); // public/og.png, 1200×630
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
+    {person && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
 
     <!-- Turns on the reveal-ready states only when scripts run, so nothing hides without JS -->
     <script is:inline>document.documentElement.classList.add('js');</script>
