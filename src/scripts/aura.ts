@@ -6,13 +6,14 @@
  * - pressing him sends a gust: the cape snaps, "+100 aura" floats up, a whoosh plays,
  *   and the aura meter fills a step;
  * - the tenth gust (or typing "arete", from keys.ts) powers him up: a living aura,
- *   a leap off the rock, lightning, a random weapon, one hit that splits the rock,
+ *   a leap off the rock, lightning, one of El's seven weapons, one hit (or one arrow) that splits the rock,
  *   then back up. Narrow screens get a shorter run on the rock; reduced motion gets
  *   one still frame of the result.
  * Each weapon rolled is collected (kept in this browser), and the first power-up
  * counts toward the Explored meter.
  */
 import { gust, whoosh, boom, strike, crunch } from './sfx';
+import { WEAPONS, WEAPON_NAMES, type Weapon } from '../data/weapons';
 
 const COMMENTS: [string, string][] = [
   ['@visitor', 'Yes El, we see the fit (¬_¬)'],
@@ -28,16 +29,14 @@ const GUSTS = 10; // gusts it takes to power him up
 const FULL_MS = 6000; // the run's length: keep in step with global.css
 const SHORT_MS = 3600;
 const STILL_MS = 4200;
-const WEAPONS = ['sword', 'axe', 'hammer', 'halberd', 'keyboard'] as const;
-type Weapon = (typeof WEAPONS)[number];
-const NAMES: Record<Weapon, string> = { sword: 'a sword', axe: 'an axe', hammer: 'a hammer', halberd: 'a halberd', keyboard: 'a keyboard' };
 const COLLECTED = 'aura-weapons';
 // when each sound lands in the run, in ms (global.css has the matching keyframes)
 const CUES_FULL: [number, () => void][] = [[500, whoosh], [1500, boom], [2070, strike], [3480, crunch], [4400, whoosh]];
 const CUES_SHORT: [number, () => void][] = [[760, strike], [1860, crunch]];
 
-/** The keyboard is the rare one: about 1 roll in 10. */
-const roll = (): Weapon => (Math.random() < 0.1 ? 'keyboard' : WEAPONS[Math.floor(Math.random() * 4)]);
+/** The keyboard is the rare one: about 1 roll in 10. The other six share the rest. */
+const HEAVY = WEAPONS.filter((w) => w !== 'keyboard');
+const roll = (): Weapon => (Math.random() < 0.1 ? 'keyboard' : HEAVY[Math.floor(Math.random() * HEAVY.length)]);
 
 export function initAura(): void {
   const farmer = document.querySelector<HTMLElement>('[data-aura]');
@@ -186,10 +185,10 @@ export function initAura(): void {
     const hitAt = reduce ? 0 : compact ? 1860 : 3480;
     react(0, '@the_rock', 'bro what did I do', hitAt + 200);
     if (weapon === 'keyboard') react(1, '@recruiter', 'ok he’s hired', hitAt + 700);
-    else if (isNew) react(1, '@collector', `new weapon: ${weapon} (${collected.size}/${WEAPONS.length})`, hitAt + 700);
+    else if (isNew) react(1, '@collector', `new weapon: ${WEAPON_NAMES[weapon]} (${collected.size}/${WEAPONS.length})`, hitAt + 700);
     window.setTimeout(renderWeapons, hitAt + 700);
 
-    if (live) live.textContent = `Powered up: El summoned ${NAMES[weapon]} and split the rock. +1000 aura.`;
+    if (live) live.textContent = `Powered up: El summoned a ${WEAPON_NAMES[weapon]} and ${weapon === 'greatbow' ? 'shot the rock in two' : 'split the rock'}. +1000 aura.`;
     document.dispatchEvent(new CustomEvent('trust:earn', { detail: 'powerup' }));
     if (!reduce && !compact) burst(section, hitAt);
 
