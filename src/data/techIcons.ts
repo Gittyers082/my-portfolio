@@ -1,6 +1,6 @@
 /**
  * Logos for tools and languages, from the open-source Simple Icons set (npm package
- * `simple-icons`). Shared by the components that show logos.
+ * `simple-icons`). Shared by TechIcon.astro and /stack.json, which the GitHub profile reads.
  */
 import * as si from 'simple-icons';
 
@@ -17,6 +17,8 @@ const SLUG: Record<string, string | null> = {
   Docker: 'docker', npm: 'npm', Maven: 'apachemaven', Gradle: 'gradle', Ant: 'apacheant', Mix: null,
   Vercel: 'vercel', AWS: null, GitHub: 'github',
   Figma: 'figma', Canva: null, Obsidian: 'obsidian', 'Claude Code': 'claude',
+  // GitHub's names for languages, for the profile's language card
+  Shell: 'gnubash', Vue: 'vuedotjs', Svelte: 'svelte', Lua: 'lua', 'Jupyter Notebook': 'jupyter',
   // contact links
   Gmail: 'gmail', Fiverr: null, LinkedIn: null, Résumé: null, // Fiverr's logo is a wordmark, unreadable this small
 };

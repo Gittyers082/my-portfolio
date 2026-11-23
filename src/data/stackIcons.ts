@@ -1,6 +1,6 @@
 /**
  * Hand-drawn line icons for the Stack areas (original, not brand logos): the inside of a
- * 32×32 SVG drawn with a 2.6px square-capped stroke. Used by StackIcon.astro.
+ * 32×32 SVG drawn with a 2.6px square-capped stroke. Shared by StackIcon.astro and /stack.json.
  */
 import type { StackId } from './profile';
 
