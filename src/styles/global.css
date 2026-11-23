@@ -697,7 +697,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer:is(.is-powering, .is-still-power) .af-aura { display: inline; }
 .farmer[data-weapon="sword"] .af-w[data-w="sword"], .farmer[data-weapon="axe"] .af-w[data-w="axe"], .farmer[data-weapon="hammer"] .af-w[data-w="hammer"],
 .farmer[data-weapon="halberd"] .af-w[data-w="halberd"], .farmer[data-weapon="keyboard"] .af-w[data-w="keyboard"] { display: inline; }
-:is(.af-capeWild, .af-arm, .af-bolt, .af-boltC, .af-spark, .af-swoosh, .af-halves, .af-impact, .af-impactC, .af-krak, .af-zz, .af-plus, .af-deb, .af-gh, .af-speed, .af-gcrack, .af-crackC, .af-shock, .af-shock2, .af-dust, .af-doom) { opacity: 0; }
+:is(.af-capeWild, .af-arm, .af-armFront, .af-bolt, .af-boltC, .af-spark, .af-swoosh, .af-halves, .af-impact, .af-impactC, .af-krak, .af-zz, .af-plus, .af-deb, .af-gh, .af-speed, .af-gcrack, .af-crackC, .af-shock, .af-shock2, .af-dust, .af-doom) { opacity: 0; }
 .af-krak, .af-zz, .af-doom, .af-plus { font-family: inherit; font-weight: 800; font-stretch: var(--display-stretch); }
 /* the living aura: three flame layers in El's own shape, edges boiling (SMIL turbulence), pulsing upward */
 @keyframes af-flick { 0%, 100% { transform: translateY(0) scale(1, 1); } 50% { transform: translateY(-5px) scale(1.02, 1.06); } }
@@ -728,8 +728,10 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering:not(.is-compact) .af-armX { animation: af-armX 6.0s linear both; }
 @keyframes af-arm { 0% { opacity: 0; } 29.98% { opacity: 0; } 30.0% { opacity: 1; } 77.48% { opacity: 1; } 77.5% { opacity: 0; } 100% { opacity: 0; } }
 .farmer.is-powering:not(.is-compact) .af-arm { animation: af-arm 6.0s linear both; }
-@keyframes af-rig { 0.0% { transform: rotate(150deg); } 30.0% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 35.83% { transform: rotate(14deg); } 45.0% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 51.67% { transform: rotate(-42deg); } 55.0% { transform: rotate(-46deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 58.0% { transform: rotate(95deg); } 62.0% { transform: rotate(95deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 64.67% { transform: rotate(84deg); } 67.5% { transform: rotate(90deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 74.17% { transform: rotate(150deg); } 100% { transform: rotate(150deg); } }
+@keyframes af-rig { 0.0% { transform: rotate(150deg); } 30.0% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 35.83% { transform: rotate(14deg); } 45.0% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 51.67% { transform: rotate(-42deg); } 55.0% { transform: rotate(-46deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 58.0% { transform: rotate(95deg); } 62.0% { transform: rotate(95deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 64.67% { transform: rotate(84deg); } 66.67% { transform: rotate(90deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 70.83% { transform: rotate(20deg); } 72.5% { transform: rotate(20deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 77.0% { transform: rotate(150deg); } 100% { transform: rotate(150deg); } }
 .farmer.is-powering:not(.is-compact) .af-rig { animation: af-rig 6.0s linear both; }
+@keyframes af-armFront { 0% { opacity: 0; } 54.98% { opacity: 0; } 55.0% { opacity: 1; } 71.65% { opacity: 1; } 71.67% { opacity: 0; } 100% { opacity: 0; } }
+.farmer.is-powering:not(.is-compact) .af-armFront { animation: af-armFront 6.0s linear both; }
 @keyframes af-lean { 0.0% { transform: rotate(0deg); } 8.33% { transform: rotate(0deg); } 11.33% { transform: rotate(6deg); } 17.5% { transform: rotate(-10deg); } 22.0% { transform: rotate(-6deg); } 25.0% { transform: rotate(8deg); } 30.0% { transform: rotate(0deg); } 45.0% { transform: rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 51.67% { transform: rotate(-7deg); } 55.0% { transform: rotate(-8deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 58.0% { transform: rotate(11deg); } 62.0% { transform: rotate(11deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 68.33% { transform: rotate(3deg); } 73.33% { transform: rotate(0deg); } 100% { transform: rotate(0deg); } }
 .farmer.is-powering:not(.is-compact) .af-lean { animation: af-lean 6.0s linear both; }
 @keyframes af-wpop { 0.0% { opacity: 0; transform: scale(0.2); } 36.65% { opacity: 0; transform: scale(0.2); } 36.67% { opacity: 1; transform: scale(1.35); } 40.33% { opacity: 1; transform: scale(1); } 70.0% { opacity: 1; transform: scale(1); } 73.67% { opacity: 0; transform: scale(0.6); } 100% { opacity: 0; transform: scale(0.6); } }
@@ -829,7 +831,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering.is-compact .af-plus { animation: af-plus-c 3.6s linear both; }
 /* reduced motion: no run, one still frame of the result */
 .farmer.is-still-power .af-capeCalm, .farmer.is-still-power .af-armX { opacity: 0; }
-.farmer.is-still-power :is(.af-capeWild, .af-arm, .af-plus, .af-wpop) { opacity: 1; }
+.farmer.is-still-power :is(.af-capeWild, .af-arm, .af-armFront, .af-plus, .af-wpop) { opacity: 1; }
 .farmer.is-still-power .af-wpop { transform: none; }
 .farmer.is-still-power:not(.is-compact) .af-move { transform: translate(-80px, 214px) scale(0.8); }
 .farmer.is-still-power:not(.is-compact) .af-rig { transform: rotate(95deg); }
@@ -838,6 +840,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-still-power:not(.is-compact) .af-halfL { transform: translate(-16px, 6px) rotate(-6deg); }
 .farmer.is-still-power:not(.is-compact) .af-halfR { transform: translate(16px, 6px) rotate(6deg); }
 .farmer.is-still-power.is-compact .af-crackC { opacity: 1; }
+.farmer.is-still-power.is-compact .af-armFront { opacity: 0; } /* on the rock the strike points down the cape: the arm stays under it */
 @media (prefers-reduced-motion: reduce) {
   :is(.af-flick1, .af-flick2, .af-flick3, .af-ptc, .af-hair, .af-flap) { animation: none; }
   .af-ptc { opacity: 0; }
