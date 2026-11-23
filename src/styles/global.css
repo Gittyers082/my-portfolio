@@ -807,8 +807,6 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering.is-compact .af-armX { animation: af-armX-c 3.6s linear both; }
 @keyframes af-arm-c { 0% { opacity: 0; } 13.86% { opacity: 0; } 13.89% { opacity: 1; } 81.92% { opacity: 1; } 81.94% { opacity: 0; } 100% { opacity: 0; } }
 .farmer.is-powering.is-compact .af-arm { animation: af-arm-c 3.6s linear both; }
-@keyframes af-armFront-c { 0% { opacity: 0; } 47.19% { opacity: 0; } 47.22% { opacity: 1; } 81.92% { opacity: 1; } 81.94% { opacity: 0; } 100% { opacity: 0; } }
-.farmer.is-powering.is-compact .af-armFront { animation: af-armFront-c 3.6s linear both; }
 @keyframes af-rig-c { 0.0% { transform: rotate(150deg); } 13.89% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 22.22% { transform: rotate(14deg); } 34.72% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 43.06% { transform: rotate(-42deg); } 47.22% { transform: rotate(-46deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 51.67% { transform: rotate(150deg); } 57.78% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 61.11% { transform: rotate(138deg); } 65.28% { transform: rotate(148deg); } 100% { transform: rotate(150deg); } }
 .farmer.is-powering.is-compact .af-rig { animation: af-rig-c 3.6s linear both; }
 @keyframes af-lean-c { 0.0% { transform: rotate(0deg); } 34.72% { transform: rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 43.06% { transform: rotate(-7deg); } 47.22% { transform: rotate(-8deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 51.67% { transform: rotate(10deg); } 57.78% { transform: rotate(10deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 69.44% { transform: rotate(0deg); } 100% { transform: rotate(0deg); } }
@@ -842,6 +840,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-still-power:not(.is-compact) .af-halfL { transform: translate(-16px, 6px) rotate(-6deg); }
 .farmer.is-still-power:not(.is-compact) .af-halfR { transform: translate(16px, 6px) rotate(6deg); }
 .farmer.is-still-power.is-compact .af-crackC { opacity: 1; }
+.farmer.is-still-power.is-compact .af-armFront { opacity: 0; } /* on the rock the strike points down the cape: the arm stays under it */
 @media (prefers-reduced-motion: reduce) {
   :is(.af-flick1, .af-flick2, .af-flick3, .af-ptc, .af-hair, .af-flap) { animation: none; }
   .af-ptc { opacity: 0; }
@@ -1845,7 +1844,7 @@ html:not(.js) .dossier__stamp { display: none; }
   .picker__name { font-size: 16px; line-height: 20px; }
 }
 
-/* ---------- Project demo loops (ThriftBite and Ka-dugo) ---------- */
+/* ---------- Project demo loops (Merlin, ThriftBite and Ka-dugo) ---------- */
 .demo { margin: 0; display: flex; flex-direction: column; gap: 18px; }
 .demo__frame { position: relative; }
 .demo__shadow { position: absolute; inset: 18px -18px -18px 18px; background-image: var(--dots); background-size: 8px 8px; }
@@ -1982,6 +1981,92 @@ html:not(.js) .dossier__stamp { display: none; }
   .demo__status-text { display: none; }
   .demo__shadow { inset: 10px -10px -10px 10px; }
 }
+
+/* Merlin's screen: a dev's desktop in his own colours (navy, bone, cyan fire), fixed in both themes */
+.screen--mer { --mer-navy: #14213D; --mer-desk: #1B2742; --mer-night: #0B1222; --mer-bone: #F1EDE3; --mer-cyan: #2EC4D6; border-color: var(--mer-navy); }
+.screen--mer .screen__bar { background: var(--mer-navy); color: var(--mer-bone); }
+.screen--mer .screen__dot { background: var(--mer-bone); }
+.screen--mer .demo__rec { background: var(--mer-cyan); }
+.mer { position: relative; overflow: hidden; background: var(--mer-desk); color: #C9D6F0; }
+.demo .screen__body.mer { min-height: 540px; } /* everything in it is placed absolutely, so it sets its own height */
+.mer__editor { position: absolute; left: 24px; top: 24px; width: min(62%, 440px); border: 2px solid var(--mer-night); background: #0F1830; }
+.mer__tabs { display: flex; background: var(--mer-night); font-size: 12px; line-height: 16px; }
+.mer__tab { padding: 8px 14px; color: #7F8DB0; }
+.mer__tab--on { background: #0F1830; color: var(--mer-bone); box-shadow: inset 0 2px 0 var(--mer-cyan); }
+.mer__code { margin: 0; padding: 14px 16px 18px; font: 13px/22px ui-monospace, Consolas, Menlo, monospace; white-space: pre; overflow: hidden; color: #C9D6F0; }
+.mer__ln { display: inline-block; width: 22px; color: #4C5A7E; user-select: none; }
+.mer__k { color: #8BE9F3; }
+.mer__f { color: #F1EDE3; font-weight: 700; }
+.mer__s { color: #A6D98A; }
+.mer__t { color: #F4C77B; }
+.mer__c { color: #6F7FA3; font-style: italic; }
+.mer__taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; background: var(--mer-night); font-size: 12px; line-height: 16px; color: var(--mer-bone); }
+.mer__start, .mer__app { width: 18px; height: 18px; border: 2px solid #4C5A7E; }
+.mer__app--on { border-color: var(--mer-cyan); }
+.mer__playing { display: inline-flex; align-items: center; gap: 8px; margin-left: 12px; padding: 4px 10px; border: 1px solid #2B3A60; opacity: 0.35; transition: opacity 300ms var(--ease); }
+.mer__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.mer__eq span { width: 3px; height: 4px; background: var(--mer-cyan); }
+.mer__clock { margin-left: auto; color: #7F8DB0; }
+/* the three beats: full-size layers over the desktop; only the chat one holds anything */
+.demo--merlin .mer__beat { position: absolute; inset: 0; z-index: 3; padding: 0; pointer-events: none; }
+.mer__pet { position: absolute; right: 7%; bottom: 52px; z-index: 2; width: min(34%, 220px); }
+.mer__pet svg { display: block; width: 100%; height: auto; overflow: visible; }
+.mer__circle, .mer__beam { opacity: 0; }
+.mer__circle { transform-box: fill-box; transform-origin: center; }
+.mer__spark { opacity: 0; animation: mer-spark 1.6s ease-out infinite; }
+.mer__note { position: absolute; top: 14%; font-size: 24px; line-height: 1; font-weight: 700; color: var(--mer-cyan); opacity: 0; }
+.mer__note--1 { left: 6%; } .mer__note--2 { left: 46%; } .mer__note--3 { right: 4%; }
+.mer__ask, .mer__say { position: absolute; margin: 0; max-width: 300px; padding: 10px 14px; font-size: 14px; line-height: 20px; opacity: 0; }
+.mer__ask { right: 34%; bottom: 330px; background: #0F1830; border: 2px solid #4C5A7E; color: var(--mer-bone); font-family: ui-monospace, Consolas, Menlo, monospace; }
+.mer__say { right: 6%; bottom: 236px; background: var(--mer-bone); border: 3px solid var(--mer-navy); color: var(--mer-navy); font-weight: 600; }
+.mer__say::after { content: ""; position: absolute; right: 64px; bottom: -14px; border: 7px solid transparent; border-top-color: var(--mer-navy); border-right-color: var(--mer-navy); }
+.mer__say code { font: 700 13px/20px ui-monospace, Consolas, Menlo, monospace; }
+:is(.mer__float, .mer__jaw, .mer__eyes) { transform-box: fill-box; }
+.mer__float { animation: mer-bob 3.4s ease-in-out infinite; }
+/* beat 1, summon: the circle draws in and spins, the beam rises, he fades up out of it */
+.demo--merlin[data-step="0"] .mer__circle { animation: mer-circle 2.6s linear both; }
+.demo--merlin[data-step="0"] .mer__beam { animation: mer-beam 2.6s var(--ease) both; }
+.demo--merlin[data-step="0"] .mer__float { animation: mer-summon 1.5s var(--ease) both; }
+/* beat 2, vibe: the music plays, he bobs to it, notes float up */
+.demo--merlin[data-step="1"] .mer__playing { opacity: 1; }
+.demo--merlin[data-step="1"] .mer__eq span { animation: mer-eq 0.5s ease-in-out infinite alternate; }
+.demo--merlin[data-step="1"] .mer__eq span:nth-child(2) { animation-delay: -0.2s; }
+.demo--merlin[data-step="1"] .mer__eq span:nth-child(3) { animation-delay: -0.35s; }
+.demo--merlin[data-step="1"] .mer__float { animation: mer-vibe 0.52s ease-in-out infinite alternate; }
+.demo--merlin[data-step="1"] .mer__note { animation: mer-note 1.6s ease-out infinite; }
+.demo--merlin[data-step="1"] .mer__note--2 { animation-delay: 0.5s; }
+.demo--merlin[data-step="1"] .mer__note--3 { animation-delay: 1s; }
+/* beat 3, chat: the question, then his reply, jaw going while he talks */
+.demo--merlin[data-step="2"] .mer__ask { animation: mer-in 300ms var(--ease) both; }
+.demo--merlin[data-step="2"] .mer__say { animation: mer-say 900ms var(--ease) 450ms both; }
+.demo--merlin[data-step="2"] .mer__jaw { animation: mer-talk 0.2s steps(2, end) 450ms 8; }
+.demo--merlin[data-step="2"] .mer__eyes { transform: translate(-4px, -3px); transition: transform 300ms var(--ease); }
+/* the clip pauses with the loop: off screen, on hover, or paused */
+.demo--merlin:not(.is-playing) :is(.mer *, .mer__note) { animation-play-state: paused; }
+@keyframes mer-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes mer-vibe { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-8px) rotate(4deg); } }
+@keyframes mer-summon { 0%, 30% { opacity: 0; transform: translateY(30px) scale(0.6); } 70% { opacity: 1; transform: translateY(-6px) scale(1.04); } 100% { opacity: 1; transform: none; } }
+@keyframes mer-circle { 0% { opacity: 0; transform: rotate(0deg) scale(0.6); } 15% { opacity: 1; transform: rotate(40deg) scale(1); } 75% { opacity: 1; } 100% { opacity: 0; transform: rotate(240deg) scale(1); } }
+@keyframes mer-beam { 0%, 10% { opacity: 0; } 30%, 55% { opacity: 1; } 85%, 100% { opacity: 0; } }
+@keyframes mer-spark { 0% { opacity: 0; transform: translate(0, 0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx, 0px), -34px); } }
+@keyframes mer-eq { from { height: 3px; } to { height: 12px; } }
+@keyframes mer-note { 0% { opacity: 0; transform: translateY(16px) rotate(-10deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-40px) rotate(10deg); } }
+@keyframes mer-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes mer-say { 0% { opacity: 0; transform: translateY(10px) scale(0.9); clip-path: inset(0 100% 0 0); } 30% { opacity: 1; transform: none; } 100% { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+@keyframes mer-talk { from { transform: none; } to { transform: translateY(5px); } }
+@media (max-width: 719px) {
+  .demo .screen__body.mer { min-height: 460px; }
+  .mer__playing { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mer__editor { width: 78%; }
+  .mer__pet { width: 42%; right: 4%; }
+  .mer__ask { right: 30%; bottom: 300px; max-width: 220px; }
+  .mer__say { right: 4%; bottom: 210px; max-width: 240px; font-size: 13px; line-height: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo--merlin :is(.mer *, .mer__note) { animation: none !important; transition: none !important; }
+  .demo--merlin[data-step="1"] .mer__note, .demo--merlin[data-step="2"] :is(.mer__ask, .mer__say) { opacity: 1; }
+}
+.poster--merlin .poster__title { color: #F1EDE3; }
 
 /* ---------- Explored meter (TrustMeter.astro) ---------- */
 .trust {
