@@ -1,6 +1,7 @@
 /**
  * Quiet sound effects, synthesized with Web Audio: the heading glitch's electric
- * "zzt", and the About desk's page flip, coffee splash, pencil scratch, and the Contact stamp
+ * "zzt", the About desk's page flip, coffee splash and pencil scratch, the Contact stamp,
+ * and the aura farmer's gust, leap, landing, lightning and rock crunch
  * (no audio file to download).
  *
  * - Browsers only allow sound after the visitor has clicked, tapped or typed
@@ -243,6 +244,132 @@ export function stamp(): void {
   hit.connect(low).connect(hg).connect(ctx.destination);
   hit.start(t);
   hit.stop(t + 0.09);
+}
+
+/** A fast rush of air for a leap: noise sweeping up, short and sharp. */
+export function whoosh(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const v = VOLUME * 1.6;
+  const rush = ctx.createBufferSource();
+  rush.buffer = noise;
+  rush.loop = true;
+  rush.playbackRate.value = 0.7;
+  const band = ctx.createBiquadFilter();
+  band.type = 'bandpass';
+  band.Q.value = 1.1;
+  band.frequency.setValueAtTime(300, t);
+  band.frequency.exponentialRampToValueAtTime(2600, t + 0.28);
+  const air = ctx.createGain();
+  air.gain.setValueAtTime(0, t);
+  air.gain.linearRampToValueAtTime(v, t + 0.12);
+  air.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+  rush.connect(band).connect(air).connect(ctx.destination);
+  rush.start(t);
+  rush.stop(t + 0.42);
+}
+
+/** A heavy landing: a deep falling thump with a burst of grit on top. */
+export function boom(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const v = VOLUME * 2.6;
+  const body = ctx.createOscillator();
+  body.type = 'sine';
+  body.frequency.setValueAtTime(110, t);
+  body.frequency.exponentialRampToValueAtTime(32, t + 0.45);
+  const bg = ctx.createGain();
+  bg.gain.setValueAtTime(0, t);
+  bg.gain.linearRampToValueAtTime(v, t + 0.008);
+  bg.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+  body.connect(bg).connect(ctx.destination);
+  body.start(t);
+  body.stop(t + 0.52);
+  const grit = ctx.createBufferSource();
+  grit.buffer = noise;
+  grit.playbackRate.value = 0.5;
+  const low = ctx.createBiquadFilter();
+  low.type = 'lowpass';
+  low.frequency.setValueAtTime(1600, t);
+  low.frequency.exponentialRampToValueAtTime(200, t + 0.35);
+  const gg = ctx.createGain();
+  gg.gain.setValueAtTime(0, t);
+  gg.gain.linearRampToValueAtTime(v * 0.6, t + 0.005);
+  gg.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+  grit.connect(low).connect(gg).connect(ctx.destination);
+  grit.start(t);
+  grit.stop(t + 0.4);
+}
+
+/** Lightning: a bright crack, then a low rumble rolling off. */
+export function strike(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const v = VOLUME * 2.2;
+  const crack = ctx.createBufferSource();
+  crack.buffer = noise;
+  const hi = ctx.createBiquadFilter();
+  hi.type = 'highpass';
+  hi.frequency.value = 1800;
+  const cg = ctx.createGain();
+  // two quick snaps, like the bolt flickering
+  cg.gain.setValueAtTime(0, t);
+  cg.gain.linearRampToValueAtTime(v, t + 0.004);
+  cg.gain.linearRampToValueAtTime(v * 0.2, t + 0.05);
+  cg.gain.linearRampToValueAtTime(v * 0.8, t + 0.07);
+  cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+  crack.connect(hi).connect(cg).connect(ctx.destination);
+  crack.start(t);
+  crack.stop(t + 0.19);
+  const rumble = ctx.createBufferSource();
+  rumble.buffer = noise;
+  rumble.loop = true;
+  rumble.playbackRate.value = 0.25;
+  const low = ctx.createBiquadFilter();
+  low.type = 'lowpass';
+  low.frequency.value = 260;
+  const rg = ctx.createGain();
+  rg.gain.setValueAtTime(0, t + 0.05);
+  rg.gain.linearRampToValueAtTime(v * 0.9, t + 0.15);
+  rg.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+  rumble.connect(low).connect(rg).connect(ctx.destination);
+  rumble.start(t + 0.05);
+  rumble.stop(t + 0.92);
+}
+
+/** Rock breaking: a hard hit, then a stutter of crunching grit. */
+export function crunch(): void {
+  if (muted || !ctx || ctx.state !== 'running' || !noise) return;
+  const t = ctx.currentTime;
+  const v = VOLUME * 2.4;
+  const hit = ctx.createOscillator();
+  hit.type = 'triangle';
+  hit.frequency.setValueAtTime(180, t);
+  hit.frequency.exponentialRampToValueAtTime(48, t + 0.2);
+  const hg = ctx.createGain();
+  hg.gain.setValueAtTime(0, t);
+  hg.gain.linearRampToValueAtTime(v, t + 0.004);
+  hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.24);
+  hit.connect(hg).connect(ctx.destination);
+  hit.start(t);
+  hit.stop(t + 0.25);
+  [0, 0.05, 0.11, 0.18, 0.26].forEach((d, i) => {
+    const bit = ctx!.createBufferSource();
+    bit.buffer = noise;
+    bit.playbackRate.value = 0.6 + Math.random() * 0.5;
+    const band = ctx!.createBiquadFilter();
+    band.type = 'bandpass';
+    band.Q.value = 2;
+    band.frequency.value = 700 + Math.random() * 900;
+    const g = ctx!.createGain();
+    const at = t + d;
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(v * (0.8 - i * 0.12), at + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + 0.06);
+    bit.connect(band).connect(g).connect(ctx!.destination);
+    bit.start(at);
+    bit.stop(at + 0.07);
+  });
 }
 
 export function initSound(): void {
