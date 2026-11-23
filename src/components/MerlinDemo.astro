@@ -1,0 +1,144 @@
+---
+/**
+ * Merlin demo loop: the desktop companion on a dev's screen, played like a muted clip.
+ * Summoned through a magic circle, vibing to music, then answering a question.
+ * Merlin's drawing and his flame are ported from merlin-desktop-companion
+ * (index.html and src/fire.ts): each flame layer is a spiky crown path that
+ * morphs between keyframe shapes with SMIL <animate>, each at its own speed.
+ * Logic: src/scripts/features.ts (initDemo), shared with ThriftBite and Ka-dugo.
+ * Without JavaScript the first screen shows and the controls stay hidden.
+ */
+import { HALO, MAIN, INNER, layer } from '../data/merlinFire';
+const outer = [layer(HALO), layer(MAIN)];
+const inner = layer(INNER);
+// sparks rising off the fire, placed the same way as in the app (fixed here, so every build matches)
+const SPARK_COLORS = ['#F4FEFF', '#8BE9F3', '#2EC4D6', '#8BE9F3'];
+const sparks = Array.from({ length: 12 }, (_, i) => {
+  const x = 48 + (i / 11) * 104;
+  const y = x > 60 && x < 140 ? [6, 28, -2, 18, 34, 10][i % 6] : [36, 46, 40][i % 3];
+  return { x, y, r: [1.6, 2.2, 2.8, 1.8][i % 4], fill: SPARK_COLORS[i % 4], diamond: i % 3 === 0, dur: (1.2 + (i % 5) * 0.22).toFixed(2), delay: ((i * 0.37) % 2).toFixed(2), dx: [-10, 6, -4, 12, -8, 4][i % 6] };
+});
+const steps = ['Rise', 'Vibe', 'Chat'];
+---
+<figure class="demo demo--merlin" data-demo data-step="0">
+  <div class="demo__frame">
+    <div class="demo__shadow" aria-hidden="true"></div>
+    <div class="screen screen--mer" data-ui>
+      <div class="screen__bar">
+        <span class="screen__dot"></span><span class="screen__dot"></span><span class="screen__dot"></span>
+        <span class="screen__url">Merlin · your desktop</span>
+        <span class="demo__status" aria-hidden="true"><span class="demo__rec"></span><span class="demo__status-text">Demo loop</span></span>
+      </div>
+      <div class="screen__body mer" aria-live="off">
+        <!-- the desktop: an editor window, and a taskbar with what's playing -->
+        <div class="mer__editor" aria-hidden="true">
+          <div class="mer__tabs"><span class="mer__tab mer__tab--on">fire.ts</span><span class="mer__tab">mood.ts</span><span class="mer__tab">brain.rs</span></div>
+          <pre class="mer__code"><span class="mer__ln">1</span><span class="mer__k">import</span> {'{'} buildFire {'}'} <span class="mer__k">from</span> <span class="mer__s">"./fire"</span>;
+<span class="mer__ln">2</span>
+<span class="mer__ln">3</span><span class="mer__k">export function</span> <span class="mer__f">summon</span>(): <span class="mer__t">void</span> {'{'}
+<span class="mer__ln">4</span>  <span class="mer__f">buildFire</span>();
+<span class="mer__ln">5</span>  stage.<span class="mer__f">setMood</span>(<span class="mer__s">"summon"</span>);
+<span class="mer__ln">6</span>{'}'}
+<span class="mer__ln">7</span>
+<span class="mer__ln">8</span><span class="mer__c">// he senses music, idle time and CPU load</span>
+<span class="mer__ln">9</span><span class="mer__k">const</span> senses = [<span class="mer__s">"music"</span>, <span class="mer__s">"idle"</span>, <span class="mer__s">"cpu"</span>];</pre>
+        </div>
+        <div class="mer__taskbar" aria-hidden="true">
+          <span class="mer__start"></span><span class="mer__app"></span><span class="mer__app mer__app--on"></span><span class="mer__app"></span>
+          <span class="mer__playing"><span class="mer__eq"><span></span><span></span><span></span></span>Now playing · lo-fi beats to code to</span>
+          <span class="mer__clock">11:42</span>
+        </div>
+
+        <!-- the three beats; each only sets what Merlin does (styles key off data-step) -->
+        <div class="demo__screen mer__beat" data-screen="0" aria-label="Step 1 of 3: Merlin is summoned through a glowing magic circle and his fire ignites"></div>
+        <div class="demo__screen mer__beat" data-screen="1" aria-label="Step 2 of 3: music is playing, and Merlin bobs along with notes floating up"></div>
+        <div class="demo__screen mer__beat" data-screen="2" aria-label="Step 3 of 3: you ask how to undo a commit, and Merlin answers in a speech bubble">
+          <p class="mer__ask">how do I undo my last commit?</p>
+          <p class="mer__say">Patience, apprentice. <code>git reset --soft HEAD~1</code> keeps your changes. Even I once force-pushed to main.</p>
+        </div>
+
+        <!-- Merlin himself, drawn as in the app -->
+        <div class="mer__pet" aria-hidden="true">
+          <span class="mer__note mer__note--1">♪</span><span class="mer__note mer__note--2">♫</span><span class="mer__note mer__note--3">♪</span>
+          <svg viewBox="-30 -70 260 294">
+            <defs>
+              <filter id="mer-flow" x="-20%" y="-30%" width="140%" height="150%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.03 0.11" numOctaves="2" seed="4" result="noise">
+                  <animate attributeName="baseFrequency" dur="3s" values="0.03 0.11;0.036 0.14;0.03 0.11" repeatCount="indefinite"></animate>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+              </filter>
+              <linearGradient id="mer-fire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1597BE"></stop><stop offset="0.55" stop-color="#2EC4D6"></stop><stop offset="1" stop-color="#8BE9F3"></stop></linearGradient>
+              <linearGradient id="mer-inner" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8BE9F3"></stop><stop offset="1" stop-color="#F4FEFF"></stop></linearGradient>
+              <linearGradient id="mer-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2EC4D6" stop-opacity="0"></stop><stop offset="1" stop-color="#2EC4D6" stop-opacity="0.55"></stop></linearGradient>
+            </defs>
+            <ellipse class="mer__shadow" cx="100" cy="200" rx="40" ry="5" fill="#14213D" opacity="0.3"></ellipse>
+            <!-- the summoning: a magic circle lying on the floor, a beam of light -->
+            <g transform="translate(100 200) scale(1 0.3)">
+              <g class="mer__circle" fill="none" stroke="#2EC4D6" stroke-linejoin="round">
+                <circle r="62" stroke-width="4"></circle><circle r="50" stroke-width="2"></circle><circle r="14" stroke-width="2.5"></circle>
+                <path d="M0 -50 L43.3 25 L-43.3 25 Z" stroke-width="2.5"></path><path d="M0 50 L43.3 -25 L-43.3 -25 Z" stroke-width="2.5"></path>
+                <path d="M0 -60 L3 -56 L0 -52 L-3 -56 Z M0 60 L3 56 L0 52 L-3 56 Z M-60 0 L-56 3 L-52 0 L-56 -3 Z M60 0 L56 3 L52 0 L56 -3 Z" fill="#2EC4D6" stroke="none"></path>
+              </g>
+            </g>
+            <rect class="mer__beam" x="56" y="30" width="88" height="170" rx="10" fill="url(#mer-beam)"></rect>
+
+            <g class="mer__float">
+              <g class="mer__fire">
+                <g filter="url(#mer-flow)">
+                  {outer.map((l) => (
+                    <path d={l.d} {...l.attrs}>
+                      <animate attributeName="d" dur={l.dur} repeatCount="indefinite" calcMode="spline" keyTimes={l.keyTimes} keySplines={l.keySplines} values={l.values}></animate>
+                    </path>
+                  ))}
+                </g>
+                <g>
+                  {sparks.map((s) => (
+                    <g transform={`translate(${s.x.toFixed(1)} ${s.y})`}>
+                      {s.diamond
+                        ? <path class="mer__spark" d={`M0 ${-s.r * 1.6} L${s.r * 0.8} 0 L0 ${s.r * 1.6} L${-s.r * 0.8} 0 Z`} fill={s.fill} style={`animation-duration:${s.dur}s;animation-delay:${s.delay}s;--dx:${s.dx}px`}></path>
+                        : <circle class="mer__spark" r={s.r} fill={s.fill} style={`animation-duration:${s.dur}s;animation-delay:${s.delay}s;--dx:${s.dx}px`}></circle>}
+                    </g>
+                  ))}
+                </g>
+                <g filter="url(#mer-flow)">
+                  <path d={inner.d} {...inner.attrs}>
+                    <animate attributeName="d" dur={inner.dur} repeatCount="indefinite" calcMode="spline" keyTimes={inner.keyTimes} keySplines={inner.keySplines} values={inner.values}></animate>
+                  </path>
+                </g>
+              </g>
+              <!-- skull, with the crack and the chipped tooth -->
+              <path d="M52 106 Q46 54 100 48 Q154 54 148 106 Q148 124 132 130 L128 142 L72 142 L68 130 Q52 124 52 106 Z" fill="#F1EDE3" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round"></path>
+              <path d="M120 58 L113 72 L121 78" fill="none" stroke="#14213D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <ellipse cx="78" cy="102" rx="16" ry="18" fill="#14213D"></ellipse>
+              <ellipse cx="122" cy="102" rx="16" ry="18" fill="#14213D"></ellipse>
+              <g class="mer__eyes"><circle cx="80" cy="106" r="5.5" fill="#2EC4D6"></circle><circle cx="120" cy="106" r="5.5" fill="#2EC4D6"></circle></g>
+              <path d="M95 120 L105 120 L100 128 Z" fill="#14213D"></path>
+              <g stroke="#14213D" stroke-width="2.5" stroke-linecap="round">
+                <line x1="84" y1="133" x2="84" y2="142"></line><line x1="92" y1="132" x2="92" y2="142"></line><line x1="100" y1="132" x2="100" y2="142"></line><line x1="108" y1="132" x2="108" y2="142"></line><line x1="116" y1="133" x2="116" y2="142"></line>
+              </g>
+              <path d="M109.5 143 L116 143 L116 136.5 L113.5 138.5 Z" fill="#14213D"></path>
+              <g class="mer__jaw">
+                <path d="M72 142 L128 142 Q131 162 116 168 L84 168 Q69 162 72 142 Z" fill="#F1EDE3" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round"></path>
+                <g stroke="#14213D" stroke-width="2.5" stroke-linecap="round"><line x1="86" y1="142" x2="86" y2="152"></line><line x1="95" y1="142" x2="95" y2="153"></line><line x1="105" y1="142" x2="105" y2="153"></line><line x1="114" y1="142" x2="114" y2="152"></line></g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo__controls" hidden>
+    <button type="button" class="demo__play" aria-label="Pause demo" data-demo-play>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path class="demo__icon-pause" d="M4 3 H8 V17 H4 Z M12 3 H16 V17 H12 Z"></path><path class="demo__icon-play" d="M5 3 L17 10 L5 17 Z"></path></svg>
+    </button>
+    {steps.map((label, i) => (
+      <button type="button" class="demo__step" data-demo-step={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+        <span class="demo__step-label">{label}</span>
+        <span class="demo__track"><span class="demo__fill"></span></span>
+      </button>
+    ))}
+  </div>
+  <figcaption class="demo__caption">Merlin as he runs on a desktop, redrawn from the app and played as a loop. Hover to pause.</figcaption>
+</figure>

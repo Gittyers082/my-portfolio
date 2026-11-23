@@ -807,6 +807,8 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering.is-compact .af-armX { animation: af-armX-c 3.6s linear both; }
 @keyframes af-arm-c { 0% { opacity: 0; } 13.86% { opacity: 0; } 13.89% { opacity: 1; } 81.92% { opacity: 1; } 81.94% { opacity: 0; } 100% { opacity: 0; } }
 .farmer.is-powering.is-compact .af-arm { animation: af-arm-c 3.6s linear both; }
+@keyframes af-armFront-c { 0% { opacity: 0; } 47.19% { opacity: 0; } 47.22% { opacity: 1; } 81.92% { opacity: 1; } 81.94% { opacity: 0; } 100% { opacity: 0; } }
+.farmer.is-powering.is-compact .af-armFront { animation: af-armFront-c 3.6s linear both; }
 @keyframes af-rig-c { 0.0% { transform: rotate(150deg); } 13.89% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 22.22% { transform: rotate(14deg); } 34.72% { transform: rotate(18deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 43.06% { transform: rotate(-42deg); } 47.22% { transform: rotate(-46deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 51.67% { transform: rotate(150deg); } 57.78% { transform: rotate(150deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 61.11% { transform: rotate(138deg); } 65.28% { transform: rotate(148deg); } 100% { transform: rotate(150deg); } }
 .farmer.is-powering.is-compact .af-rig { animation: af-rig-c 3.6s linear both; }
 @keyframes af-lean-c { 0.0% { transform: rotate(0deg); } 34.72% { transform: rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 43.06% { transform: rotate(-7deg); } 47.22% { transform: rotate(-8deg); animation-timing-function: cubic-bezier(.5,0,.9,.4); } 51.67% { transform: rotate(10deg); } 57.78% { transform: rotate(10deg); animation-timing-function: cubic-bezier(.2,.8,.3,1); } 69.44% { transform: rotate(0deg); } 100% { transform: rotate(0deg); } }
@@ -840,7 +842,6 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-still-power:not(.is-compact) .af-halfL { transform: translate(-16px, 6px) rotate(-6deg); }
 .farmer.is-still-power:not(.is-compact) .af-halfR { transform: translate(16px, 6px) rotate(6deg); }
 .farmer.is-still-power.is-compact .af-crackC { opacity: 1; }
-.farmer.is-still-power.is-compact .af-armFront { opacity: 0; } /* on the rock the strike points down the cape: the arm stays under it */
 @media (prefers-reduced-motion: reduce) {
   :is(.af-flick1, .af-flick2, .af-flick3, .af-ptc, .af-hair, .af-flap) { animation: none; }
   .af-ptc { opacity: 0; }
