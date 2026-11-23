@@ -113,7 +113,7 @@ function initJumps(card: HTMLElement): void {
 }
 
 /** True once the Explored meter has hit 100% (this visit or earlier in the session). */
-export const exploredAll = (): boolean => document.querySelector('[data-trust-value]')?.textContent?.trim() === '100%';
+const exploredAll = (): boolean => document.querySelector('[data-trust-value]')?.textContent?.trim() === '100%';
 
 /** The secret 7th card: revealed at 100% explored (drops in), and on later page loads (already there). */
 function initSecret(card: HTMLElement): void {

@@ -1,0 +1,13 @@
+{
+  // The code is hand-formatted. Prettier would rewrite ~9,000 lines on save, so it stays off here.
+  "editor.formatOnSave": false,
+  "[typescript]": { "editor.formatOnSave": false },
+  "[javascript]": { "editor.formatOnSave": false },
+  "[css]": { "editor.formatOnSave": false },
+  "[astro]": { "editor.formatOnSave": false },
+  "[json]": { "editor.formatOnSave": false },
+  "[jsonc]": { "editor.formatOnSave": false },
+  "[markdown]": { "editor.formatOnSave": false },
+  "[yaml]": { "editor.formatOnSave": false },
+  "[html]": { "editor.formatOnSave": false }
+}

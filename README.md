@@ -22,13 +22,12 @@ npm run preview   # serves the production build
 | `src/data/profile.ts` | **Your content.** Name, links, Character card facts (and the secret 7th card), Stack areas and levels, training, lore, project episodes, hero portrait. Start here. |
 | `src/data/contributions.ts` | GitHub activity: your contribution calendar (with per-day counts) and latest pushed repos, read at build time. |
 | `src/pages/index.astro` | The homepage: Hero → Character card → Character file (Projects is the peak) → Tagline → About → GitHub activity → Contact, plus the mountain map and the shortcuts panel |
-| `src/pages/work/ka-dugo.astro` | Ka-dugo case study (stub, fill it in) |
 | `src/pages/404.astro` | 404: El lost with his map upside down, and dodge.exe |
 | `src/layouts/Base.astro` | Page shell; sets light/dark before the first paint |
-| `src/components/` | One file per section. Drawings: `DeskScene`, `EpisodeArt`, `AuraFarmer`, `Climb`; `Runner` is dodge.exe; `KadugoDemo` is the demo loop. |
+| `src/components/` | One file per section. Drawings: `DeskScene`, `EpisodeArt`, `AuraFarmer`, `Climb`; `Runner` is dodge.exe; `ThriftbiteDemo` and `KadugoDemo` are the project demo loops. |
 | `src/styles/global.css` | All styles. Design tokens (colours, spacing, motion) and the dark palette are at the top. |
 | `src/scripts/site.ts` | Wires everything up (reveals, menu, chapters, hero, Projects links…) and calls the scripts below |
-| `src/scripts/features.ts` | Explored meter, demo loop, episode picker + Snap, copy-the-email |
+| `src/scripts/features.ts` | Explored meter, project demo loops, episode picker, copy-the-email |
 | `src/scripts/theme.ts` | Light / dark toggle |
 | `src/scripts/` (others) | One small file per feature: `card`, `climb`, `aura`, `calendar`, `keys`, `lore`, `stack`, `typing`, `cursor`, `stars`, `notebook`, `contact`, `footer`, `lost`, `devtools`, `sfx` (sounds), `portrait-reveal` |
 | `public/fonts/` | Archivo variable font, self-hosted (SIL Open Font License) |
@@ -67,13 +66,29 @@ The hero's second frame is your photo (Ink / Photo buttons). Put it at **`public
 (`.jpg`, `.avif` or `.png` also work), and optionally a night version at **`public/portrait/steven-dark.webp`**,
 which shows in dark mode. If the crop cuts your face, adjust `portrait.focus` in `src/data/profile.ts`.
 
-## Before launch
+## Deploy
 
-Search the code for `[` brackets or `TODO`:
+Hosted on Vercel at <https://elsteven-cruz.vercel.app>. Every push to `main` deploys; every other branch gets a preview link.
 
-- [x] `profile.ts`: email, GitHub, LinkedIn, Fiverr
-- [x] Hero photos (light and dark)
-- [ ] Deployed site URL: `site` in `astro.config.mjs` and `profile.ts` (canonical links and social cards)
-- [ ] `public/og.png` (1200×630 social card)
-- [ ] `public/resume.pdf` (the Contact link appears once the file exists)
-- [ ] Projects: real episodes, Ka-dugo details and case study, a real screen recording for the demo loop
+- The GitHub activity section is read at build time, so `.github/workflows/daily-rebuild.yml` asks Vercel for a fresh
+  build every night (18:17 UTC, 2:17 AM Manila). It needs the repo secret `VERCEL_DEPLOY_HOOK`.
+- Vercel env var `GITHUB_TOKEN` (a token with no permissions) keeps the GitHub API from rate-limiting the build.
+- `site` comes from Vercel's `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links and the social card follow the domain.
+
+Still to do: drop a résumé at `public/resume.pdf` (the Contact link appears once the file exists).
+
+## Workflow
+
+`main` is what's live. Never commit to it directly.
+
+```bash
+git checkout main && git pull
+git checkout -b feat/short-name      # or fix/…, chore/…, docs/…
+# make the change, then
+git add -A && git commit -m "feat: what changed"
+git push -u origin feat/short-name
+```
+
+Open a PR into `main`, check the Vercel preview link on it, merge, and delete the branch.
+
+Formatting is by hand: `.vscode/settings.json` turns off format-on-save, because Prettier would rewrite the whole codebase.

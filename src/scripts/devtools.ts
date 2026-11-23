@@ -21,7 +21,7 @@ export function initDevtools(): void {
   const cyan = 'color:#00789A;font-weight:700';
   const plain = 'color:inherit;font-weight:400';
   /* eslint-disable no-console */
-  console.log(`%c${EL}`, 'color:#00789A;font-family:monospace;line-height:1.15'); // taste-skill-ignore: ASCII art needs monospace
+  console.log(`%c${EL}`, 'color:#00789A;font-family:monospace;line-height:1.15');
   console.log("%cYou're reading the source. I like you already.", `${bold};font-size:15px`);
   console.log(
     "%cI'm El: a 3rd-year IT student who builds web apps and is learning AI engineering.\n%cOpen to internships → %c" + email,
