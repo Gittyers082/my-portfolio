@@ -313,8 +313,8 @@ export const episodes: Episode[] = [
       { label: 'Stack', value: 'Tauri 2 (Rust) · TypeScript · SVG and CSS animation · Web Audio · Ollama / Claude API · GitHub Actions releases' },
     ],
     links: [
-      { href: 'https://github.com/malemanape/merlin-desktop-companion/releases/latest', label: 'Download for Windows' },
-      { href: 'https://github.com/malemanape/merlin-desktop-companion', label: 'Read the code' },
+      { href: 'https://github.com/malemanape/Merlin/releases/latest', label: 'Download for Windows' },
+      { href: 'https://github.com/malemanape/Merlin', label: 'Read the code' },
     ],
   },
   {
@@ -341,7 +341,7 @@ export const episodes: Episode[] = [
       { label: 'Stack', value: 'Vanilla JavaScript · HTML · CSS · PHP · MySQL · a service worker for offline use. A rebuild is planned this semester.' },
     ],
     links: [
-      { href: 'https://github.com/malemanape/ka-dugo', label: 'Read the code' },
+      { href: 'https://github.com/malemanape/Ka-dugo', label: 'Read the code' },
     ],
   },
 ];
