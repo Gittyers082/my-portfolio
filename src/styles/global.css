@@ -816,6 +816,14 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .farmer.is-powering.is-compact .af-shake { animation: af-shake-c 3.6s linear both; }
 @keyframes af-plus-c { 0.0% { opacity: 0; transform: translateY(0px); } 77.78% { opacity: 0; transform: translateY(0px); } 81.94% { opacity: 1; transform: translateY(0px); } 100% { opacity: 0; transform: translateY(-40px); } }
 .farmer.is-powering.is-compact .af-plus { animation: af-plus-c 3.6s linear both; }
+/* the shield against the rock: the split knocks it over (it pivots on its point), it rocks once on
+ * the ground, and stands back up when the rock does */
+.farmer svg .af-shield { transform-box: view-box; transform-origin: 80px 466px; }
+@keyframes af-shield { 0%, 58% { transform: rotate(0deg); animation-timing-function: cubic-bezier(.55,0,.9,.5); } 62% { transform: rotate(80deg); animation-timing-function: ease-out; } 64.5% { transform: rotate(71deg); animation-timing-function: ease-in; } 66.5%, 88.32% { transform: rotate(80deg); } 88.33%, 100% { transform: rotate(0deg); } }
+.farmer.is-powering:not(.is-compact) .af-shield { animation: af-shield 6.0s linear both; }
+@keyframes af-shield-c { 0%, 51.67% { transform: rotate(0deg); animation-timing-function: cubic-bezier(.55,0,.9,.5); } 57.5% { transform: rotate(80deg); animation-timing-function: ease-out; } 61.5% { transform: rotate(71deg); animation-timing-function: ease-in; } 65%, 94.43% { transform: rotate(80deg); } 94.44%, 100% { transform: rotate(0deg); } }
+.farmer.is-powering.is-compact .af-shield { animation: af-shield-c 3.6s linear both; }
+.farmer.is-still-power .af-shield { transform: rotate(80deg); }
 /* each bolt in the strike crackles on its own beat (the whole strike's timing is af-bolt / af-boltC) */
 @keyframes af-strand { 0%, 100% { opacity: 1; } 40% { opacity: 0.15; } 60% { opacity: 0.9; } }
 .farmer.is-powering .af-strand { animation: af-strand 0.18s steps(1) infinite; }
