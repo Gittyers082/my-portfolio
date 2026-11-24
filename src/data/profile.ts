@@ -142,7 +142,7 @@ export const stack: StackArea[] = [
   },
   {
     id: 'design', title: 'Design & notes', line: 'Where ideas start',
-    items: [{ text: 'Figma' }, { text: 'Canva' }, { text: 'Obsidian' }, { text: 'Google Docs' }],
+    items: [{ text: 'Figma' }, { text: 'Canva' }, { text: 'Obsidian' }, { text: 'Docs' }],
   },
   {
     id: 'ai', title: 'Next arc', line: 'Where I’m heading',
@@ -154,6 +154,8 @@ export const stack: StackArea[] = [
     ],
   },
 ];
+// bars always read highest to lowest, so a level change re-sorts itself (ties keep the order above)
+for (const area of stack) area.skills?.sort((a, b) => b.level - a.level);
 
 /* ---------- Character file → Training ----------
  * Academy: the BSIT course as a quest board. Major subjects only, by term.
