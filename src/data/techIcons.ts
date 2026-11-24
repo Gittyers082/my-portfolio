@@ -10,19 +10,19 @@ const SLUG: Record<string, string | null> = {
   Kotlin: 'kotlin', Elixir: 'elixir', Rust: 'rust', C: 'c', 'C++': 'cplusplus', 'C#': null, Go: 'go',
   Ruby: 'ruby', Dart: 'dart', PHP: 'php', Bash: 'gnubash',
   Astro: 'astro', React: 'react', 'Next.js': 'nextdotjs', HTML: 'html5', CSS: 'css',
-  Tailwind: 'tailwindcss', Bootstrap: 'bootstrap',
+  Tailwind: 'tailwindcss', Bootstrap: 'bootstrap', Vite: 'vite', Tauri: 'tauri',
   'Node.js': 'nodedotjs', Express: 'express', 'Spring Boot': 'springboot', FastAPI: 'fastapi', Phoenix: 'phoenixframework',
-  MySQL: 'mysql', PostgreSQL: 'postgresql', MongoDB: 'mongodb', Firebase: 'firebase', Supabase: 'supabase',
-  Git: 'git', 'VS Code': null, 'IntelliJ IDEA': 'intellijidea', Antigravity: null,
-  Docker: 'docker', npm: 'npm', Maven: 'apachemaven', Gradle: 'gradle', Ant: 'apacheant', Mix: null,
-  Vercel: 'vercel', AWS: null, GitHub: 'github',
-  Figma: 'figma', Canva: null, Obsidian: 'obsidian', 'Claude Code': 'claude',
+  MySQL: 'mysql', PostgreSQL: 'postgresql', MongoDB: 'mongodb', Firebase: 'firebase', Supabase: 'supabase', Redis: 'redis',
+  Git: 'git', 'VS Code': null, 'IntelliJ IDEA': 'intellijidea', Zed: 'zedindustries', 'Sublime Text': 'sublimetext',
+  Docker: 'docker', npm: 'npm', Maven: 'apachemaven', Gradle: 'gradle', Ant: 'apacheant', Mix: null, 'GitHub Actions': 'githubactions',
+  Vercel: 'vercel', Render: 'render', GitHub: 'github',
+  Figma: 'figma', Canva: null, Obsidian: 'obsidian', 'Claude Code': 'claude', Ollama: 'ollama',
   // GitHub's names for languages, for the profile's language card
   Shell: 'gnubash', Vue: 'vuedotjs', Svelte: 'svelte', Lua: 'lua', 'Jupyter Notebook': 'jupyter',
   // contact links
   Gmail: 'gmail', Fiverr: null, LinkedIn: null, Résumé: null, // Fiverr's logo is a wordmark, unreadable this small
 };
-const TILE: Record<string, string> = { SQL: 'SQL', 'C#': 'C#', 'VS Code': 'VS', Antigravity: 'AG', Mix: 'mix', AWS: 'AWS', Canva: 'Ca', LinkedIn: 'in', Fiverr: 'fi', Résumé: 'CV' };
+const TILE: Record<string, string> = { SQL: 'SQL', 'C#': 'C#', 'VS Code': 'VS', Mix: 'mix', Canva: 'Ca', LinkedIn: 'in', Fiverr: 'fi', Résumé: 'CV' };
 
 const icons = si as unknown as Record<string, { path: string } | undefined>;
 
