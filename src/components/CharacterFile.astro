@@ -291,7 +291,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                   </div>
                   <p class:list={['dossier__hook', { placeholder: w.placeholder }]}><span class="redact">{w.hook}</span></p>
                   {w.quote && (
-                    <blockquote class="dossier__quote"><p><span class="sr-only">“{w.quote}”</span><span class="redact" aria-hidden="true" data-type>“{w.quote}”</span></p><footer>{w.name}</footer></blockquote>
+                    <blockquote class="dossier__quote"><p><span class="sr-only">“{w.quote}”</span><span class="redact" aria-hidden="true" data-quote-type>“{w.quote}”</span></p><footer>{w.name}</footer></blockquote>
                   )}
                   <dl class="dossier__specs">
                     {w.specs.map((sp) => (
