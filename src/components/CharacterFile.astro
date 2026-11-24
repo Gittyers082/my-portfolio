@@ -30,7 +30,7 @@ import { stack, episodes, profile, lore, course, missions, selfTraining } from '
 
 const loreKind = { universe: 'Universe', power: 'Power system', oc: 'Character' } as const;
 
-const statusLabel = { cleared: 'Cleared', active: 'In progress', locked: 'Locked' } as const;
+const statusLabel = { cleared: 'Cleared', active: 'In Progress', locked: 'Locked' } as const;
 
 // Quest counts for the Academy progress bar
 const allQuests = course.terms.flatMap((t) => t.quests.map(() => t.status));
@@ -39,7 +39,7 @@ const active = allQuests.filter((st) => st === 'active').length;
 
 const chapters = [
   { id: 'stack', title: 'Stack', teaser: 'Languages, tools and what I’m learning next', count: `${stack.length} Areas` },
-  { id: 'training', title: 'Training', teaser: 'School, field missions and self-training', count: 'Training arc' },
+  { id: 'training', title: 'Training', teaser: 'School, clubs, events and self-training', count: 'Training arc' },
   { id: 'writing', title: 'Writing', teaser: 'Lore, worldbuilding and power systems', count: 'Side Quest' },
   { id: 'certs', title: 'Certified', teaser: 'Courses cleared. Receipts on the wall.', count: `${certs.length} Earned` },
   { id: 'projects', title: 'Projects', teaser: 'The main event. What I’ve built so far.', count: `${episodes.length} Episodes`, open: true },
@@ -158,7 +158,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                     <span class="course__school">{course.school} · {course.year}</span>
                   </span>
                   <span class="course__progress">
-                    <span class="course__count"><b>{cleared}</b> cleared · <b>{active}</b> in progress</span>
+                    <span class="course__count"><b>{cleared}</b> Cleared · <b>{active}</b> In Progress</span>
                     <span class="course__bar" aria-hidden="true">
                       {allQuests.map((st) => <span class:list={['course__seg', `course__seg--${st}`]}></span>)}
                     </span>
@@ -179,16 +179,23 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                       {t.quests.length > 0 ? (
                         <ul class="term__quests" role="list">
                           {t.quests.map((q) => {
-                            const mark = t.status === 'cleared'
-                              ? <svg viewBox="0 0 16 16"><path d="M2.5 8.5 L6.5 12 L13.5 4" fill="none" stroke="currentColor" stroke-width="2.4"></path></svg>
-                              : <span class="quest__dot"></span>;
+                            const head = (
+                              <>
+                                <span class="quest__mark" aria-hidden="true">
+                                  {t.status === 'cleared'
+                                    ? <svg viewBox="0 0 16 16"><path d="M2.5 8.5 L6.5 12 L13.5 4" fill="none" stroke="currentColor" stroke-width="2.4"></path></svg>
+                                    : <span class="quest__dot"></span>}
+                                </span>
+                                <span class="quest__title"><span class="quest__name">{q.name}</span>{q.tag && <span class="quest__tag">{q.tag}</span>}</span>
+                                <span class="sr-only"> ({statusLabel[t.status]})</span>
+                              </>
+                            );
+                            // a quest with a note opens to show it; the rest are a plain row
                             return q.learned ? (
                               <li class:list={['quest', 'quest--open-able', `quest--${t.status}`]}>
                                 <details class="quest__details" data-glide>
                                   <summary class="quest__head">
-                                    <span class="quest__mark" aria-hidden="true">{mark}</span>
-                                    <span class="quest__title"><span class="quest__name">{q.name}</span>{q.tag && <span class="quest__tag">{q.tag}</span>}</span>
-                                    <span class="sr-only"> ({statusLabel[t.status]})</span>
+                                    {head}
                                     <svg class="quest__plus" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8 H14" stroke="currentColor" stroke-width="2.4"></path><path class="quest__plus-v" d="M8 2 V14" stroke="currentColor" stroke-width="2.4"></path></svg>
                                   </summary>
                                   <div class="quest__learned">
@@ -199,11 +206,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                               </li>
                             ) : (
                               <li class:list={['quest', `quest--${t.status}`]}>
-                                <div class="quest__head">
-                                  <span class="quest__mark" aria-hidden="true">{mark}</span>
-                                  <span class="quest__title"><span class="quest__name">{q.name}</span></span>
-                                  <span class="sr-only"> ({statusLabel[t.status]})</span>
-                                </div>
+                                <div class="quest__head">{head}</div>
                               </li>
                             );
                           })}
@@ -218,7 +221,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
             </section>
 
             <section class="train__block" style="--i:1" aria-labelledby="train-missions">
-              <h3 id="train-missions" class="train__h">Field missions</h3>
+              <h3 id="train-missions" class="train__h">Clubs and events</h3>
               <ul class="missions" role="list">
                 {missions.map((m) => (
                   <li class="mission">
@@ -228,7 +231,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                     </div>
                     <h4 class="mission__title">{m.title}</h4>
                     <p class="mission__role">{m.role}</p>
-                    <p class:list={['mission__note', { placeholder: m.placeholder }]}>{m.note}</p>
+                    <p class="mission__note">{m.note}</p>
                   </li>
                 ))}
               </ul>

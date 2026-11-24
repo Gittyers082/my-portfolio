@@ -1573,7 +1573,7 @@ html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-
   .stat__name--tech .tech-icon { width: 20px; height: 20px; }
 }
 
-/* ---------- Training: academy quest board, field missions, self-training ---------- */
+/* ---------- Training: academy quest board, clubs and events, self-training ---------- */
 .train { display: flex; flex-direction: column; gap: var(--s-600); }
 .train :where(h3, h4, p, ol, ul) { margin: 0; }
 .train__h { margin-bottom: var(--s-200); font-size: 40px; line-height: 40px; font-weight: 700; font-stretch: var(--display-stretch); letter-spacing: var(--display-track); }
