@@ -1,0 +1,59 @@
+---
+/**
+ * The trophy wall inside the Certifications chapter: each certificate framed and taped up,
+ * a mounted label under it, newest first (and marked NEW). Clicking a frame unfolds the
+ * certificate to full size (certs.ts); the ↗ on the label goes straight to the certificate.
+ * On phones the wall becomes a row you swipe along. Data: src/data/certifications.ts.
+ */
+import { getImage } from 'astro:assets';
+import { certs } from '../data/certifications';
+
+// newest first; each keeps the number from the order it was earned, so numbers never shift
+const shown = certs.map((c, i) => ({ ...c, no: i + 1 })).reverse();
+const TILTS = [-1.5, 1.2, -0.8, 1.6, -1.1];
+const pics = await Promise.all(
+  shown.map(async (c) => ({
+    thumb: await getImage({ src: c.image, width: 720, format: 'webp' }),
+    full: await getImage({ src: c.image, width: 1600, format: 'webp' }),
+  })),
+);
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<div class="cw" data-certs>
+  <div class="cw__wall" data-cw-wall>
+    {shown.map((c, i) => (
+      <div class="cw__item" id={`cert-${c.slug}`}>
+        <button
+          class="cw__frame" type="button" style={`--tilt:${TILTS[i % TILTS.length]}deg`}
+          data-cw-frame data-full={pics[i].full.src} data-title={c.title} data-meta={`${c.issuer} · ${c.date}`} data-link={c.link} data-slug={c.slug}
+          aria-label={`Unfold the ${c.title} certificate`}
+        >
+          <span class="cw__tape cw__tape--l" aria-hidden="true"></span><span class="cw__tape cw__tape--r" aria-hidden="true"></span>
+          <span class="cw__mat">
+            <img class="cw__img" src={pics[i].thumb.src} width={pics[i].thumb.attributes.width} height={pics[i].thumb.attributes.height}
+              alt={`${c.title} certificate of completion from ${c.issuer}`} loading="lazy" decoding="async" />
+          </span>
+        </button>
+        <div class="cw__plate">
+          <div class="cw__txt">
+            <span class="cw__no">No. {pad(c.no)}{i === 0 && <span class="cw__new">New</span>}</span>
+            <h3 class="cw__title" data-cw-glide>{c.title}</h3>
+            <p class="cw__meta" data-cw-glide>{c.issuer} · {c.date}</p>
+          </div>
+          <a class="cw__go" href={c.link} target="_blank" rel="noopener" aria-label={`Open the ${c.title} certificate`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg>
+          </a>
+        </div>
+      </div>
+    ))}
+    <div class="cw__item cw__item--next">
+      <div class="cw__slot">Space for the next one</div>
+      <span class="cw__next">Next course</span>
+    </div>
+  </div>
+  <div class="cw__swipe" data-cw-swipe>
+    <button type="button" data-cw-prev aria-label="Previous certificate">←</button>
+    <span data-cw-pos aria-live="polite"></span>
+    <button type="button" data-cw-next aria-label="Next certificate">→</button>
+  </div>
+</div>
