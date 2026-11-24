@@ -417,27 +417,25 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 /* ---------- Character file: the expandable chapters ---------- */
 .cf { display: flex; flex-direction: column; gap: var(--s-200); }
 .cf__item { position: relative; border: var(--ink-line) solid var(--ink); background: var(--ivory); }
-.cf__item { --cut: 64px; }
+/* the cut corner: --c is how deep the cut is right now. It's a registered property, so it can be
+   animated, and both the clip and the corner's drawn edge read it, so the edge always matches the cut */
+@property --c { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.cf__item { --cut: 48px; }
 .cf__item[open] {
   background: var(--ivory); color: var(--on-panel); border-color: var(--ink); /* the ink comes from ::before */
-  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  --c: var(--cut);
+  clip-path: polygon(0 0, calc(100% - var(--c)) 0, 100% var(--c), 100% 100%, 0 100%);
   /* the corner cuts in only once the ink slash has reached it, so the light header never shows a notch */
   animation: cf-corner-in 300ms var(--ease) 200ms both;
 }
-/* the cut corner's own edge: the border can't follow a clip-path diagonal, so draw it
-   (invisible against ink in light mode, the missing line in dark mode); fades in once the cut is done */
+/* the cut corner's own edge: the border can't follow a clip-path diagonal, so draw it (invisible against
+   ink in light mode, the missing line in dark mode). It grows and shrinks with the cut, never pops. */
 .cf__item[open]::after {
-  content: ""; position: absolute; z-index: 2; top: calc(-1 * var(--ink-line)); left: calc(100% + var(--ink-line) - var(--cut));
-  width: calc(var(--cut) * 1.4143); height: var(--ink-line); background: var(--ink);
+  content: ""; position: absolute; z-index: 2; top: calc(-1 * var(--ink-line)); left: calc(100% + var(--ink-line) - var(--c));
+  width: calc(var(--c) * 1.4143); height: var(--ink-line); background: var(--ink);
   transform-origin: 0 0; transform: rotate(45deg); pointer-events: none;
-  animation: cf-edge-in 120ms linear 480ms both;
 }
-@keyframes cf-edge-in { from { opacity: 0; } to { opacity: 1; } }
-.cf__item[open].is-closing::after { animation: none; opacity: 0; }
-@keyframes cf-corner-in {
-  from { clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%); }
-  to { clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%); }
-}
+@keyframes cf-corner-in { from { --c: 0px; } to { --c: var(--cut); } }
 .cf { overflow-anchor: none; } /* site.ts keeps the clicked chapter in place itself */
 /* Opening: an ink slash wipes across the header, then the content rises in.
    (With JS the panel height glides too: see site.ts.) */
@@ -472,10 +470,7 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .cf__item[open].is-closing .cf__icon { background: transparent; border-color: currentColor; color: inherit; }
 /* the cut corner squares off as the panel folds, so no notch is left in the border */
 .cf__item[open].is-closing { animation: cf-corner-out 300ms var(--ease) both; }
-@keyframes cf-corner-out {
-  from { clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%); }
-  to { clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%); }
-}
+@keyframes cf-corner-out { from { --c: var(--cut); } to { --c: 0px; } }
 .cf__item[open].is-closing .cf__icon-v { transform: none; }
 .cf__head {
   display: grid; grid-template-columns: minmax(0, 340px) 1fr auto 56px; gap: var(--s-400);
@@ -534,7 +529,9 @@ html.js .hero__card:not(.is-flipped) .hero__card-face--back, html.js .hero__card
 .cf__icon {
   width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
   border: var(--ink-line) solid currentColor;
-  transition: background var(--dur-fast) var(--ease), transform var(--dur) var(--ease);
+  /* translate too: the header's hover nudge (.cf__head > *) would otherwise snap on this one piece */
+  transition: translate var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), transform var(--dur) var(--ease);
 }
 .cf__icon svg { width: 28px; height: 28px; }
 .cf__icon-v { transition: transform var(--dur) var(--ease); transform-origin: center; }
