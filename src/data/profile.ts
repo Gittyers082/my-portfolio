@@ -160,6 +160,7 @@ for (const area of stack) area.skills?.sort((a, b) => b.level - a.level);
 /* ---------- Character file → Training ----------
  * Academy: the BSIT course as a quest board. Major subjects only, by term.
  * status: 'cleared' (done) · 'active' (this semester) · 'locked' (not yet).
+ * A quest with `learned` opens to show it; add it once the course is cleared.
  * A quest can point at work it led to with `link`. */
 export type QuestStatus = 'cleared' | 'active' | 'locked';
 export type Quest = {
@@ -215,8 +216,8 @@ export const course: { degree: string; school: string; year: string; terms: Term
     },
     {
       label: '3rd year · 1st sem', status: 'active', quests: [
-        { name: 'Applications Development', learned: 'Where the Team 5 build system came from.' },
-        { name: 'Web Technologies', learned: 'Where Ka-dugo was built.', link: { href: '/#episode-kadugo', label: 'See Ka-dugo' } },
+        { name: 'Applications Development' },
+        { name: 'Web Technologies' },
         { name: 'Software Engineering' },
         { name: 'Social and Professional Issues in IT' },
         { name: 'Technopreneurship' },
@@ -227,20 +228,20 @@ export const course: { degree: string; school: string; year: string; terms: Term
   ],
 };
 
-/* Field missions: hands-on work outside class. */
-export type Mission = { kind: string; title: string; role: string; when: string; note: string; current?: boolean; placeholder?: boolean };
+/* Clubs and events: hands-on work outside class, newest first. */
+export type Mission = { kind: string; title: string; role: string; when: string; note: string; current?: boolean };
 export const missions: Mission[] = [
   {
     kind: 'Club', title: 'AWS Learning Club SLU', role: 'Associate Operations Officer', when: 'Now', current: true,
     note: 'I help our operations head with the work behind our events: program flows, event letters, processing documents, and errands.',
   },
   {
-    kind: 'Competition', title: 'Philippine Startup Challenge XI', role: 'Team TindaTech · CAR regional', when: 'Oct 2026',
-    note: 'We pitched KitaKlaro, a solution built for MSMEs, with our concept note. We didn’t place, but the idea kept going.',
-  },
-  {
     kind: 'Hackathon', title: 'PinaSIKlab', role: 'Team parZval', when: 'Oct 2026',
     note: 'We carried KitaKlaro forward and built a working PWA prototype. No win this time, but it went from a pitch to a product.',
+  },
+  {
+    kind: 'Competition', title: 'Philippine Startup Challenge XI', role: 'Team TindaTech · CAR regional', when: 'Oct 2026',
+    note: 'We pitched KitaKlaro, a solution built for MSMEs, with our concept note. We didn’t place, but the idea kept going.',
   },
 ];
 
