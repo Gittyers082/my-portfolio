@@ -8,8 +8,8 @@
  *  3. Add a line at the END of the list below (oldest first). The wall shows the newest first,
  *     marks it NEW, numbers every cert, and updates the "earned" count on its own.
  *
- * `link` is where the ↗ goes: the issuer's verification or share page if there is one,
- * otherwise the PDF you put in public/certs/.
+ * `link` is where the ↗ goes: the issuer's own verification page (Anthropic Academy's are on
+ * verify.skilljar.com), so anyone can check the certificate is real. No page? Use the PDF in public/certs/.
  */
 import type { ImageMetadata } from 'astro';
 import claude101 from '../assets/certs/claude-101.png';
@@ -30,9 +30,9 @@ export type Cert = {
 };
 
 export const certs: Cert[] = [
-  { slug: 'claude-101', title: 'Claude 101', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claude101, link: '/certs/claude-101.pdf' },
-  { slug: 'claude-code-101', title: 'Claude Code 101', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claudeCode101, link: '/certs/claude-code-101.pdf' },
-  { slug: 'claude-platform-101', title: 'Claude Platform 101', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claudePlatform101, link: '/certs/claude-platform-101.pdf' },
-  { slug: 'intro-to-claude-cowork', title: 'Introduction to Claude Cowork', issuer: 'Anthropic Academy', date: 'Nov 2026', image: introToClaudeCowork, link: '/certs/intro-to-claude-cowork.pdf' },
-  { slug: 'claude-code-in-action', title: 'Claude Code in Action', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claudeCodeInAction, link: '/certs/claude-code-in-action.pdf' },
+  { slug: 'claude-101', title: 'Claude 101', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claude101, link: 'https://verify.skilljar.com/c/gskcyj42eeb5' },
+  { slug: 'claude-code-101', title: 'Claude Code 101', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claudeCode101, link: 'https://verify.skilljar.com/c/qgw8ava9sqw7' },
+  { slug: 'claude-platform-101', title: 'Claude Platform 101', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claudePlatform101, link: 'https://verify.skilljar.com/c/u4shvgii6bzf' },
+  { slug: 'intro-to-claude-cowork', title: 'Introduction to Claude Cowork', issuer: 'Anthropic Academy', date: 'Nov 2026', image: introToClaudeCowork, link: 'https://verify.skilljar.com/c/s84mxee3j652' },
+  { slug: 'claude-code-in-action', title: 'Claude Code in Action', issuer: 'Anthropic Academy', date: 'Nov 2026', image: claudeCodeInAction, link: 'https://verify.skilljar.com/c/kw227mcg5549' },
 ];
