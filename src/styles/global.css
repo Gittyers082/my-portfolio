@@ -1600,17 +1600,19 @@ html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-
   transition: background-color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
 .course__toggle-v { transition: transform var(--dur) var(--ease); transform-origin: center; }
-.course__toggle-text--close { display: none; }
-.course[open] .course__toggle-text--open { display: none; }
-.course[open] .course__toggle-text--close { display: inline; }
-.course[open] .course__toggle svg { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.course[open] .course__toggle-v { transform: scaleY(0); }
+/* the label rolls: "Open the quest board" slides up and out as "Close" slides up into its place, and back.
+   Open means [open] and not closing, so the label, the icon and the panel all turn back together. */
+.course__toggle-label { display: grid; justify-items: end; overflow: hidden; }
+.course__toggle-text { grid-area: 1 / 1; white-space: nowrap; transition: transform var(--dur) var(--ease), opacity var(--dur-fast) var(--ease); }
+.course__toggle-text--close { transform: translateY(100%); opacity: 0; }
+.course[open]:not(.is-closing) .course__toggle-text--open { transform: translateY(-100%); opacity: 0; }
+.course[open]:not(.is-closing) .course__toggle-text--close { transform: none; opacity: 1; }
+.course[open]:not(.is-closing) .course__toggle svg { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.course[open]:not(.is-closing) .course__toggle-v { transform: scaleY(0); }
 .course__head:hover .course__toggle-text { text-decoration: underline; text-underline-offset: 4px; }
 
 .quests { padding: 0 28px 28px; }
-.course.is-closing .quests { animation: cf-sink 200ms var(--ease) both; }
-.course.is-closing .course__toggle svg { background: transparent; border-color: currentColor; color: inherit; }
-.course.is-closing .course__toggle-v { transform: none; }
+.course.is-closing .quests { animation: cf-sink 240ms var(--ease) both; }
 .term { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--s-200) var(--s-400); padding: 20px 0; border-top: 2px solid var(--ink-2); }
 .term__head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-75); }
 .term__label { font-size: 16px; line-height: 22px; font-weight: 700; }
@@ -1658,7 +1660,9 @@ summary.quest__head::-webkit-details-marker { display: none; }
 .mission__kind { font-size: 13px; line-height: 20px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .mission__when { margin-left: auto; font-size: 14px; line-height: 20px; color: #BDB4A6; }
 .mission__when--now { display: inline-flex; align-items: center; gap: 6px; color: var(--on-panel); font-weight: 700; }
-.mission__when--now::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.mission__when--now::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: now-pulse 1.6s ease-out infinite; }
+/* "Now": the dot beats and sends out a ring, like a live light */
+@keyframes now-pulse { 0% { box-shadow: 0 0 0 0 rgb(43 165 198 / 0.7); } 70%, 100% { box-shadow: 0 0 0 7px rgb(43 165 198 / 0); } 35% { opacity: 1; } 50% { opacity: 0.55; } }
 .mission__title { font-size: 30px; line-height: 30px; font-weight: 700; font-stretch: var(--display-stretch); letter-spacing: var(--display-track); text-wrap: balance; }
 .mission__role { font-size: 16px; line-height: 22px; font-weight: 600; color: #DCD5C8; }
 .mission__note { margin-top: var(--s-75); padding-top: var(--s-100); border-top: 2px solid var(--ink-2); font-size: 16px; line-height: 24px; }
@@ -1688,9 +1692,9 @@ summary.quest__head::-webkit-details-marker { display: none; }
   .mission:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .course[open] .term, .quest--active .quest__dot { animation: none; }
+  .course[open] .term, .quest--active .quest__dot, .mission__when--now::before { animation: none; }
   .quest, .quest__plus-v { transition: none; }
-  .course__toggle svg, .course__toggle-v { transition: none; }
+  .course__toggle svg, .course__toggle-v, .course__toggle-text { transition: none; }
 }
 
 /* ---------- Writing: the lore archive + commission panel ---------- */
