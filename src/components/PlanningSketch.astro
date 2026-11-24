@@ -86,14 +86,5 @@ const notes = [
 </figure>
 
 <script>
-  // play the drawing once, the first time the card is properly on screen
-  document.querySelectorAll<HTMLElement>('[data-sketch]').forEach((el) => {
-    // reduced motion: the finished drawing, standing still (CSS skips the draw-in; this stops the cape and arm)
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) el.querySelector('svg')?.pauseAnimations();
-    if (!('IntersectionObserver' in window)) { el.classList.add('is-drawn'); return; }
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { el.classList.add('is-drawn'); io.disconnect(); }
-    }, { threshold: 0.4 });
-    io.observe(el);
-  });
+  import '../scripts/sketch';
 </script>
