@@ -133,7 +133,7 @@ export const stack: StackArea[] = [
   },
   {
     id: 'tools', title: 'Tools', line: 'What keeps the work together',
-    skills: [{ name: 'Git', level: 8, note: 'Daily, solo and in teams' }],
+    skills: [{ name: 'Git', level: 8, note: 'Solo and in teams' }],
     groups: [
       { label: 'Editors', items: ['VS Code', 'IntelliJ IDEA', 'Zed', 'Sublime Text'] },
       { label: 'Build', items: ['Docker', 'npm', 'Maven', 'Gradle', 'Ant', 'Mix', 'GitHub Actions'] },
