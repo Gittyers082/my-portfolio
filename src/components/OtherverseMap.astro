@@ -1,0 +1,81 @@
+---
+/**
+ * Writing: a line-art chart of the Otherverse, beside the archive's intro.
+ * Realms on their orbits (Mythoria in cyan), the Otherversal Barrier around it all, and the
+ * Outers pressing in from beyond. Draws itself in the first time it's on screen
+ * (scripts/sketch.ts); then the barrier's outer ring turns, the realms glow and the Outers drift.
+ * Reduced motion: still.
+ */
+const CY = '#2BA5C6';
+const BG = '#1B1915'; // the open chapter's panel, so the realm dots hide the orbit lines behind them
+const at = (i: number) => `--d:${(i * 0.14).toFixed(2)}s`;
+// realms on two orbits: [angle in degrees, radius]; Mythoria is the one marked home
+const ORBITS = [
+  { rx: 52, ry: 22, realms: [[200, 5], [20, 4]] },
+  { rx: 88, ry: 38, realms: [[120, 6], [250, 3.5]] },
+];
+const MYTHORIA = { rx: 88, ry: 38, deg: 330 };
+const TILT = -16;
+const pt = (rx: number, ry: number, deg: number) => {
+  const r = (deg * Math.PI) / 180;
+  return [rx * Math.cos(r), ry * Math.sin(r)];
+};
+// Mythoria's spot on the page (its orbit is tilted), for its label
+const home = (() => {
+  const [x, y] = pt(MYTHORIA.rx, MYTHORIA.ry, MYTHORIA.deg);
+  const t = (TILT * Math.PI) / 180;
+  return [x * Math.cos(t) - y * Math.sin(t), x * Math.sin(t) + y * Math.cos(t)].map((v) => Math.round(v));
+})();
+// the Outers: small jagged shards beyond the barrier, at these angles
+const OUTERS = [[-38, 136], [26, 142], [150, 132], [208, 140], [312, 138]];
+const shard = 'M0 -7 L2 -2 L7 -1 L3 2 L4 7 L0 4 L-4 7 L-3 2 L-7 -1 L-2 -2 Z';
+---
+<figure class="sketch sketch--map" data-sketch>
+  <svg viewBox="-150 -150 300 300" role="img" aria-label="A line-art chart of the Otherverse: realms on their orbits, Mythoria among them, inside the Otherversal Barrier, with the Outers beyond it">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <!-- the barrier: a solid ring, and a dashed ring that turns -->
+      <circle class="sk-dr" pathLength="1" style={at(0)} r="112" stroke-width="2.4"></circle>
+      <g class="map-spin map-spin--rev"><circle r="120" stroke-width="1.4" stroke-dasharray="2 9" opacity="0.5"></circle></g>
+
+      <!-- orbits and realms -->
+      <g transform={`rotate(${TILT})`}>
+        {ORBITS.map((o, k) => (
+          <ellipse class="sk-dr" pathLength="1" style={at(1 + k)} rx={o.rx} ry={o.ry} stroke-width="1.6" opacity="0.55"></ellipse>
+        ))}
+        {ORBITS.map((o, k) => o.realms.map(([deg, r], n) => {
+          const [x, y] = pt(o.rx, o.ry, deg);
+          return <circle class="sk-dr map-realm" pathLength="1" style={`${at(3 + k + n)};--g:${k + n}`} cx={x.toFixed(1)} cy={y.toFixed(1)} r={r} stroke-width="2" fill={BG}></circle>;
+        }))}
+        <g transform={`translate(${pt(MYTHORIA.rx, MYTHORIA.ry, MYTHORIA.deg).map((v) => v.toFixed(1)).join(' ')})`}>
+          <g class="map-home"><circle r="12" stroke={CY} stroke-width="1.4" opacity="0.5"></circle></g>
+          <circle class="sk-dr" pathLength="1" style={at(5)} r="7" stroke={CY} stroke-width="2.4" fill={BG}></circle>
+          <circle r="2.6" fill={CY} stroke="none"></circle>
+        </g>
+      </g>
+
+      <!-- the heart of it all -->
+      <path class="sk-dr" pathLength="1" style={at(4)} d="M0 -9 L2 -2 L9 0 L2 2 L0 9 L-2 2 L-9 0 L-2 -2 Z" stroke-width="1.8"></path>
+
+      <!-- the Outers, pressing in -->
+      {OUTERS.map(([deg, dist], i) => {
+        const r = (deg * Math.PI) / 180;
+        return (
+          <g transform={`translate(${(dist * Math.cos(r)).toFixed(1)} ${(dist * Math.sin(r)).toFixed(1)}) rotate(${deg + 90})`}>
+            <g class="map-outer" style={`--o:${i}`}><path class="sk-dr" pathLength="1" style={at(6 + i * 0.5)} d={shard} stroke={CY} stroke-width="1.6"></path></g>
+          </g>
+        );
+      })}
+    </g>
+
+    <!-- labels -->
+    <g class="map-label" fill="currentColor">
+      <text x="0" y="-134" text-anchor="middle">THE OTHERVERSAL BARRIER</text>
+      <text x={home[0] - 18} y={home[1] + 3} text-anchor="end" fill={CY}>MYTHORIA</text>
+      <text x="0" y="147" text-anchor="middle" opacity="0.7">THE OUTERS, BEYOND</text>
+    </g>
+  </svg>
+</figure>
+
+<script>
+  import '../scripts/sketch';
+</script>
