@@ -28,6 +28,7 @@ import { initKeys } from './keys';
 import { initDevtools } from './devtools';
 import { initStackBars } from './stack';
 import { initLore } from './lore';
+import { initCerts } from './certs';
 import { initTyping } from './typing';
 import { initLost } from './lost';
 import { initTheme } from './theme';
@@ -510,6 +511,7 @@ export function initSite(): void {
   initDevtools();
   initStackBars();
   initLore();
+  initCerts();
   initTyping();
   initLost();
   initTheme();
