@@ -2458,9 +2458,10 @@ html::-webkit-scrollbar-corner { background: var(--sand); }
 }
 
 /* ---------- Writing, extras: the Otherverse chart, archive stats, sealed files, the typed quote ---------- */
-.lore__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 380px); gap: var(--s-400) var(--s-600); align-items: center; }
+/* the chart sits beside the intro, top-aligned and no taller than it needs to be, so there's no gap above the text */
+.lore__top { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: var(--s-400) var(--s-600); align-items: start; }
 .lore__lead { display: flex; flex-direction: column; gap: var(--s-400); }
-.sketch--map { min-height: 0; padding: 0; border: 0; aspect-ratio: 1; }
+.sketch--map { min-height: 0; padding: 0; border: 0; aspect-ratio: 1; margin-top: -28px; }
 .map-label { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 8.5px; letter-spacing: 0.14em; }
 .sketch.is-drawn .map-spin { animation: map-spin 80s linear infinite; }
 .map-spin--rev { transform-box: view-box; transform-origin: 0 0; } /* the chart's centre is 0,0 */
@@ -2500,7 +2501,7 @@ html::-webkit-scrollbar-corner { background: var(--sand); }
 
 @media (max-width: 999px) {
   .lore__top { grid-template-columns: 1fr; }
-  .sketch--map { width: min(100%, 340px); justify-self: center; }
+  .sketch--map { width: min(100%, 300px); justify-self: center; margin-top: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sketch .map-spin, .sketch .map-home, .sketch .map-realm, .sketch .map-outer, .lore__open::before, .type-caret::after { animation: none; }

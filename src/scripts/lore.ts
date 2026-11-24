@@ -30,7 +30,13 @@ function typeOut(el: HTMLElement): void {
     if (i < text.length) window.setTimeout(step, text[i - 1] === ',' ? 160 : 34);
     else window.setTimeout(() => { caret.remove(); el.textContent = text; }, 1600);
   };
-  window.setTimeout(step, 320); // after the bars start to wipe
+  // wait until the line is actually on screen, so a file declassified in passing still talks when you get to it
+  const start = (): void => { window.setTimeout(step, 320); }; // after the bars start to wipe
+  if (!('IntersectionObserver' in window)) { start(); return; }
+  const io = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { io.disconnect(); start(); }
+  }, { threshold: 1 });
+  io.observe(el);
 }
 
 export function initLore(): void {
