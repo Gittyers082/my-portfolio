@@ -102,10 +102,10 @@ export const stack: StackArea[] = [
     skills: [
       { name: 'Java', level: 8, note: 'First language I learned, still my strongest' },
       { name: 'SQL', level: 8, note: 'Schemas, joins and queries that stay fast' },
-      { name: 'Python', level: 6, note: 'Scripts and APIs now, AI work next' },
+      { name: 'Python', level: 7, note: 'Scripts and APIs now, AI work next' },
       { name: 'JavaScript', level: 7, note: 'The web’s first language, front to back' },
-      { name: 'TypeScript', level: 6, note: 'JavaScript with types, on every web project' },
-      { name: 'Kotlin', level: 5, note: 'Java’s cleaner sibling' },
+      { name: 'TypeScript', level: 7, note: 'JavaScript with types, on every web project' },
+      { name: 'Kotlin', level: 4, note: 'Java’s cleaner sibling' },
       { name: 'Elixir', level: 5, note: 'Functional, with Phoenix on the web' },
       { name: 'Rust', level: 5, note: 'Merlin runs on it, through Tauri' },
     ],
@@ -142,7 +142,7 @@ export const stack: StackArea[] = [
   },
   {
     id: 'design', title: 'Design & notes', line: 'Where ideas start',
-    items: [{ text: 'Figma' }, { text: 'Canva' }, { text: 'Obsidian' }],
+    items: [{ text: 'Figma' }, { text: 'Canva' }, { text: 'Obsidian' }, { text: 'Google Docs' }],
   },
   {
     id: 'ai', title: 'Next arc', line: 'Where I’m heading',
@@ -150,7 +150,7 @@ export const stack: StackArea[] = [
       { label: 'Studying', items: ['AI engineering concepts'] },
       { label: 'Built', items: ['Merlin, an AI desktop companion'] },
       { label: 'Next build', items: ['A RAG app'] },
-      { label: 'Daily', items: ['Claude Code', 'Claude Cowork', 'ChatGPT', 'Gemini', 'Ollama', 'Prompt engineering', 'Online courses'] },
+      { label: 'Daily', items: ['Claude Code & Cowork', 'ChatGPT', 'Gemini', 'Ollama', 'Prompt engineering', 'Online courses', 'AI and tech news'] },
     ],
   },
 ];
