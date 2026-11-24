@@ -33,10 +33,12 @@ function typeOut(el: HTMLElement): void {
   // wait until the line is actually on screen, so a file declassified in passing still talks when you get to it
   const start = (): void => { window.setTimeout(step, 320); }; // after the bars start to wipe
   if (!('IntersectionObserver' in window)) { start(); return; }
+  // watch the quote block, half in view is enough: a "fully visible" check on wrapped text
+  // can stay a hair under 100% at display scaling like Windows' 125%, and then it never types
   const io = new IntersectionObserver(([e]) => {
     if (e.isIntersecting) { io.disconnect(); start(); }
-  }, { threshold: 1 });
-  io.observe(el);
+  }, { threshold: 0.5 });
+  io.observe(el.closest('blockquote') ?? el);
 }
 
 export function initLore(): void {
@@ -49,7 +51,7 @@ export function initLore(): void {
       if (file.classList.contains('is-revealed')) return;
       file.classList.add('is-revealed');
       if (count) count.textContent = String(document.querySelectorAll('[data-dossier].is-revealed').length);
-      file.querySelectorAll<HTMLElement>('[data-type]').forEach(typeOut);
+      file.querySelectorAll<HTMLElement>('[data-quote-type]').forEach(typeOut); // not [data-type]: typing.ts owns that one
       document.dispatchEvent(new CustomEvent('trust:earn', { detail: 'lore' }));
     };
     file.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') reveal(); });
