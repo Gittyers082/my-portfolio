@@ -24,6 +24,7 @@ import ThriftbiteDemo from './ThriftbiteDemo.astro';
 import LoreIcon from './LoreIcon.astro';
 import CertWall from './CertWall.astro';
 import ChapterIcon from './ChapterIcon.astro';
+import PlanningSketch from './PlanningSketch.astro';
 import { certs } from '../data/certifications';
 import { stack, episodes, profile, lore, course, missions, selfTraining } from '../data/profile';
 
@@ -121,6 +122,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                       {area.items.map((it) => <li class:list={['tech', { placeholder: it.placeholder }]}><TechIcon name={it.text} />{it.text}</li>)}
                     </ul>
                   )}
+                  {area.id === 'design' && <PlanningSketch />}
                   {area.groups && (
                     <dl class="area__groups">
                       {area.groups.map((g) => (

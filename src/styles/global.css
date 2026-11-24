@@ -2430,3 +2430,25 @@ html::-webkit-scrollbar-corner { background: var(--sand); }
 .cw-bar a:hover { color: #8FDDF2; }
 .cw-bar a:focus-visible { outline: 3px solid #2BA5C6; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .cw__frame, .cw__tape, .cw__plate, .cw__go { transition: none; } }
+
+/* Design & notes: El planning at the whiteboard (PlanningSketch.astro). Fills the rest of the card. */
+.sketch { flex: 1; display: flex; min-height: 260px; margin: 0; padding-top: 18px; border-top: 2px solid var(--ink-2); }
+.sketch svg { flex: 1; width: 100%; min-height: 0; overflow: visible; }
+.sk-dr, .sk-w { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.sk-string, .sk-pin { opacity: 0; }
+.sk-pin { transform-box: fill-box; transform-origin: center; }
+.sketch.is-drawn .sk-dr { animation: sk-draw 1.4s linear var(--d, 0s) both; }
+.sketch.is-drawn .sk-w1 { animation: sk-draw 0.9s linear 2.2s both; }
+.sketch.is-drawn .sk-w2 { animation: sk-draw 0.9s linear 3.6s both; }
+.sketch.is-drawn .sk-w3 { animation: sk-draw 0.9s linear 5s both; }
+.sketch.is-drawn .sk-t1 { animation: sk-draw 0.35s ease-out 6.2s both; }
+.sketch.is-drawn .sk-t2 { animation: sk-draw 0.35s ease-out 6.7s both; }
+.sketch.is-drawn .sk-string { animation: sk-string 1.2s ease-out 7.2s both; }
+.sketch.is-drawn .sk-pin { animation: sk-pin 0.5s ease-out 8.2s both; }
+@keyframes sk-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes sk-string { from { opacity: 0; stroke-dashoffset: 300; } to { opacity: 1; stroke-dashoffset: 0; } }
+@keyframes sk-pin { 0% { opacity: 0; transform: scale(0.4) rotate(-12deg); } 70% { opacity: 1; transform: scale(1.08); } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .sketch .sk-dr, .sketch .sk-w { animation: none; stroke-dashoffset: 0; }
+  .sketch .sk-string, .sketch .sk-pin { animation: none; opacity: 1; }
+}
