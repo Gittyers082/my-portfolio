@@ -9,8 +9,10 @@
  * desktop a closed chapter peeks at what's inside on hover; the first time a
  * chapter is opened it gets an "Opened" stamp (site.ts).
  *
- * Inside Projects, the picked episode "pops out" into a big panel. Without
- * JavaScript every episode panel is simply shown, one after another.
+ * Projects: the episode list on the left (a bar across the top on phones), the picked
+ * episode's demo on the right with its write-up under it: three lines of summary, the
+ * links as buttons, and "Read more" for the rest. Without JavaScript every episode is
+ * simply shown, one after another.
  *
  * Certified sits just before Projects: the trophy wall (CertWall.astro, certs.ts).
  */
@@ -118,13 +120,13 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                           </div>
                           <span class="stat__num" aria-hidden="true"><b data-count={s.level}>{s.level}</b>/10</span>
                         </div>
-                        <p class:list={['stat__desc', { placeholder: s.placeholderNote }]}>{s.note}</p>
+                        <p class="stat__desc">{s.note}</p>
                       </div>
                     </div>
                   ))}
                   {area.items && (
                     <ul class="area__items">
-                      {area.items.map((it) => <li class:list={['tech', { placeholder: it.placeholder }]}><TechIcon name={it.text} />{it.text}</li>)}
+                      {area.items.map((it) => <li class="tech"><TechIcon name={it.text} />{it.text}</li>)}
                     </ul>
                   )}
                   {area.id === 'design' && <PlanningSketch />}
@@ -280,16 +282,16 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                   <div class="dossier__top">
                     <LoreIcon name={w.kind} />
                     <span class="dossier__kind">{loreKind[w.kind]}</span>
-                    {w.year && <span class:list={['dossier__year', { placeholder: w.placeholder }]}>{w.year}</span>}
+                    {w.year && <span class="dossier__year">{w.year}</span>}
                   </div>
                   <div class="dossier__head">
                     <div>
-                      <h3 class:list={['dossier__name', { placeholder: w.placeholder }]}>{w.name}</h3>
+                      <h3 class="dossier__name">{w.name}</h3>
                       {w.epithet && <p class="dossier__epithet">{w.epithet}</p>}
                     </div>
                     <span class="dossier__stamp" aria-hidden="true"><span class="dossier__stamp-c">Classified</span><span class="dossier__stamp-d">Declassified</span></span>
                   </div>
-                  <p class:list={['dossier__hook', { placeholder: w.placeholder }]}><span class="redact">{w.hook}</span></p>
+                  <p class="dossier__hook"><span class="redact">{w.hook}</span></p>
                   {w.quote && (
                     <blockquote class="dossier__quote"><p><span class="sr-only">“{w.quote}”</span><span class="redact" aria-hidden="true" data-quote-type>“{w.quote}”</span></p><footer>{w.name}</footer></blockquote>
                   )}
@@ -297,7 +299,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                     {w.specs.map((sp) => (
                       <div class="dossier__spec">
                         <dt>{sp.label}</dt>
-                        <dd class:list={{ placeholder: w.placeholder }}><span class="redact">{sp.value}</span></dd>
+                        <dd><span class="redact">{sp.value}</span></dd>
                       </div>
                     ))}
                   </dl>

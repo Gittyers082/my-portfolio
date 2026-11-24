@@ -35,14 +35,14 @@ const SPEED = `<svg class="card__speed" viewBox="0 0 100 100" preserveAspectRati
             <button class="card__face card__face--front" type="button" aria-label={`${f.label}: ${f.value}. Flip for more`} data-flip>
               <Fragment set:html={SPEED} />
               <span class="card__label">{f.label}</span>
-              <span class:list={['card__value', { placeholder: f.placeholder }]}>{f.value}</span>
-              <span class:list={['card__note', { placeholder: f.placeholder }]}>{f.note}</span>
+              <span class="card__value">{f.value}</span>
+              <span class="card__note">{f.note}</span>
               <svg class="card__corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 A8 8 0 1 1 7 18.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path><path d="M3 14 L7 19 L11 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </button>
             <div class="card__face card__face--back" data-back>
               <span class="card__label">{f.label}</span>
               <svg class="card__corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 A8 8 0 1 1 7 18.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path><path d="M3 14 L7 19 L11 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-              <p class:list={['card__back', { placeholder: f.placeholder }]}>{fill(f.back)}</p>
+              <p class="card__back">{fill(f.back)}</p>
               <span class="card__actions">
                 {f.jump && (f.jump.href
                   ? <a class="card__jump" href={f.jump.href}>{f.jump.label} <Arrow /></a>
