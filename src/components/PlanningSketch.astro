@@ -1,0 +1,99 @@
+---
+/**
+ * Design & notes: El, from behind as always, planning at a whiteboard. Line art that
+ * draws itself the first time the card is on screen: the board and the sticky notes,
+ * then a checklist written line by line, two ticks, a string between the notes and a
+ * new note pinned up. After that only his cape and writing arm keep moving.
+ * Reduced motion gets the finished drawing. Cream is the card's text colour (currentColor).
+ */
+const CY = '#2BA5C6';
+const BG = '#24211C'; // the card's background, so shapes in front hide what's behind them
+const SPLINES = Array(4).fill('0.45 0 0.55 1').join(';');
+const seq = (f: string[]) => [f[0], f[1], f[0], f[2], f[0]].join(';');
+// a cape hanging indoors, swaying a little: three shapes with the same commands, so the morph is smooth
+const CAPE = [
+  'M132 140 C126 186 124 228 128 264 C156 270 184 270 212 264 C216 228 214 186 208 140 Z',
+  'M132 140 C125 186 121 228 124 262 C152 270 184 272 210 268 C215 230 214 186 208 140 Z',
+  'M132 140 C127 186 128 228 132 266 C160 270 188 268 216 261 C218 226 215 186 208 140 Z',
+];
+const FOLD = ['M170 146 C168 190 170 226 172 264', 'M170 146 C166 190 166 228 168 266', 'M170 146 C170 190 174 226 178 262'];
+/** Stagger for the draw-in, in steps of 0.12s. */
+const at = (i: number) => `--d:${(i * 0.12).toFixed(2)}s`;
+const notes = [
+  { x: 42, y: 30, r: -3, i: 2 },
+  { x: 90, y: 44, r: 4, i: 3 },
+  { x: 44, y: 92, r: 2, i: 4 },
+];
+---
+<figure class="sketch" data-sketch>
+  <svg viewBox="0 0 320 300" role="img" aria-label="Line drawing: El, seen from behind, writing a checklist on a whiteboard covered in sticky notes">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <!-- the whiteboard on its stand -->
+      <path class="sk-dr" pathLength="1" style={at(0)} d="M62 176 L44 292 M258 176 L276 292 M60 236 H260" stroke-width="2.4" opacity="0.8"></path>
+      <path class="sk-dr" pathLength="1" style={at(1)} d="M28 16 H292 V178 H28 Z" stroke-width="2.8"></path>
+      <path class="sk-dr" pathLength="1" style={at(2)} d="M40 178 V186 H110 V178" stroke-width="2.2"></path>
+      {notes.map((n) => (
+        <g transform={`translate(${n.x} ${n.y}) rotate(${n.r})`}>
+          <path class="sk-dr" pathLength="1" style={at(n.i)} d="M0 0H32V32H0Z" stroke-width="2.2" fill={BG}></path>
+          <path class="sk-dr" pathLength="1" style={at(n.i + 1)} d="M6 10H26 M6 17H22 M6 24H16" stroke-width="1.8" opacity="0.7"></path>
+        </g>
+      ))}
+      <!-- a page wireframe -->
+      <path class="sk-dr" pathLength="1" style={at(5)} d="M146 32 H228 V90 H146 Z M146 44 H228 M154 52 H186 V82 H154 Z M194 54 H220 M194 62 H216 M194 70 H220" stroke-width="2"></path>
+      <!-- later: the string between the notes, and the new note it leads to -->
+      <path class="sk-string" d="M60 46 C80 40 96 50 106 60 C150 110 220 30 266 46" stroke={CY} stroke-width="1.8" stroke-dasharray="4 5"></path>
+      <g class="sk-pin"><g transform="translate(250 30) rotate(6)">
+        <path d="M0 0H32V32H0Z" stroke={CY} stroke-width="2.2" fill={BG}></path>
+        <path d="M6 10H26 M6 17H22 M6 24H16" stroke={CY} stroke-width="1.8" opacity="0.7"></path>
+      </g></g>
+      <!-- the checklist he's writing -->
+      <path class="sk-dr" pathLength="1" style={at(6)} d="M204 104 h9 v9 h-9 Z M204 120 h9 v9 h-9 Z M204 136 h9 v9 h-9 Z" stroke-width="2"></path>
+      <path class="sk-w sk-w1" pathLength="1" d="M219 108.5 H262" stroke-width="2"></path>
+      <path class="sk-w sk-w2" pathLength="1" d="M219 124.5 H254" stroke-width="2"></path>
+      <path class="sk-w sk-w3" pathLength="1" d="M219 140.5 H258" stroke-width="2"></path>
+      <path class="sk-w sk-t1" pathLength="1" d="M205.5 108.5 L208 111.5 L213 102" stroke={CY} stroke-width="2.4"></path>
+      <path class="sk-w sk-t2" pathLength="1" d="M205.5 124.5 L208 127.5 L213 118" stroke={CY} stroke-width="2.4"></path>
+
+      <!-- El, in his own coordinates (the same as the hero's), scaled down in front of the board -->
+      <g transform="translate(84.6 96.6) scale(0.62)">
+        <path class="sk-dr" pathLength="1" style={at(3)} d="M140 246 L138 310 L164 310 L166 246 M176 246 L178 310 L204 310 L202 246 M126 306 H166 V320 H122 Z M176 306 H214 V320 H180 Z" stroke-width="4" fill={BG}></path>
+        <path class="sk-dr" pathLength="1" style={at(4)} d="M128 142 C120 190 122 230 132 252 L208 252 C218 230 220 190 212 142 Z" stroke-width="4" fill={BG}></path>
+        <path class="sk-dr" pathLength="1" style={at(5)} d="M130 166 C114 168 102 184 105 199 C108 210 122 211 130 204" stroke-width="4" fill={BG}></path>
+        <!-- the writing arm, under the cape at the shoulder; it jitters while he writes -->
+        <g>
+          <animateTransform attributeName="transform" type="rotate" dur="0.7s" repeatCount="indefinite" values="0 204 150;-3 204 150;1.5 204 150;-2 204 150;0 204 150"></animateTransform>
+          <path class="sk-dr" pathLength="1" style={at(8)} d="M204 150 L251 44" stroke-width="20"></path>
+          <path d="M204 150 L251 44" stroke={BG} stroke-width="13"></path>
+          <circle class="sk-dr" pathLength="1" style={at(9)} cx="251" cy="44" r="11" stroke-width="4" fill={BG}></circle>
+          <path class="sk-dr" pathLength="1" style={at(10)} d="M256 36 L266 22" stroke={CY} stroke-width="5"></path>
+        </g>
+        <path class="sk-dr" pathLength="1" style={at(6)} d={CAPE[0]} stroke={CY} stroke-width="4.6" fill={BG}>
+          <animate attributeName="d" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.5;0.8;1" keySplines={SPLINES} values={seq(CAPE)}></animate>
+        </path>
+        <path class="sk-dr" pathLength="1" style={at(7)} d={FOLD[0]} stroke={CY} stroke-width="3" opacity="0.55">
+          <animate attributeName="d" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.5;0.8;1" keySplines={SPLINES} values={seq(FOLD)}></animate>
+        </path>
+        <!-- head: the same spiky hair as the hero -->
+        <g transform="translate(92 58) scale(0.55)">
+          <path class="sk-dr" pathLength="1" style={at(8)} d="M92 150 C78 108 84 66 110 44 L104 14 L126 34 L134 0 L150 30 L170 6 L172 38 L196 22 L188 58 C204 84 206 122 188 150 Z" stroke-width="7" fill={BG}></path>
+          <path class="sk-dr" pathLength="1" style={at(9)} d="M94 104 C86 102 82 114 88 124 C92 130 98 128 98 122" stroke-width="6"></path>
+          <path class="sk-dr" pathLength="1" style={at(9)} d="M116 56 C102 76 100 102 104 128" stroke-width="5" opacity="0.55"></path>
+        </g>
+        <path class="sk-dr" pathLength="1" style={at(9)} d="M130 142 C150 134 190 134 210 142" stroke-width="6"></path>
+      </g>
+    </g>
+  </svg>
+</figure>
+
+<script>
+  // play the drawing once, the first time the card is properly on screen
+  document.querySelectorAll<HTMLElement>('[data-sketch]').forEach((el) => {
+    // reduced motion: the finished drawing, standing still (CSS skips the draw-in; this stops the cape and arm)
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) el.querySelector('svg')?.pauseAnimations();
+    if (!('IntersectionObserver' in window)) { el.classList.add('is-drawn'); return; }
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { el.classList.add('is-drawn'); io.disconnect(); }
+    }, { threshold: 0.4 });
+    io.observe(el);
+  });
+</script>

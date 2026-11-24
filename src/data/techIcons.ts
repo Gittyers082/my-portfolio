@@ -16,7 +16,7 @@ const SLUG: Record<string, string | null> = {
   Git: 'git', 'VS Code': null, 'IntelliJ IDEA': 'intellijidea', Zed: 'zedindustries', 'Sublime Text': 'sublimetext',
   Docker: 'docker', npm: 'npm', Maven: 'apachemaven', Gradle: 'gradle', Ant: 'apacheant', Mix: null, 'GitHub Actions': 'githubactions',
   Vercel: 'vercel', Render: 'render', GitHub: 'github',
-  Figma: 'figma', Canva: null, Obsidian: 'obsidian', 'Google Docs': 'googledocs', 'Claude Code': 'claude', 'Claude Code & Cowork': 'claude', ChatGPT: null, Gemini: 'googlegemini', Ollama: 'ollama',
+  Figma: 'figma', Canva: null, Obsidian: 'obsidian', Docs: 'googledocs', // Google Docs 'Claude Code': 'claude', 'Claude Code & Cowork': 'claude', ChatGPT: null, Gemini: 'googlegemini', Ollama: 'ollama',
   'Prompt engineering': null, 'Online courses': null, 'AI and tech news': null, // drawn below
   // GitHub's names for languages, for the profile's language card
   Shell: 'gnubash', Vue: 'vuedotjs', Svelte: 'svelte', Lua: 'lua', 'Jupyter Notebook': 'jupyter',

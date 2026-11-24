@@ -178,7 +178,8 @@ function initGlideDetails(): void {
     summary?.addEventListener('click', (e) => {
       if (reduce.matches) return;
       e.preventDefault();
-      glide(item, !item.open || item.classList.contains('is-closing'), 560, 380, 80);
+      // same timing as the chapters: the content sinks first, then the panel folds
+      glide(item, !item.open || item.classList.contains('is-closing'), 620, 480, 110);
     });
   });
 }
