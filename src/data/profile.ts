@@ -150,7 +150,7 @@ export const stack: StackArea[] = [
       { label: 'Studying', items: ['AI engineering concepts'] },
       { label: 'Built', items: ['Merlin, an AI desktop companion'] },
       { label: 'Next build', items: ['A RAG app'] },
-      { label: 'Daily', items: ['Claude Code', 'Ollama', 'Prompt engineering'] },
+      { label: 'Daily', items: ['Claude Code', 'Claude Cowork', 'ChatGPT', 'Gemini', 'Ollama', 'Prompt engineering', 'Online courses'] },
     ],
   },
 ];
