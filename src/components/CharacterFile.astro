@@ -12,7 +12,7 @@
  * Inside Projects, the picked episode "pops out" into a big panel. Without
  * JavaScript every episode panel is simply shown, one after another.
  *
- * Certifications comes after Projects: the trophy wall (CertWall.astro, certs.ts).
+ * Certified sits just before Projects: the trophy wall (CertWall.astro, certs.ts).
  */
 import Arrow from './Arrow.astro';
 import StackIcon from './StackIcon.astro';
@@ -23,6 +23,7 @@ import MerlinDemo from './MerlinDemo.astro';
 import ThriftbiteDemo from './ThriftbiteDemo.astro';
 import LoreIcon from './LoreIcon.astro';
 import CertWall from './CertWall.astro';
+import ChapterIcon from './ChapterIcon.astro';
 import { certs } from '../data/certifications';
 import { stack, episodes, profile, lore, course, missions, selfTraining } from '../data/profile';
 
@@ -36,11 +37,11 @@ const cleared = allQuests.filter((st) => st === 'cleared').length;
 const active = allQuests.filter((st) => st === 'active').length;
 
 const chapters = [
-  { id: 'stack', title: 'Stack', teaser: 'Languages, tools and what I’m learning next', count: `${stack.length} areas` },
+  { id: 'stack', title: 'Stack', teaser: 'Languages, tools and what I’m learning next', count: `${stack.length} Areas` },
   { id: 'training', title: 'Training', teaser: 'School, field missions and self-training', count: 'Training arc' },
-  { id: 'writing', title: 'Writing', teaser: 'Lore, worldbuilding and power systems', count: 'Side quest' },
-  { id: 'projects', title: 'Projects', teaser: 'The main event. What I’ve built so far.', count: `${episodes.length} episodes`, open: true },
-  { id: 'certs', title: 'Certifications', teaser: 'Courses cleared. Receipts on the wall.', count: `${certs.length} earned` },
+  { id: 'writing', title: 'Writing', teaser: 'Lore, worldbuilding and power systems', count: 'Side Quest' },
+  { id: 'certs', title: 'Certified', teaser: 'Courses cleared. Receipts on the wall.', count: `${certs.length} Earned` },
+  { id: 'projects', title: 'Projects', teaser: 'The main event. What I’ve built so far.', count: `${episodes.length} Episodes`, open: true },
 ];
 const segments = Array.from({ length: 10 }, (_, i) => i);
 // header extras: live counts (always shown) and a hover peek (desktop) for the closed chapters
@@ -64,11 +65,12 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
             {ch.id === 'training' && (
               <span class="cf__live cf__live--bar">
                 <span class="cf__minibar" aria-hidden="true">{allQuests.map((st) => <span class:list={['cf__minibar-seg', `cf__minibar-seg--${st}`]}></span>)}</span>
-                <span class="cf__live-text">{cleared} cleared · {active} in progress</span>
+                <span class="cf__live-text">{cleared} Cleared · {active} In Progress</span>
               </span>
             )}
             {ch.id === 'writing' && <span class="cf__live"><span class="cf__mini">{lore.map((l) => <LoreIcon name={l.kind} />)}</span><span class="cf__live-text">{ch.count}</span></span>}
-            {(ch.id === 'projects' || ch.id === 'certs') && <span class="cf__live-text">{ch.count}</span>}
+            {ch.id === 'certs' && <span class="cf__live"><span class="cf__mini"><ChapterIcon name="cert" /></span><span class="cf__live-text">{ch.count}</span></span>}
+            {ch.id === 'projects' && <span class="cf__live"><span class="cf__mini"><ChapterIcon name="merlin" /></span><span class="cf__live-text">{ch.count}</span></span>}
           </span>
           <span class="cf__stamp" aria-hidden="true">Opened</span>
           <span class="cf__icon" aria-hidden="true">
