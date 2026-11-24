@@ -140,8 +140,6 @@ button { font: inherit; color: inherit; }
 }
 .skip-link:focus { clip-path: none; }
 
-.placeholder { color: var(--muted); }
-.cf__item[open] .placeholder { color: #BDB4A6; }
 
 /* ---------- type roles ---------- */
 .display {
@@ -1454,8 +1452,6 @@ html:not(.js) .card__corner, html:not(.js) .card__back-btn { display: none; }
 .card__fact--hi .card__face { background: var(--ink); color: var(--ivory); outline: 3px solid var(--ivory); outline-offset: -11px; } /* the inverse tile: dark in light mode, light in dark mode */
 .card__fact--hi .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.18), transparent 55%); }
 .card__fact--hi::before { background-image: none; background: var(--accent); }
-.card__fact--hi .placeholder { color: #BDB4A6; }
-html[data-theme="dark"] .card__fact--hi .placeholder { color: var(--muted); }
 html[data-theme="dark"] .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.1), transparent 55%); }
 html[data-theme="dark"] .card__fact--hi .card__face::after { background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.42), transparent 55%); }
 .card__label { position: relative; z-index: 1; font-size: 16px; line-height: 24px; font-weight: 700; }
@@ -1814,7 +1810,6 @@ html:not(.js) .dossier__stamp { display: none; }
 }
 .pop__panel { position: relative; background: var(--ivory); color: var(--ink); padding: var(--s-400); transform: translate(-6px, -6px); }
 .pop__panel :focus-visible { outline-color: var(--ink); }
-.cf__item .pop__panel .placeholder { color: var(--muted); }
 .pop__ep + .pop__ep { margin-top: var(--s-700); }
 .episodes.is-live .pop__ep { display: none; margin-top: 0; }
 .episodes.is-live .pop__ep.is-active { display: block; animation: pop-in 420ms var(--ease); }

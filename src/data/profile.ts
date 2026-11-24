@@ -1,6 +1,6 @@
 /**
  * Everything personal lives here; the components read from this file.
- * A value in [brackets] counts as a placeholder: it shows muted, or not at all.
+ * A value in [brackets] counts as not set yet (isPlaceholder): the GitHub username, for one.
  */
 
 export const profile = {
@@ -42,7 +42,7 @@ export type FactJump = { label: string; chapter?: 'stack' | 'training' | 'writin
 export type Fact = {
   label: string; value: string; note: string;
   back: string; jump?: FactJump;
-  highlight?: boolean; placeholder?: boolean;
+  highlight?: boolean;
 };
 export const facts: Fact[] = [
   // Order matters: on wide screens the grid is 3 × 2, so the 5th fact (Next arc) sits bottom middle.
@@ -86,14 +86,14 @@ export const secretFact: Fact = {
 
 /* ---------- Character file → Stack: one area per kind of tool, each with its own icon ---------- */
 /** Power levels run 0–10. */
-export type Skill = { name: string; level: number; note: string; placeholderNote?: boolean };
+export type Skill = { name: string; level: number; note: string };
 export type StackId = 'languages' | 'web' | 'backend' | 'data' | 'tools' | 'design' | 'ai';
 export type StackArea = {
   id: StackId;
   title: string;
   line: string;
   skills?: Skill[];                          // bars, for the ones worth a level
-  items?: { text: string; placeholder?: boolean }[];
+  items?: { text: string }[];
   groups?: { label: string; items: string[]; iconsOnly?: boolean }[]; // labelled rows, e.g. "Hosting: Vercel · Render"; iconsOnly shows just the logos
 };
 export const stack: StackArea[] = [
@@ -266,7 +266,6 @@ export type LoreEntry = {
   quote?: string;   // a short line in the character's voice
   specs: { label: string; value: string }[];
   link?: string;
-  placeholder?: boolean;
 };
 export const lore: LoreEntry[] = [
   {
