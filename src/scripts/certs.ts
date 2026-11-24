@@ -4,7 +4,8 @@
  *    (plain paper back showing), opens flat, and shows a small caption with a link to it.
  *    Clicking anywhere outside, or Esc, puts it back. A page-flip sound plays (sfx.ts).
  *  - a label's long name or line glides sideways on hover so it can be read whole.
- *  - on phones the wall is a row you swipe; the arrows and counter follow it.
+ *  - on phones the wall is a row you swipe; the arrows and counter follow it, and the certificate
+ *    in view glides its own long label (there's no hover on a phone).
  *  - /#cert-<slug> opens the Certifications chapter with that certificate unfolded.
  */
 import { flip as flipSound } from './sfx';
@@ -228,6 +229,48 @@ export function initCerts(): void {
     wall.addEventListener('scroll', show, { passive: true });
     addEventListener('resize', show);
     show();
+
+    // no hover on a phone: the certificate in view glides its long label by itself,
+    // out to the end, a pause, back, and again while it stays in view
+    const long = (item: HTMLElement): HTMLElement[] =>
+      Array.from(item.querySelectorAll<HTMLElement>('[data-cw-glide]')).filter((l) => l.scrollWidth > l.clientWidth);
+    const swiping = (): boolean => wall.scrollWidth > wall.clientWidth + 4;
+    let active = -1;
+    let loop = 0;
+    const stop = (): void => {
+      window.clearTimeout(loop);
+      if (active >= 0) long(items[active]).forEach((l) => glide(l, 0));
+      active = -1;
+    };
+    const play = (i: number): void => {
+      if (i === active || reduce() || !swiping()) return;
+      stop();
+      active = i;
+      const lines = long(items[i] ?? items[0]);
+      if (!lines.length) return;
+      const out = (): void => {
+        lines.forEach((l) => glide(l, l.scrollWidth - l.clientWidth));
+        loop = window.setTimeout(home, 3600);
+      };
+      const home = (): void => {
+        lines.forEach((l) => glide(l, 0));
+        loop = window.setTimeout(out, 3600);
+      };
+      loop = window.setTimeout(out, 600);
+    };
+    let settle = 0;
+    let inView = false;
+    wall.addEventListener('scroll', () => {
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => inView && play(current()), 160);
+    }, { passive: true });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        inView = e.isIntersecting;
+        if (inView) play(current());
+        else stop();
+      }, { threshold: 0.5 }).observe(wall);
+    }
   }
 
   // /#cert-<slug>: open the chapter, bring the certificate into view, unfold it
