@@ -256,7 +256,7 @@ export const selfTraining: { title: string; note: string }[] = [
  * A few worlds, power systems and OCs made over the years. Keep each hook to one line.
  * Add or remove entries freely; the grid adapts (best at 3 or 6).
  * `link` is optional (a doc, a post, a Fiverr gig sample). */
-export type LoreKind = 'universe' | 'power' | 'oc';
+export type LoreKind = 'universe' | 'power' | 'oc' | 'faction' | 'artifact';
 export type LoreEntry = {
   kind: LoreKind;
   name: string;
@@ -298,6 +298,10 @@ export const lore: LoreEntry[] = [
     ],
   },
 ];
+
+/* Sealed files: lore that isn't declassified yet. Only the type shows; the rest stays blacked out.
+ * When one is ready, move it into `lore` above as a full entry and drop it from here. */
+export const sealedFiles: { kind: LoreKind }[] = [{ kind: 'oc' }, { kind: 'faction' }, { kind: 'artifact' }];
 
 /* ---------- Character file → Projects: the episodes. The picked one pops out. ---------- */
 export type Episode = {

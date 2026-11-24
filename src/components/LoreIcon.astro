@@ -1,6 +1,7 @@
 ---
 /** Line icons for the lore archive, drawn to match StackIcon. */
-interface Props { name: 'universe' | 'power' | 'oc' }
+import type { LoreKind } from '../data/profile';
+interface Props { name: LoreKind }
 const { name } = Astro.props;
 ---
 <span class="stack-icon lore-icon" aria-hidden="true">
@@ -12,6 +13,12 @@ const { name } = Astro.props;
     )}
     {name === 'power' && (
       <path d="M18.5 3 L7 18 H15 L13 29 L25 13 H17 Z"></path>
+    )}
+    {name === 'faction' && (
+      <path d="M8 3 V29 M8 5 H25 L21 11 L25 17 H8"></path>
+    )}
+    {name === 'artifact' && (
+      <path d="M10 5 H22 L28 12 L16 28 L4 12 Z M4 12 H28 M12 5 L10 12 L16 28 L22 12 L20 5"></path>
     )}
     {name === 'oc' && (
       <>
