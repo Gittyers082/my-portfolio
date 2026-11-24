@@ -94,7 +94,7 @@ export type StackArea = {
   line: string;
   skills?: Skill[];                          // bars, for the ones worth a level
   items?: { text: string; placeholder?: boolean }[];
-  groups?: { label: string; items: string[]; iconsOnly?: boolean }[]; // labelled rows, e.g. "Hosting: Vercel · AWS"; iconsOnly shows just the logos
+  groups?: { label: string; items: string[]; iconsOnly?: boolean }[]; // labelled rows, e.g. "Hosting: Vercel · Render"; iconsOnly shows just the logos
 };
 export const stack: StackArea[] = [
   {
@@ -102,20 +102,20 @@ export const stack: StackArea[] = [
     skills: [
       { name: 'Java', level: 8, note: 'First language I learned, still my strongest' },
       { name: 'SQL', level: 8, note: 'Schemas, joins and queries that stay fast' },
-      { name: 'Python', level: 6, note: 'Scripts and APIs now, AI work next' },
+      { name: 'Python', level: 7, note: 'Scripts and APIs now, AI work next' },
       { name: 'JavaScript', level: 7, note: 'The web’s first language, front to back' },
-      { name: 'TypeScript', level: 6, note: 'JavaScript with types, on every web project' },
-      { name: 'Kotlin', level: 5, note: 'Java’s cleaner sibling' },
+      { name: 'TypeScript', level: 7, note: 'JavaScript with types, on every web project' },
+      { name: 'Kotlin', level: 4, note: 'Java’s cleaner sibling' },
       { name: 'Elixir', level: 5, note: 'Functional, with Phoenix on the web' },
-      { name: 'Rust', level: 4, note: 'Still climbing the borrow checker' },
+      { name: 'Rust', level: 5, note: 'Merlin runs on it, through Tauri' },
     ],
     groups: [{ label: 'Others', items: ['C', 'C++', 'C#', 'Go', 'Ruby', 'Dart', 'PHP', 'Bash'], iconsOnly: true }],
   },
   {
-    id: 'web', title: 'Frontend', line: 'What runs in the browser',
+    id: 'web', title: 'Frontend', line: 'What runs on screen',
     items: [
       { text: 'Astro' }, { text: 'React' }, { text: 'Next.js' }, { text: 'HTML' }, { text: 'CSS' },
-      { text: 'Tailwind' }, { text: 'Bootstrap' },
+      { text: 'Tailwind' }, { text: 'Bootstrap' }, { text: 'Vite' }, { text: 'Tauri' },
     ],
   },
   {
@@ -126,20 +126,23 @@ export const stack: StackArea[] = [
   },
   {
     id: 'data', title: 'Data', line: 'Where it all lives',
-    items: [{ text: 'MySQL' }, { text: 'PostgreSQL' }, { text: 'MongoDB' }, { text: 'Firebase' }, { text: 'Supabase' }],
+    groups: [
+      { label: 'SQL', items: ['MySQL', 'PostgreSQL', 'Supabase'] },
+      { label: 'NoSQL', items: ['MongoDB', 'Firebase', 'Redis'] },
+    ],
   },
   {
     id: 'tools', title: 'Tools', line: 'What keeps the work together',
-    skills: [{ name: 'Git', level: 7, note: 'Daily, solo and in teams' }],
+    skills: [{ name: 'Git', level: 8, note: 'Daily, solo and in teams' }],
     groups: [
-      { label: 'Editors', items: ['VS Code', 'IntelliJ IDEA', 'Antigravity'] },
-      { label: 'Build', items: ['Docker', 'npm', 'Maven', 'Gradle', 'Ant', 'Mix'] },
-      { label: 'Hosting', items: ['Vercel', 'AWS', 'GitHub'] },
+      { label: 'Editors', items: ['VS Code', 'IntelliJ IDEA', 'Zed', 'Sublime Text'] },
+      { label: 'Build', items: ['Docker', 'npm', 'Maven', 'Gradle', 'Ant', 'Mix', 'GitHub Actions'] },
+      { label: 'Hosting', items: ['Vercel', 'Render', 'GitHub'] },
     ],
   },
   {
     id: 'design', title: 'Design & notes', line: 'Where ideas start',
-    items: [{ text: 'Figma' }, { text: 'Canva' }, { text: 'Obsidian' }],
+    items: [{ text: 'Figma' }, { text: 'Canva' }, { text: 'Obsidian' }, { text: 'Google Docs' }],
   },
   {
     id: 'ai', title: 'Next arc', line: 'Where I’m heading',
@@ -147,7 +150,7 @@ export const stack: StackArea[] = [
       { label: 'Studying', items: ['AI engineering concepts'] },
       { label: 'Built', items: ['Merlin, an AI desktop companion'] },
       { label: 'Next build', items: ['A RAG app'] },
-      { label: 'Daily', items: ['Claude Code', 'Prompt engineering'] },
+      { label: 'Daily', items: ['Claude Code & Cowork', 'ChatGPT', 'Gemini', 'Ollama', 'Prompt engineering', 'Online courses', 'AI and tech news'] },
     ],
   },
 ];
