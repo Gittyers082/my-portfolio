@@ -25,10 +25,15 @@ import LoreIcon from './LoreIcon.astro';
 import CertWall from './CertWall.astro';
 import ChapterIcon from './ChapterIcon.astro';
 import PlanningSketch from './PlanningSketch.astro';
+import OtherverseMap from './OtherverseMap.astro';
 import { certs } from '../data/certifications';
-import { stack, episodes, profile, lore, course, missions, selfTraining } from '../data/profile';
+import { stack, episodes, profile, lore, sealedFiles, course, missions, selfTraining } from '../data/profile';
 
-const loreKind = { universe: 'Universe', power: 'Power system', oc: 'Character' } as const;
+const loreKind = { universe: 'Universe', power: 'Power system', oc: 'Character', faction: 'Faction', artifact: 'Artifact' } as const;
+// the archive's first year, from the files themselves ("Since 2021" → 2021)
+const loreSince = Math.min(...lore.map((l) => Number(l.year?.match(/\d{4}/)?.[0] ?? Infinity)));
+// sealed files: a few blacked-out lines of uneven length, the same every build
+const sealBars = (n: number, seed: number) => Array.from({ length: n }, (_, k) => 62 + ((seed * 37 + k * 23) % 38));
 
 const statusLabel = { cleared: 'Cleared', active: 'In Progress', locked: 'Locked' } as const;
 
@@ -255,7 +260,19 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
 
         {ch.id === 'writing' && (
           <div class="cf__body lore">
-            <p class="lore__intro">Outside code, I build worlds. This is a piece of the Otherverse, the universe I’ve been writing: the world, its rarest power, and one of its characters. I also write lore like this for clients.</p>
+            <div class="lore__top">
+              <div class="lore__lead">
+                <p class="lore__intro">Outside code, I build worlds. This is a piece of the Otherverse, the universe I’ve been writing: the world, its rarest power, and one of its characters. I also write lore like this for clients.</p>
+                <ul class="lore__stats" role="list">
+                  <li><span>Archive since</span><b>{loreSince}</b></li>
+                  <li><span>Files</span><b>{lore.length + sealedFiles.length}</b></li>
+                  <li><span>Declassified</span><b><span data-lore-count>{lore.length}</span>/{lore.length}</b></li>
+                  <li><span>Sealed</span><b>{sealedFiles.length}</b></li>
+                  <li><span>Commissions</span><b class="lore__open">Open</b></li>
+                </ul>
+              </div>
+              <OtherverseMap />
+            </div>
 
             <ul class="lore__grid" role="list">
               {lore.map((w, i) => (
@@ -274,7 +291,7 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                   </div>
                   <p class:list={['dossier__hook', { placeholder: w.placeholder }]}><span class="redact">{w.hook}</span></p>
                   {w.quote && (
-                    <blockquote class="dossier__quote"><p><span class="redact">“{w.quote}”</span></p><footer>{w.name}</footer></blockquote>
+                    <blockquote class="dossier__quote"><p><span class="sr-only">“{w.quote}”</span><span class="redact" aria-hidden="true" data-type>“{w.quote}”</span></p><footer>{w.name}</footer></blockquote>
                   )}
                   <dl class="dossier__specs">
                     {w.specs.map((sp) => (
@@ -289,9 +306,27 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                   )}
                 </li>
               ))}
+              {sealedFiles.map((f, i) => (
+                <li class="dossier dossier--sealed" style={`--i:${lore.length + i}`} data-sealed>
+                  <span class="sr-only">Sealed file: {loreKind[f.kind].toLowerCase()}, not declassified yet.</span>
+                  <div class="dossier__top" aria-hidden="true">
+                    <LoreIcon name={f.kind} />
+                    <span class="dossier__kind">{loreKind[f.kind]}</span>
+                    <span class="dossier__year">20??</span>
+                  </div>
+                  <div class="dossier__head" aria-hidden="true">
+                    <span class="seal__name" style={`width:${sealBars(1, i)[0]}%`}></span>
+                    <span class="dossier__stamp dossier__stamp--sealed">Sealed</span>
+                  </div>
+                  <div class="seal__lines" aria-hidden="true">
+                    {sealBars(3, i + 1).map((w, k) => <span class="seal__bar" style={`width:${k === 2 ? w - 30 : w}%`}></span>)}
+                  </div>
+                  <p class="seal__note" aria-hidden="true">Not declassified yet.</p>
+                </li>
+              ))}
             </ul>
 
-            <a class="commission" style={`--i:${lore.length}`} href={profile.fiverr} target="_blank" rel="noopener">
+            <a class="commission" style={`--i:${lore.length + sealedFiles.length}`} href={profile.fiverr} target="_blank" rel="noopener">
               <span class="commission__text">
                 <span class="commission__kicker">Commissions open</span>
                 <span class="commission__title">Need a world built?</span>
