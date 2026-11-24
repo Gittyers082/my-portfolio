@@ -339,29 +339,33 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
 
         {ch.id === 'projects' && (
           <div class="cf__body episodes" data-episodes>
-            <p class="stats__note">Pick an episode. The one you pick pops out.</p>
-
-            <div class="pop">
-              <div class="pop__shadow" aria-hidden="true"></div>
-              <div class="pop__panel">
-                {episodes.map((ep, j) => (
-                  <div class:list={['pop__ep', { 'is-active': j === 0 }]} data-episode={ep.id} id={`episode-${ep.id}`} role="region" aria-label={ep.title}>
-                    <div class="pop__demo">
+            <div class="eps">
+              <div class="pop">
+                <div class="pop__shadow" aria-hidden="true"></div>
+                <div class="pop__panel">
+                  {episodes.map((ep, j) => (
+                    <div class:list={['pop__ep', { 'is-active': j === 0 }]} data-episode={ep.id} id={`episode-${ep.id}`} role="region" aria-label={ep.title}>
                       {ep.id === 'merlin' ? <MerlinDemo /> : ep.id === 'thriftbite' ? <ThriftbiteDemo /> : <KadugoDemo />}
                       <article class="pop__info">
-                        <div>
+                        <div class="pop__text">
                           <h3 class="display pop__title">{ep.title}</h3>
                           <p class="pop__meta">{ep.meta}</p>
                           <p class="lede pop__summary">{ep.summary}</p>
+                          <details class="pop__more" data-glide>
+                            <summary class="pop__more-btn">
+                              <span class="pop__more-open">Read more</span><span class="pop__more-close">Show less</span>
+                              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8 H14" stroke="currentColor" stroke-width="2.4"></path><path class="pop__more-v" d="M8 2 V14" stroke="currentColor" stroke-width="2.4"></path></svg>
+                            </summary>
+                            <dl class="work__facts">
+                              {ep.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+                            </dl>
+                          </details>
                         </div>
-                        <dl class="work__facts">
-                          {ep.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
-                        </dl>
                         {ep.links.length > 0 && (
                           <div class="pop__links">
-                            {ep.links.map((l) => (
-                              <a class="link-arrow" href={l.href} target="_blank" rel="noopener">
-                                <span class="link-arrow__label">{l.label}</span>
+                            {ep.links.map((l, k) => (
+                              <a class:list={['pop__cta', { 'pop__cta--main': k === 0 }]} href={l.href} target="_blank" rel="noopener">
+                                <span>{l.label}</span>
                                 <Arrow />
                               </a>
                             ))}
@@ -369,18 +373,22 @@ const peekLogos = ['Java', 'Python', 'TypeScript', 'React', 'Astro', 'Spring Boo
                         )}
                       </article>
                     </div>
-                  </div>
+                  ))}
+                </div>
+              </div>
+
+              <div class="picker" role="group" aria-label="Episodes" hidden>
+                <p class="picker__head"><span>Episodes</span><b>{episodes.length}</b></p>
+                {episodes.map((ep, j) => (
+                  <button type="button" class="picker__btn" data-pick={ep.id} aria-controls={`episode-${ep.id}`} aria-pressed={j === 0 ? 'true' : 'false'}>
+                    <span class="picker__thumb"><span class="picker__zoom"><EpisodeArt id={ep.id} title={ep.title} uid={`thumb-${ep.id}`} /></span></span>
+                    <span class="picker__text">
+                      <span class="picker__num">Episode {j + 1}</span>
+                      <span class="picker__name">{ep.title}</span>
+                    </span>
+                  </button>
                 ))}
               </div>
-            </div>
-
-            <div class="picker" role="group" aria-label="Episodes" hidden>
-              {episodes.map((ep, j) => (
-                <button type="button" class="picker__btn" data-pick={ep.id} aria-controls={`episode-${ep.id}`} aria-pressed={j === 0 ? 'true' : 'false'}>
-                  <span class="picker__thumb"><span class="picker__zoom"><EpisodeArt id={ep.id} title={ep.title} uid={`thumb-${ep.id}`} /></span></span>
-                  <span class="picker__name">{ep.title}</span>
-                </button>
-              ))}
             </div>
           </div>
         )}
