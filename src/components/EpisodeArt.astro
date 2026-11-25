@@ -38,15 +38,15 @@ const { id, title, uid } = Astro.props;
   )}
   {id === 'thriftbite' && (
     <>
-      <div class="poster__ground" style="background:#0A7C8A"></div>
+      <div class="poster__ground" style="background:#127a8a"></div>
       <svg class="poster__svg" viewBox="0 0 380 300" aria-hidden="true">
-        <defs><pattern id={`tb-dots-${uid}`} width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="2" fill="#102326" opacity=".35"></circle></pattern></defs>
+        <defs><pattern id={`tb-dots-${uid}`} width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="2" fill="#163a44" opacity=".3"></circle></pattern></defs>
         <rect x="0" y="0" width="380" height="300" fill={`url(#tb-dots-${uid})`}></rect>
-        <g transform="rotate(-9 120 150)">
-          <path d="M40 92 H170 L206 150 L170 208 H40 Z" fill="#102326" transform="translate(8 8)"></path>
-          <path d="M40 92 H170 L206 150 L170 208 H40 Z" fill="#A6D94A" stroke="#102326" stroke-width="5" stroke-linejoin="round"></path>
-          <circle cx="174" cy="150" r="9" fill="#0A7C8A" stroke="#102326" stroke-width="4"></circle>
-          <text x="102" y="167" text-anchor="middle" font-family="Archivo, sans-serif" font-size="52" font-weight="800" fill="#102326">-50%</text>
+        <!-- ThriftBite's discount sticker: a scalloped bakery price tag, tilted like it's stuck on the box -->
+        <g transform="translate(118 150) rotate(-10) scale(1.7) translate(-50 -50)">
+          <g fill="#163a44" transform="translate(3 4)"><circle cx="50" cy="50" r="40"></circle><circle cx="90.00" cy="50.00" r="9"></circle><circle cx="84.64" cy="70.00" r="9"></circle><circle cx="70.00" cy="84.64" r="9"></circle><circle cx="50.00" cy="90.00" r="9"></circle><circle cx="30.00" cy="84.64" r="9"></circle><circle cx="15.36" cy="70.00" r="9"></circle><circle cx="10.00" cy="50.00" r="9"></circle><circle cx="15.36" cy="30.00" r="9"></circle><circle cx="30.00" cy="15.36" r="9"></circle><circle cx="50.00" cy="10.00" r="9"></circle><circle cx="70.00" cy="15.36" r="9"></circle><circle cx="84.64" cy="30.00" r="9"></circle></g>
+          <g fill="#f2995a"><circle cx="50" cy="50" r="40"></circle><circle cx="90.00" cy="50.00" r="9"></circle><circle cx="84.64" cy="70.00" r="9"></circle><circle cx="70.00" cy="84.64" r="9"></circle><circle cx="50.00" cy="90.00" r="9"></circle><circle cx="30.00" cy="84.64" r="9"></circle><circle cx="15.36" cy="70.00" r="9"></circle><circle cx="10.00" cy="50.00" r="9"></circle><circle cx="15.36" cy="30.00" r="9"></circle><circle cx="30.00" cy="15.36" r="9"></circle><circle cx="50.00" cy="10.00" r="9"></circle><circle cx="70.00" cy="15.36" r="9"></circle><circle cx="84.64" cy="30.00" r="9"></circle></g>
+          <text x="50" y="60" text-anchor="middle" font-family="Fredoka, Archivo, sans-serif" font-size="28" font-weight="600" fill="#3a1c08">−50%</text>
         </g>
       </svg>
       <img class="poster__mascot" src="/projects/thryx-full.webp" alt="" width="360" height="352" loading="lazy" decoding="async">
