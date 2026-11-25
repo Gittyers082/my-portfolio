@@ -19,7 +19,7 @@ const POINTS: Record<string, number> = {
   copy: 20,
   book: 4, // flipping the About me notebook
   coffee: 2,
-  pencil: 2,
+  quill: 4, // fixing a page with the quill
   wave: 2,
   card: 4, // flipping a character card
   commit: 2, // flipping the hero's commit card
@@ -57,9 +57,9 @@ function initTrust(): void {
     ['episode', 'pick a project episode'],
     ['demo', 'pause or step through a project demo'],
     ['powerup', 'click El on the rock ten times'],
-    ['book', 'flip the notebook in About me'],
+    ['book', 'turn a page of the grimoire in About me'],
+    ['quill', 'fix a page with the quill'],
     ['coffee', 'knock over the coffee'],
-    ['pencil', 'click the pencil'],
     ['copy', 'copy my email'],
   ];
   const nextHint = (): string | null => {
