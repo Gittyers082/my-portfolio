@@ -6,14 +6,14 @@
  * Colours are the site's drawing hex values, so the dark theme remaps them; red marks
  * what's wrong.
  */
-export const INK = '#15130F';
-export const RED = '#C8462F';
+const INK = '#15130F';
+const RED = '#C8462F';
 const MONO = 'font-family="ui-monospace, Consolas, Menlo, monospace"';
 const S = `fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"`;
 const esc = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const T = (x: number, y: number, s: string, size = 14, extra = ''): string =>
   `<text x="${x}" y="${y}" ${MONO} font-size="${size}" fill="${INK}" xml:space="preserve" ${extra}>${esc(s)}</text>`;
-const note = (x: number, y: number, s: string): string => T(x, y, s, 13, 'opacity=".6"');
+const note = (x: number, y: number, s: string, size = 13): string => T(x, y, s, size, 'opacity=".6"');
 const num = (n: number): string => `<text x="150" y="384" text-anchor="middle" ${MONO} font-size="11" fill="${INK}" opacity=".55">— ${n} —</text>`;
 const svg = (inner: string): string => `<svg viewBox="0 0 300 400" aria-hidden="true">${inner}<circle data-tip cx="-50" cy="-50" r="1" fill="none"></circle></svg>`;
 /** A red wavy underline, the way an editor marks an error. */
@@ -29,12 +29,12 @@ const lerp = (a: number, b: number, p: number): number => a + (b - a) * p;
 const back = (p: number): number => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
 
 /** Where the nib is: on a line being written (x is measured), or a fixed point (a tick). */
-export type Tip = { x: number; y: number; measure: boolean } | null;
+type Tip = { x: number; y: number; measure: boolean } | null;
 export type Page = { html: string; tip: Tip };
 
 /* ---------- 1 · code: bugs on the left, the fix written on the right ---------- */
 const BUG = ['fn summon(ink) {', '  if (ink.dry) {', '    return cast(inc)', '', '  retry(ink)', '  return null'];
-export const FIX = ['fn summon(ink) {', '  if (!ink.dry) {', '    return cast(ink)', '  }', '  return retry(ink)', '}'];
+const FIX = ['fn summon(ink) {', '  if (!ink.dry) {', '    return cast(ink)', '  }', '  return retry(ink)', '}'];
 export const FIX_CHARS = FIX.join('').length;
 /** How far through the fix each error is solved (as a share of the writing): the logic, the typo, the brace. */
 export const CODE_SOLVED = [0.45, 0.62, 0.75];
@@ -105,10 +105,10 @@ export function ocLeft(): string {
   const o = note(30, 58, 'OC #07')
     + `<rect x="30" y="76" width="96" height="112" rx="4" ${S}></rect><circle cx="78" cy="132" r="30" ${S} stroke-dasharray="4 6"></circle>`
     + `<path d="M78 106 C90 120 92 134 84 150 L78 160 L72 150 C64 134 66 120 78 106 Z" ${S}></path><circle cx="78" cy="136" r="4" ${S}></circle><path d="M78 140 L78 156" ${S}></path>`
-    + note(142, 98, 'name:').replace('font-size="13"', 'font-size="12"') + `<path d="M142 118 L270 116" ${S}></path>`
-    + note(142, 148, 'fable:').replace('font-size="13"', 'font-size="12"') + T(142, 168, 'ink-bound')
-    + note(30, 222, 'flaw:').replace('font-size="13"', 'font-size="12"') + T(30, 244, "can't stop writing")
-    + note(30, 278, 'weak to:').replace('font-size="13"', 'font-size="12"') + T(30, 300, 'deadlines');
+    + note(142, 98, 'name:', 12) + `<path d="M142 118 L270 116" ${S}></path>`
+    + note(142, 148, 'fable:', 12) + T(142, 168, 'ink-bound')
+    + note(30, 222, 'flaw:', 12) + T(30, 244, "can't stop writing")
+    + note(30, 278, 'weak to:', 12) + T(30, 300, 'deadlines');
   return svg(o + num(33));
 }
 const PTS: [number, number][] = [...Array(5)].map((_, i) => [150 + 80 * Math.sin(i * 1.2566), 168 - 80 * Math.cos(i * 1.2566)]);
