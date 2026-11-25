@@ -1,3 +1,6 @@
+---
+import Dot from './Dot.astro';
+---
 <svg class="hero__scene" viewBox="0 0 840 900" preserveAspectRatio="xMaxYMid slice" role="img" aria-label="Illustration: seen over his shoulder, El types at his desk; the code on his monitor describes him">
   <defs>
     <pattern id="ht-ink" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1.9" fill="#15130F"></circle></pattern>
@@ -57,6 +60,8 @@
     <line x1="218" y1="702" x2="632" y2="702"></line>
   </g>
   <polygon points="204,724 646,724 640,736 210,736" fill="url(#ht-ink)"></polygon>
+  <!-- Dot, El's ink familiar, on the desk with his back to us, watching the screen. Click: he vanishes. -->
+  <Dot pose="desk" transform="translate(228 774) scale(0.92)" />
   <path d="M840 742 C760 712 660 690 572 682 L556 716 C650 734 748 770 840 820 Z" fill="#15130F"></path>
   <path d="M840 760 C770 735 690 716 620 706" fill="none" stroke="url(#ht-light)" stroke-width="16"></path>
   <path d="M518 672 C538 658 574 660 592 676 L600 698 C584 712 546 716 522 706 L512 690 Z" fill="#F4EFE4" stroke="#15130F" stroke-width="5" stroke-linejoin="round"></path>

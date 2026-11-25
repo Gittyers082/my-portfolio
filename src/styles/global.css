@@ -2572,3 +2572,87 @@ html::-webkit-scrollbar-corner { background: var(--sand); }
   .sketch .map-spin, .sketch .map-home, .sketch .map-realm, .sketch .map-outer, .lore__open::before, .type-caret::after { animation: none; }
   .dossier--sealed.is-denied { animation: none; }
 }
+
+/* ---------- Dot, El's ink familiar (components/Dot.astro) ----------
+ * Three spots: still at the desk (click: he vanishes, scripts/dot.ts), asleep by the rock, and on the
+ * Contact ledge waving. By the rock he follows El's power-up: the full run (6s) startles him when El lands
+ * (25%), knocks him back, and walks him home when El jumps back up (73%); the short run on narrow screens
+ * (3.6s) does it on the hit (52%). Keep these in step with af-move above and aura.ts.
+ */
+.dot :is(.dot__push, .dot__hop, .dot__up, .dot__armL, .dot__armR, .dot__legL, .dot__legR, .dot__eyes, .dot__bang, .dot__z, .dot__desk) { transform-box: view-box; }
+.dot__push { transform-origin: 60px 100px; }
+.dot__armL { transform-origin: 31px 64px; } .dot__armR { transform-origin: 89px 64px; }
+.dot__legL { transform-origin: 44px 82px; } .dot__legR { transform-origin: 76px 82px; }
+.dot__eyes { transform-origin: 60px 64px; }
+.dot__bang { opacity: 0; transform-origin: 60px 28px; }
+/* by the rock: asleep, sinking a little with each breath, z's drifting up */
+.dot--rock .dot__open { opacity: 0; }
+.dot--rock .dot__up { animation: dot-breathe 3.2s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes dot-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(1.4px); } }
+.dot__z { opacity: 0; animation: dot-zz 3.2s linear infinite; }
+.dot__z2 { animation-delay: 1.6s; }
+@keyframes dot-zz { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(12px, -22px); } }
+@keyframes dot-knock-full { 0%, 24.50% { transform: translate(0, 0) rotate(0); } 25.30% { transform: translate(0, -9px) rotate(0); animation-timing-function: cubic-bezier(.2,.8,.4,1); } 26.50% { transform: translate(-6px, -12px) rotate(-6deg); animation-timing-function: cubic-bezier(.25,.6,.45,1); } 31% { transform: translate(-44px, -26px) rotate(-22deg); animation-timing-function: cubic-bezier(.55,0,.85,.4); } 35% { transform: translate(-70px, 0) rotate(-8deg); animation-timing-function: cubic-bezier(.2,.8,.4,1); } 37% { transform: translate(-78px, 0) rotate(5deg); } 39% { transform: translate(-80px, 0) rotate(-2deg); } 41%, 58% { transform: translate(-80px, 0) rotate(0); } 59% { transform: translate(-80px, -6px) rotate(0); } 60.50%, 74% { transform: translate(-80px, 0) rotate(0); } 92%, 100% { transform: translate(0, 0) rotate(0); } }
+@keyframes dot-walk-full { 0%, 74% { transform: translateY(0); } 75.50% { transform: translateY(-3px); } 77% { transform: translateY(0); } 78.50% { transform: translateY(-3px); } 80% { transform: translateY(0); } 81.50% { transform: translateY(-3px); } 83% { transform: translateY(0); } 84.50% { transform: translateY(-3px); } 86% { transform: translateY(0); } 87.50% { transform: translateY(-3px); } 89% { transform: translateY(0); } 90.50% { transform: translateY(-3px); } 92% { transform: translateY(0); } 100% { transform: translateY(0); } }
+@keyframes dot-stepL-full { 0%, 74% { transform: rotate(0); } 75.50% { transform: rotate(16deg); } 77% { transform: rotate(0); } 78.50% { transform: rotate(-16deg); } 80% { transform: rotate(0); } 81.50% { transform: rotate(16deg); } 83% { transform: rotate(0); } 84.50% { transform: rotate(-16deg); } 86% { transform: rotate(0); } 87.50% { transform: rotate(16deg); } 89% { transform: rotate(0); } 90.50% { transform: rotate(-16deg); } 92% { transform: rotate(0); } 100% { transform: rotate(0); } }
+@keyframes dot-stepR-full { 0%, 74% { transform: rotate(0); } 75.50% { transform: rotate(-16deg); } 77% { transform: rotate(0); } 78.50% { transform: rotate(16deg); } 80% { transform: rotate(0); } 81.50% { transform: rotate(-16deg); } 83% { transform: rotate(0); } 84.50% { transform: rotate(16deg); } 86% { transform: rotate(0); } 87.50% { transform: rotate(-16deg); } 89% { transform: rotate(0); } 90.50% { transform: rotate(16deg); } 92% { transform: rotate(0); } 100% { transform: rotate(0); } }
+@keyframes dot-shut-full { 0%, 24.60% { opacity: 1; } 24.62%, 94% { opacity: 0; } 94.02%, 100% { opacity: 1; } }
+@keyframes dot-open-full { 0%, 24.60% { opacity: 0; } 24.62%, 94% { opacity: 1; } 94.02%, 100% { opacity: 0; } }
+@keyframes dot-wide-full { 0%, 24.50% { transform: scale(1); } 26% { transform: scale(1.4); } 41%, 46% { transform: scale(1.3); } 48% { transform: scale(1.3, 0.1); } 50% { transform: scale(1.15); } 74%, 100% { transform: scale(1); } }
+@keyframes dot-bang-full { 0%, 24.50% { opacity: 0; transform: scale(0.4); } 26% { opacity: 1; transform: scale(1.15); } 28%, 39% { opacity: 1; transform: scale(1); } 45%, 100% { opacity: 0; transform: scale(1); } }
+@keyframes dot-zs-full { 0%, 24.60% { opacity: 1; } 24.62%, 95% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes dot-flailL-full { 0%, 24.50% { transform: rotate(0); } 26% { transform: rotate(70deg); } 35% { transform: rotate(40deg); } 41%, 100% { transform: rotate(0); } }
+@keyframes dot-flailR-full { 0%, 24.50% { transform: rotate(0); } 26% { transform: rotate(-70deg); } 35% { transform: rotate(-40deg); } 41%, 100% { transform: rotate(0); } }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__push { animation: dot-knock-full 6.0s linear both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__hop { animation: dot-walk-full 6.0s linear both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__legL { animation: dot-stepL-full 6.0s ease-in-out both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__legR { animation: dot-stepR-full 6.0s ease-in-out both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__shut { animation: dot-shut-full 6.0s linear both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__open { animation: dot-open-full 6.0s linear both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__eyes { animation: dot-wide-full 6.0s ease-out both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__bang { animation: dot-bang-full 6.0s ease-out both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__zs { animation: dot-zs-full 6.0s linear both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__armL { animation: dot-flailL-full 6.0s ease-out both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__armR { animation: dot-flailR-full 6.0s ease-out both; }
+.farmer.is-powering:not(.is-compact) .dot--rock .dot__up { animation: none; }
+@keyframes dot-knock-short { 0%, 51.20% { transform: translate(0, 0) rotate(0); } 52% { transform: translate(0, -9px) rotate(0); animation-timing-function: cubic-bezier(.2,.8,.4,1); } 53.20% { transform: translate(-6px, -12px) rotate(-6deg); animation-timing-function: cubic-bezier(.25,.6,.45,1); } 57.70% { transform: translate(-44px, -26px) rotate(-22deg); animation-timing-function: cubic-bezier(.55,0,.85,.4); } 61.70% { transform: translate(-70px, 0) rotate(-8deg); animation-timing-function: cubic-bezier(.2,.8,.4,1); } 63.70% { transform: translate(-78px, 0) rotate(5deg); } 65.70% { transform: translate(-80px, 0) rotate(-2deg); } 67.70%, 66% { transform: translate(-80px, 0) rotate(0); } 90%, 100% { transform: translate(0, 0) rotate(0); } }
+@keyframes dot-walk-short { 0%, 66% { transform: translateY(0); } 68% { transform: translateY(-3px); } 70% { transform: translateY(0); } 72% { transform: translateY(-3px); } 74% { transform: translateY(0); } 76% { transform: translateY(-3px); } 78% { transform: translateY(0); } 80% { transform: translateY(-3px); } 82% { transform: translateY(0); } 84% { transform: translateY(-3px); } 86% { transform: translateY(0); } 88% { transform: translateY(-3px); } 90% { transform: translateY(0); } 100% { transform: translateY(0); } }
+@keyframes dot-stepL-short { 0%, 66% { transform: rotate(0); } 68% { transform: rotate(16deg); } 70% { transform: rotate(0); } 72% { transform: rotate(-16deg); } 74% { transform: rotate(0); } 76% { transform: rotate(16deg); } 78% { transform: rotate(0); } 80% { transform: rotate(-16deg); } 82% { transform: rotate(0); } 84% { transform: rotate(16deg); } 86% { transform: rotate(0); } 88% { transform: rotate(-16deg); } 90% { transform: rotate(0); } 100% { transform: rotate(0); } }
+@keyframes dot-stepR-short { 0%, 66% { transform: rotate(0); } 68% { transform: rotate(-16deg); } 70% { transform: rotate(0); } 72% { transform: rotate(16deg); } 74% { transform: rotate(0); } 76% { transform: rotate(-16deg); } 78% { transform: rotate(0); } 80% { transform: rotate(16deg); } 82% { transform: rotate(0); } 84% { transform: rotate(-16deg); } 86% { transform: rotate(0); } 88% { transform: rotate(16deg); } 90% { transform: rotate(0); } 100% { transform: rotate(0); } }
+@keyframes dot-shut-short { 0%, 51.30% { opacity: 1; } 51.32%, 92% { opacity: 0; } 92.02%, 100% { opacity: 1; } }
+@keyframes dot-open-short { 0%, 51.30% { opacity: 0; } 51.32%, 92% { opacity: 1; } 92.02%, 100% { opacity: 0; } }
+@keyframes dot-wide-short { 0%, 51.20% { transform: scale(1); } 52.70% { transform: scale(1.4); } 67.70%, 72.70% { transform: scale(1.3); } 74.70% { transform: scale(1.3, 0.1); } 76.70% { transform: scale(1.15); } 66%, 100% { transform: scale(1); } }
+@keyframes dot-bang-short { 0%, 51.20% { opacity: 0; transform: scale(0.4); } 52.70% { opacity: 1; transform: scale(1.15); } 54.70%, 65.70% { opacity: 1; transform: scale(1); } 71.70%, 100% { opacity: 0; transform: scale(1); } }
+@keyframes dot-zs-short { 0%, 51.30% { opacity: 1; } 51.32%, 93% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes dot-flailL-short { 0%, 51.20% { transform: rotate(0); } 52.70% { transform: rotate(70deg); } 61.70% { transform: rotate(40deg); } 67.70%, 100% { transform: rotate(0); } }
+@keyframes dot-flailR-short { 0%, 51.20% { transform: rotate(0); } 52.70% { transform: rotate(-70deg); } 61.70% { transform: rotate(-40deg); } 67.70%, 100% { transform: rotate(0); } }
+.farmer.is-powering.is-compact .dot--rock .dot__push { animation: dot-knock-short 3.6s linear both; }
+.farmer.is-powering.is-compact .dot--rock .dot__hop { animation: dot-walk-short 3.6s linear both; }
+.farmer.is-powering.is-compact .dot--rock .dot__legL { animation: dot-stepL-short 3.6s ease-in-out both; }
+.farmer.is-powering.is-compact .dot--rock .dot__legR { animation: dot-stepR-short 3.6s ease-in-out both; }
+.farmer.is-powering.is-compact .dot--rock .dot__shut { animation: dot-shut-short 3.6s linear both; }
+.farmer.is-powering.is-compact .dot--rock .dot__open { animation: dot-open-short 3.6s linear both; }
+.farmer.is-powering.is-compact .dot--rock .dot__eyes { animation: dot-wide-short 3.6s ease-out both; }
+.farmer.is-powering.is-compact .dot--rock .dot__bang { animation: dot-bang-short 3.6s ease-out both; }
+.farmer.is-powering.is-compact .dot--rock .dot__zs { animation: dot-zs-short 3.6s linear both; }
+.farmer.is-powering.is-compact .dot--rock .dot__armL { animation: dot-flailL-short 3.6s ease-out both; }
+.farmer.is-powering.is-compact .dot--rock .dot__armR { animation: dot-flailR-short 3.6s ease-out both; }
+.farmer.is-powering.is-compact .dot--rock .dot__up { animation: none; }
+/* at the desk: still, like the rest of the drawing; a click and he's gone (poof) */
+.dot--desk { cursor: var(--cursor-hand); }
+.dot__desk { transform-origin: 60px 90px; }
+.dot--desk.is-gone .dot__desk { animation: dot-poof 0.34s cubic-bezier(.5,0,.9,.4) both; pointer-events: none; }
+@keyframes dot-poof { 0% { transform: scale(1); opacity: 1; } 35% { transform: scale(1.12, 0.86); opacity: 1; } 100% { transform: scale(0.2, 1.4) translateY(-20px); opacity: 0; } }
+/* on the Contact ledge: legs over the edge, swinging, waving at you */
+.dot--ledge .dot__up { animation: dot-bob 2.4s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes dot-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.2px); } }
+.dot--ledge .dot__armR { animation: dot-wave 2.4s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes dot-wave { 0%, 100% { transform: rotate(-112deg); } 25% { transform: rotate(-132deg); } 50% { transform: rotate(-104deg); } 75% { transform: rotate(-130deg); } }
+.dot--ledge :is(.dot__legL, .dot__legR) { transform-origin: 60px 84px; animation: dot-swing 2.4s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes dot-swing { 0%, 100% { transform: skewX(0); } 50% { transform: skewX(-6deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .dot *, .farmer .dot * { animation: none !important; }
+  .dot--rock .dot__z:not(.dot__z2) { opacity: 1; }
+  .dot--ledge .dot__armR { transform: rotate(-120deg); }
+  .dot--desk.is-gone { display: none; }
+}

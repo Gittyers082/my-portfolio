@@ -1,0 +1,94 @@
+---
+/**
+ * Dot, El's familiar: a small ink bottle with no cap, stick arms and legs, and solid cream eyes.
+ * El was a pure fighter until Merlin taught him magic (code); Dot is the ink he writes it in.
+ * Drawn inside a host SVG, at 120x105 of his own units, placed with `transform`:
+ * - desk: a still back view in the desk scene's halftone style, hands planted on the desk.
+ *   Clicking him makes him vanish (scripts/dot.ts).
+ * - rock: asleep on the ground by the rock. El's power-up startles him and knocks him back,
+ *   and he walks back when El jumps up again; the timing lives with the run in global.css (search "Dot").
+ * - ledge: sitting on the Contact ledge beside El, legs over the edge, waving.
+ * Colours are the site's drawing hex values, so the dark theme remaps them like every other drawing;
+ * the cyan is the accent.
+ */
+interface Props {
+  pose: 'desk' | 'rock' | 'ledge';
+  transform: string;
+}
+const { pose, transform } = Astro.props;
+
+const INK = '#15130F';
+const LIGHT = '#F4EFE4';
+// the bottle: a wide, flat body with slanted shoulders, the neck and lip one piece with it
+const BODY = 'M41 30 L79 30 Q81 30 81 32 L81 35 Q81 37 79 37 L75 37 L75 42 L91 50 Q97 53 97 61 L97 78 Q97 88 87 88 L33 88 Q23 88 23 78 L23 61 Q23 53 29 50 L45 42 L45 37 L41 37 Q39 37 39 35 L39 32 Q39 30 41 30 Z';
+const ARM_L = 'M31 64 L18 77';
+const ARM_R = 'M89 64 L102 77';
+const LEG_L = 'M44 80 L44 99 L50 99';
+const LEG_R = 'M76 80 L76 99 L70 99';
+const DANGLE_L = 'M46 84 L45 102 L40 105';
+const DANGLE_R = 'M74 84 L75 102 L80 105';
+const DESK_ARMS = ['M30 62 C22 68 17 76 15 86', 'M90 62 C98 68 103 76 105 86'];
+// a limb is a cream halo drawn under the body and an ink line over it, so it grows out of him
+const halo = { stroke: LIGHT, 'stroke-width': 8.5, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const;
+const ink = { stroke: INK, 'stroke-width': 4.4, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const;
+const legs = pose === 'ledge' ? [DANGLE_L, DANGLE_R] : [LEG_L, LEG_R];
+---
+<g class={`dot dot--${pose}`} transform={transform} data-dot={pose}>
+  {pose === 'desk' ? (
+    <g class="dot__desk">
+      <ellipse cx="60" cy="90" rx="52" ry="4" fill={INK} opacity="0.28"></ellipse>
+      {DESK_ARMS.map((d) => <path d={d} {...halo}></path>)}
+      <path d={BODY} fill={INK} stroke={LIGHT} stroke-width="5" paint-order="stroke" stroke-linejoin="round"></path>
+      {DESK_ARMS.map((d) => <path d={d} {...ink}></path>)}
+      <ellipse cx="13" cy="87.5" rx="5" ry="2.6" fill={INK} stroke={LIGHT} stroke-width="2" paint-order="stroke"></ellipse>
+      <ellipse cx="107" cy="87.5" rx="5" ry="2.6" fill={INK} stroke={LIGHT} stroke-width="2" paint-order="stroke"></ellipse>
+      <path d="M31 56 C28 64 28 74 31 84" fill="none" stroke="url(#ht-light)" stroke-width="9" stroke-linecap="round"></path>
+      <path d="M47 33 L47 38" stroke="url(#ht-light)" stroke-width="4"></path>
+      <path d="M41 33.5 L79 33.5" stroke={LIGHT} stroke-width="1.6" opacity="0.55"></path>
+    </g>
+  ) : (
+    <g class="dot__push"><g class="dot__hop">
+      <g class="dot__legL"><path d={legs[0]} {...halo}></path></g>
+      <g class="dot__legR"><path d={legs[1]} {...halo}></path></g>
+      <g class="dot__up">
+        <g class="dot__armL"><path d={ARM_L} {...halo}></path></g>
+        <g class="dot__armR"><path d={ARM_R} {...halo}></path></g>
+        <path d={BODY} fill={INK} stroke={LIGHT} stroke-width="5" paint-order="stroke" stroke-linejoin="round"></path>
+      </g>
+      <g class="dot__legL"><path d={legs[0]} {...ink}></path></g>
+      <g class="dot__legR"><path d={legs[1]} {...ink}></path></g>
+      <g class="dot__up">
+        <g class="dot__armL"><path d={ARM_L} {...ink}></path></g>
+        <g class="dot__armR"><path d={ARM_R} {...ink}></path></g>
+        <g class="dot__face">
+          {pose === 'rock' && (
+            <g class="dot__shut">
+              <path d="M41 66 Q47 70 53 66" fill="none" stroke={LIGHT} stroke-width="3" stroke-linecap="round"></path>
+              <path d="M67 66 Q73 70 79 66" fill="none" stroke={LIGHT} stroke-width="3" stroke-linecap="round"></path>
+            </g>
+          )}
+          <g class="dot__open"><g class="dot__eyes">
+            <ellipse cx="47" cy="64" rx="7" ry="9" fill={LIGHT} transform="rotate(12 47 64)"></ellipse>
+            <ellipse cx="73" cy="64" rx="7" ry="9" fill={LIGHT} transform="rotate(-12 73 64)"></ellipse>
+          </g></g>
+          <path d="M56.5 78 Q60 80.5 63.5 78" fill="none" stroke={LIGHT} stroke-width="2.4" stroke-linecap="round"></path>
+          <ellipse class="accent-fill" cx="38" cy="75" rx="4" ry="2.2" opacity="0.6"></ellipse>
+          <ellipse class="accent-fill" cx="82" cy="75" rx="4" ry="2.2" opacity="0.6"></ellipse>
+        </g>
+        {pose === 'rock' && (
+          <>
+            <g class="dot__zs">
+              <text class="dot__z accent-fill" x="86" y="30" font-family="Archivo, sans-serif" font-weight="800" font-size="13">z</text>
+              <text class="dot__z dot__z2 accent-fill" x="86" y="30" font-family="Archivo, sans-serif" font-weight="800" font-size="10">z</text>
+            </g>
+            <g class="dot__bang">
+              <path class="accent-stroke" d="M60 6 L60 20" stroke-width="5" stroke-linecap="round"></path>
+              <circle class="accent-fill" cx="60" cy="27" r="2.8"></circle>
+              <path class="accent-stroke" d="M40 16 L34 9 M80 16 L86 9" stroke-width="3" stroke-linecap="round"></path>
+            </g>
+          </>
+        )}
+      </g>
+    </g></g>
+  )}
+</g>

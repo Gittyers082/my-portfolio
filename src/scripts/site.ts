@@ -21,6 +21,7 @@ import { initFooter } from './footer';
 import { initCard } from './card';
 import { initStars } from './stars';
 import { initAura } from './aura';
+import { initDot } from './dot';
 import { initCursor } from './cursor';
 import { initClimb } from './climb';
 import { initCalendar } from './calendar';
@@ -503,6 +504,7 @@ export function initSite(): void {
   initStars();
   initProjectLinks();
   initAura();
+  initDot();
   initCursor();
   initCommitCard();
   initClimb();
