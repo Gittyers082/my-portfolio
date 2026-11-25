@@ -18,6 +18,11 @@ import {
 } from './grimoire-pages';
 
 const W = 760; // the scene's own width, before it's scaled to the column
+/** How far through the fix the plan's and the power system's stamps turn green. */
+const PLAN_DONE = 0.96;
+const SYS_DONE = 0.95;
+/** Where the to-do slips land when they fly off the page. */
+const SLIP_TO: [number, number][] = [[170, 44], [650, 290], [210, 484], [440, 492]];
 const TURN_MS = 800;
 const BURST_MS = 1400;
 const FIX_MS = 2400;
@@ -30,6 +35,7 @@ const out = (p: number): number => 1 - Math.pow(1 - p, 3);
 const back = (p: number): number => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
 const earn = (key: string): void => { document.dispatchEvent(new CustomEvent('trust:earn', { detail: key })); };
 
+/** Something that bursts out of a page. `gone`: how far through the fix it clears (stamps change instead). */
 type Flyer = { el: HTMLElement; to: [number, number]; gone: number; stamp?: boolean; leaving?: { t: string; o: number } };
 
 export function initNotebook(): void {
@@ -72,16 +78,16 @@ export function initNotebook(): void {
       { el: err('✕', 'LogicError: summons dry ink'), to: [250, 40], gone: CODE_SOLVED[0] },
       { el: err('✕', 'ReferenceError: inc is not defined'), to: [470, 74], gone: CODE_SOLVED[1] },
       { el: err('✕', 'SyntaxError: missing }'), to: [650, 300], gone: CODE_SOLVED[2] },
-      { el: fly('stamp', '3 PROBLEMS'), to: [190, 480], gone: 2, stamp: true },
+      { el: fly('stamp', '3 PROBLEMS'), to: [190, 480], gone: Infinity, stamp: true },
     ],
     [
-      ...TODO.map((t, i): Flyer => ({ el: fly('slip', t), to: ([[170, 44], [650, 290], [210, 484], [440, 492]] as [number, number][])[i], gone: 2 })),
-      { el: fly('stamp', 'OVERDUE'), to: [470, 52], gone: 2, stamp: true },
+      ...TODO.map((t, i): Flyer => ({ el: fly('slip', t), to: SLIP_TO[i], gone: Infinity })),
+      { el: fly('stamp', 'OVERDUE'), to: [470, 52], gone: Infinity, stamp: true },
     ],
     [
       { el: err('!', 'too OP'), to: [650, 300], gone: 0.75 },
       { el: err('!', 'no cost?'), to: [240, 44], gone: 0.4 },
-      { el: fly('stamp', 'UNBALANCED'), to: [200, 482], gone: 2, stamp: true },
+      { el: fly('stamp', 'UNBALANCED'), to: [200, 482], gone: Infinity, stamp: true },
     ],
   ];
   const ORIGIN: [number, number] = [330, 250];
@@ -109,11 +115,12 @@ export function initNotebook(): void {
     if (page === 1) return planRight(Math.floor(clamp(p / 0.7) * TODO_CHARS), clamp((p - 0.72) / 0.24) * 2);
     return sysRight(Math.floor(clamp(p / 0.6) * RULE.length), clamp((p - 0.6) / 0.4), p < 0.9);
   };
+  const drawn = new WeakMap<HTMLElement, string>(); // what each page shows now, so a frame only redraws what changed
   const put = (el: HTMLElement, html: string): void => {
-    if ((el as HTMLElement & { _h?: string })._h === html) return;
+    if (drawn.get(el) === html) return;
     el.querySelector(':scope > svg')?.remove();
     el.insertAdjacentHTML('afterbegin', html);
-    (el as HTMLElement & { _h?: string })._h = html;
+    drawn.set(el, html);
   };
   /** A point on the right page (in its 300×400 units), in the scene's own pixels. */
   const onPage = (x: number, y: number): [number, number] => {
@@ -132,10 +139,10 @@ export function initNotebook(): void {
       const n = 3 - CODE_SOLVED.filter((v) => p >= v).length;
       return n ? { label: `${n} PROBLEM${n === 1 ? '' : 'S'}`, good: false } : { label: '0 PROBLEMS ✓', good: true };
     }
-    if (page === 1) return p >= 0.96 ? { label: 'ON TRACK ✓', good: true } : { label: 'OVERDUE', good: false };
-    return p >= 0.95 ? { label: 'BALANCED ✓', good: true } : { label: 'UNBALANCED', good: false };
+    if (page === 1) return p >= PLAN_DONE ? { label: 'ON TRACK ✓', good: true } : { label: 'OVERDUE', good: false };
+    return p >= SYS_DONE ? { label: 'BALANCED ✓', good: true } : { label: 'UNBALANCED', good: false };
   };
-  const CHANGE_AT = [[...CODE_SOLVED], [0.96], [0.95]];
+  const CHANGE_AT = [CODE_SOLVED, [PLAN_DONE], [SYS_DONE]]; // when each page's stamp changes, for its little bump
 
   /* ---------- one frame ---------- */
   let quillWas: [number, number] | null = null;

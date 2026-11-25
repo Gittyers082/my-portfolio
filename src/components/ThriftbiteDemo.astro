@@ -1,96 +1,100 @@
 ---
 /**
- * ThriftBite demo loop: a reservation played through like a muted clip.
- * Drawn in ThriftBite's own colours (it's a screen of a different app, so it
- * stays light in dark mode, like a screenshot would). Listings are real ones
- * from the live app. Logic: src/scripts/features.ts (initDemo), shared with Ka-dugo.
- * Without JavaScript the first screen shows and the controls stay hidden.
+ * ThriftBite demo loop: a reservation played through like a muted clip, drawn from the
+ * redesigned app (its colours, fonts, food drawings and Thryx). Light by default, like
+ * a screenshot; the moon button flips it to the app's own dark theme. Listings, the
+ * pickup spot and the claim code are the live app's demo data.
+ * Steps: find a deal → add it to the cart (the cart ticket slides up, another listing's
+ * stock drops live) → the reservation with its claim code.
+ * Logic: src/scripts/features.ts (initDemo, and the theme button). Without JavaScript
+ * the first screen shows and the controls stay hidden.
  */
 const steps = ['Find a deal', 'Reserve it', 'Pick it up tonight'];
 const deals = [
-  { name: 'Pandesal, bag of 10', store: 'Sunrise Bakery', now: '₱25.00', was: '₱50.00', off: '50% off', closes: 'Closes in 2 h 0 m', left: '3 left', picked: true, glyph: 'bread' },
-  { name: 'Chicken adobo with rice', store: 'Lola Ising’s Carinderia', now: '₱60.00', was: '₱95.00', off: '37% off', closes: 'Closes in 2 h 30 m', left: '6 left', glyph: 'bowl' },
-  { name: 'Strawberry taho, 2 cups', store: 'Burnham Taho Cart', now: '₱20.00', was: '₱35.00', off: '43% off', closes: 'Closes in 1 h 0 m', left: '8 left', glyph: 'cup' },
+  { name: 'Strawberry taho, 2 cups', store: 'Burnham Taho Cart', now: '₱20.00', was: '₱35.00', off: 43, left: 8, closes: '1 h 22 m', soon: true, pickup: '12:00 to 2:30 AM', art: 'cup', tile: 'pink' },
+  { name: 'Pandesal, bag of 10', store: 'Sunrise Bakery', note: 'Baked this morning.', now: '₱25.00', was: '₱50.00', off: 50, left: 3, closes: '2 h 0 m', pickup: '5:30 to 8:30 PM', art: 'buns', tile: 'yolk', picked: true },
+  { name: 'Chicken adobo with rice', store: 'Lola Ising’s Carinderia', note: 'One serving.', now: '₱60.00', was: '₱95.00', off: 37, left: 6, closes: '2 h 30 m', pickup: '6:00 to 9:00 PM', art: 'rice-bowl', tile: 'yolk', live: true },
 ];
-const glyphs: Record<string, string> = {
-  bread: 'M10 30 C10 18 18 12 32 12 C46 12 54 18 54 30 C54 34 51 36 48 36 L48 50 L16 50 L16 36 C13 36 10 34 10 30 Z M24 22 L22 30 M32 20 L32 30 M40 22 L42 30',
-  bowl: 'M8 30 H56 C56 42 46 50 32 50 C18 50 8 42 8 30 Z M20 30 C20 22 26 18 32 18 C38 18 44 22 44 30 M26 54 H38',
-  cup: 'M18 18 H46 L42 52 H22 Z M16 18 H48 M24 12 C24 8 28 8 28 12 M34 12 C34 8 38 8 38 12',
-};
 ---
 <figure class="demo demo--tb" data-demo data-step="0">
   <div class="demo__frame">
-    <div class="screen screen--tb" data-ui>
+    <div class="screen screen--tb" data-ui data-tb>
       <div class="screen__bar">
         <span class="screen__dot"></span><span class="screen__dot"></span><span class="screen__dot"></span>
         <span class="screen__url">thriftbite.vercel.app</span>
         <span class="demo__status" aria-hidden="true"><span class="demo__rec"></span><span class="demo__status-text">Demo loop</span></span>
       </div>
       <div class="screen__body tb" aria-live="off">
-        <div class="tb__nav" aria-hidden="true">
-          <span class="tb__brand"><img src="/projects/thryx-head.webp" alt="" width="28" height="28" loading="lazy" decoding="async">ThriftBite</span>
-          <span class="tb__tab tb__tab--on">Browse</span>
-          <span class="tb__tab">Reservations</span>
-          <span class="tb__cart">Cart</span>
+        <div class="tb__bar">
+          <span class="tb__mark" aria-hidden="true"><img src="/projects/thryx-head.webp" alt="" width="30" height="30" loading="lazy" decoding="async">ThriftBite</span>
+          <span class="tb__links" aria-hidden="true"><span class="tb__link tb__link--browse">Browse</span><span class="tb__link tb__link--res">Reservations</span></span>
+          <button type="button" class="tb__key tb__theme" aria-pressed="false" aria-label="Show the demo in ThriftBite’s dark theme" data-tb-theme>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="tb__moon" d="M20 14.5 A8.5 8.5 0 1 1 9.5 4 A7 7 0 0 0 20 14.5 Z"></path><g class="tb__sun"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2.5 V5 M12 19 V21.5 M2.5 12 H5 M19 12 H21.5 M5.3 5.3 L7 7 M17 17 L18.7 18.7 M5.3 18.7 L7 17 M17 7 L18.7 5.3"></path></g></svg>
+          </button>
+          <span class="tb__key tb__cart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4 H6 L8 15 H18 L20 7 H7"></path><circle cx="9" cy="19" r="1.5"></circle><circle cx="17" cy="19" r="1.5"></circle></svg>Cart<span class="tb__badge">1</span></span>
+          <span class="tb__avatar" aria-hidden="true">D</span>
         </div>
 
-        <div class="demo__screen tb__screen" data-screen="0" aria-label="Step 1 of 3: tonight’s deals, closing soonest first">
+        <div class="demo__screen tb__screen" data-screen="0" aria-label="Steps 1 and 2 of 3: tonight’s deals; a bag of pandesal from Sunrise Bakery goes into the cart">
           <div class="tb__hero">
-            <div>
-              <p class="tb__hero-h">Tonight’s surplus, saved before closing.</p>
-              <p class="tb__hero-sub">End-of-day food from Baguio bakeries and carinderias.</p>
+            <div class="tb__hero-text">
+              <p class="tb__h1">Tonight’s surplus, saved before closing.</p>
+              <p class="tb__sub">End-of-day food from Baguio bakeries and carinderias, at a portion of the usual price.</p>
             </div>
-            <img class="tb__mascot" src="/projects/thryx-full.webp" alt="" width="120" height="117" loading="lazy" decoding="async">
+            <span class="tb__note">Sunrise Bakery stops pickups in <b>2 h 0 m.</b></span>
+            <img class="tb__thryx" src="/projects/thryx-full.webp" alt="" width="132" height="129" loading="lazy" decoding="async">
           </div>
-          <div class="tb__count"><span>9 deals you can still pick up tonight</span><span class="tb__live">Live</span></div>
+          <div class="tb__count"><b>9 deals you can still pick up tonight</b><span class="tb__tag tb__tag--lime"><span class="tb__live-dot"></span>Live</span></div>
           <div class="tb__deals">
             {deals.map((d) => (
-              <div class:list={['tb__deal', { 'tb__deal--picked': d.picked }]}>
-                <div class="tb__img">
-                  <span class="tb__off">{d.off}</span>
-                  <svg viewBox="0 0 64 64" aria-hidden="true"><path d={glyphs[d.glyph]}></path></svg>
+              <div class:list={['tb__deal', { 'tb__deal--picked': d.picked, 'tb__deal--live': d.live }]}>
+                <div class={`tb__photo tb__photo--${d.tile}`}>
+                  <img src={`/projects/tb-art-${d.art}.svg`} alt="" width="64" height="64" loading="lazy" decoding="async">
+                  <span class="tb__price-tag">−{d.off}%</span>
                 </div>
                 <div class="tb__deal-body">
-                  <b>{d.name}</b>
                   <span class="tb__store">{d.store}</span>
-                  <span><b>{d.now}</b> <s>{d.was}</s></span>
-                  <span class="tb__meta">{d.closes} · {d.left}</span>
+                  <b class="tb__name">{d.name}</b>
+                  <span class="tb__spread">
+                    <span class="tb__price"><b>{d.now}</b> <s>{d.was}</s></span>
+                    {d.live
+                      ? <span class="tb__tag tb__stock"><span class="tb__stock-a">{d.left} left</span><span class="tb__stock-b">{d.left - 1} left</span></span>
+                      : <span class="tb__tag">{d.left} left</span>}
+                  </span>
+                  <span class="tb__when"><b class:list={{ 'tb__soon': d.soon }}>Closes in {d.closes}</b> · Pick up {d.pickup}</span>
+                  {d.picked
+                    ? <span class="tb__btn-slot"><span class="tb__btn tb__btn--lime tb__add">Add to cart</span><span class="tb__btn tb__btn--teal tb__in">In your cart (1)</span></span>
+                    : <span class="tb__btn tb__btn--lime">Add to cart</span>}
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        <div class="demo__screen tb__screen" data-screen="1" aria-label="Step 2 of 3: reserving a bag of pandesal from Sunrise Bakery">
-          <div class="tb__detail">
-            <div class="tb__img tb__img--big">
-              <span class="tb__off">50% off</span>
-              <svg viewBox="0 0 64 64" aria-hidden="true"><path d={glyphs.bread}></path></svg>
-            </div>
-            <div class="tb__detail-body">
-              <span class="tb__store">Sunrise Bakery</span>
-              <p class="tb__detail-h">Pandesal, bag of 10</p>
-              <p class="tb__price"><b>₱25.00</b> <s>₱50.00</s></p>
-              <div class="tb__line"><span>Pick up</span><b>5:30 to 8:30 PM</b></div>
-              <div class="tb__line"><span>Closes in</span><b>2 h 0 m</b></div>
-              <div class="tb__line tb__line--live"><span><span class="tb__dot"></span>Stock, live</span><b class="tb__stock"><span class="tb__stock-a">3 left</span><span class="tb__stock-b">2 left</span></b></div>
-              <div class="tb__buy"><span class="tb__qty">− 1 +</span><span class="tb__btn">Reserve for pickup</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="demo__screen tb__screen tb__screen--done" data-screen="2" aria-label="Step 3 of 3: reserved, ready to pick up tonight">
-          <div class="tb__done">
-            <span class="tb__check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#102326" stroke-width="3.2" stroke-linecap="square"></path></svg></span>
-            <div><p class="tb__done-h">Reserved!</p><p class="tb__store">Saved before closing.</p></div>
-          </div>
           <div class="tb__ticket">
-            <div class="tb__ticket-row"><b>Pandesal, bag of 10</b><span>× 1</span></div>
-            <span class="tb__store">Sunrise Bakery</span>
-            <div class="tb__ticket-row"><span>Pick up tonight</span><b>5:30 to 8:30 PM</b></div>
-            <div class="tb__ticket-row"><span>₱25.00</span><b class="tb__saved">you saved ₱25.00</b></div>
+            <span class="tb__ticket-text"><b>1 item from Sunrise Bakery.</b> <span class="tb__pay">Pay ₱25.00 at pickup.</span></span>
+            <span class="tb__tear"></span>
+            <span class="tb__btn tb__btn--lime">Review cart</span>
           </div>
-          <p class="tb__store">It’s waiting under Reservations.</p>
+        </div>
+
+        <div class="demo__screen tb__screen tb__screen--res" data-screen="2" aria-label="Step 3 of 3: reserved; show claim code 482 913 at Sunrise Bakery by 8:30 PM">
+          <div class="tb__head">
+            <p class="tb__h1">Reservations</p>
+            <span class="tb__segmented"><span class="tb__chip tb__chip--on">Ready for pickup <span>1</span></span><span class="tb__chip">Past <span>4</span></span></span>
+          </div>
+          <div class="tb__res">
+            <div class="tb__res-head">
+              <div><b class="tb__res-store">Sunrise Bakery</b><span class="tb__small">Sunrise Bakery counter, Session Road</span></div>
+              <span class="tb__tag tb__tag--orange">Due 8:30 PM</span>
+            </div>
+            <div class="tb__res-body">
+              <span class="tb__spread"><span>1 × Pandesal, bag of 10</span><span>₱25.00</span></span>
+              <span class="tb__spread tb__total"><span>Pay at the counter</span><span>₱25.00</span></span>
+              <span class="tb__small">Claim code <b class="tb__code">482 913</b></span>
+              <span class="tb__btn tb__btn--teal tb__btn--big">Show claim code</span>
+              <span class="tb__small tb__muted">You saved ₱25.00 and a bag of bread.</span>
+            </div>
+          </div>
+          <img class="tb__thryx tb__thryx--wave" src="/projects/thryx-full.webp" alt="" width="132" height="129" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
