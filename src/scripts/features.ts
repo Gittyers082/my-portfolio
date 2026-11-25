@@ -17,7 +17,7 @@ const POINTS: Record<string, number> = {
   demo: 10,
   portrait: 10,
   copy: 20,
-  book: 4, // flipping the About me notebook
+  book: 4, // turning a page of the About me grimoire
   coffee: 2,
   quill: 4, // fixing a page with the quill
   wave: 2,
@@ -137,6 +137,16 @@ const STEP_MS = 2600;
 
 function initDemos(): void {
   document.querySelectorAll<HTMLElement>('[data-demo]').forEach(initDemo);
+  // ThriftBite's demo starts light, like a screenshot; its moon button shows the app's dark theme
+  document.querySelectorAll<HTMLButtonElement>('[data-tb-theme]').forEach((btn) => {
+    const screen = btn.closest<HTMLElement>('[data-tb]');
+    btn.addEventListener('click', () => {
+      const dark = btn.getAttribute('aria-pressed') !== 'true';
+      btn.setAttribute('aria-pressed', String(dark));
+      btn.setAttribute('aria-label', dark ? 'Show the demo in ThriftBite’s light theme' : 'Show the demo in ThriftBite’s dark theme');
+      screen?.classList.toggle('is-dark', dark);
+    });
+  });
 }
 
 function initDemo(demo: HTMLElement): void {
