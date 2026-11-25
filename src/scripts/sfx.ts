@@ -189,7 +189,7 @@ export function splash(): void {
   });
 }
 
-/** Pencil on paper for `ms`: soft, high, scratchy noise that wavers. */
+/** A nib on paper for `ms`: soft, high, scratchy noise that wavers (the About quill). */
 export function scribble(ms: number): void {
   if (muted || !ctx || ctx.state !== 'running' || !noise) return;
   const t = ctx.currentTime + 0.26;

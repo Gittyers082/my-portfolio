@@ -24,13 +24,13 @@ npm run preview   # serves the production build
 | `src/pages/index.astro` | The homepage: Hero → Character card → Character file (Projects is the peak) → Tagline → About → GitHub activity → Contact, plus the mountain map and the shortcuts panel |
 | `src/pages/404.astro` | 404: El lost with his map upside down, and dodge.exe |
 | `src/layouts/Base.astro` | Page shell; sets light/dark before the first paint |
-| `src/components/` | One file per section. Drawings: `DeskScene`, `EpisodeArt`, `AuraFarmer`, `Climb`; `Runner` is dodge.exe; `ThriftbiteDemo` and `KadugoDemo` are the project demo loops. |
+| `src/components/` | One file per section. Drawings: `DeskScene`, `EpisodeArt`, `AuraFarmer`, `Climb`, `Notebook` (the About grimoire), `Dot`; `Runner` is dodge.exe; `MerlinDemo`, `ThriftbiteDemo` and `KadugoDemo` are the project demo loops. |
 | `src/styles/global.css` | All styles. Design tokens (colours, spacing, motion) and the dark palette are at the top. |
 | `src/scripts/site.ts` | Wires everything up (reveals, menu, chapters, hero, Projects links…) and calls the scripts below |
 | `src/scripts/features.ts` | Explored meter, project demo loops, episode picker, copy-the-email |
 | `src/scripts/theme.ts` | Light / dark toggle |
-| `src/scripts/` (others) | One small file per feature: `card`, `climb`, `aura`, `calendar`, `keys`, `lore`, `stack`, `typing`, `cursor`, `stars`, `notebook`, `contact`, `footer`, `lost`, `devtools`, `sfx` (sounds), `portrait-reveal` |
-| `public/fonts/` | Archivo variable font, self-hosted (SIL Open Font License) |
+| `src/scripts/` (others) | One small file per feature: `card`, `climb`, `aura`, `calendar`, `keys`, `lore`, `stack`, `typing`, `cursor`, `stars`, `notebook` (the About grimoire; its pages are in `grimoire-pages`), `dot` (Dot, the ink familiar), `contact`, `footer`, `lost`, `devtools`, `sfx` (sounds), `portrait-reveal` |
+| `public/fonts/` | Archivo variable font for the site, plus Fredoka and Figtree for the ThriftBite demo, all self-hosted (SIL Open Font License) |
 
 Some internal names are older than the sections they belong to: `TrustMeter` / `trust` is the Explored meter,
 and `TrustHistory` is the GitHub activity section.
