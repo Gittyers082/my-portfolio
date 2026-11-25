@@ -15,7 +15,7 @@
 import { initPortraitReveal } from './portrait-reveal';
 import { initFeatures } from './features';
 import { initSound, zzt, flip as flipSound, stamp as stampSound } from './sfx';
-import { initNotebook, initCoffee, initPencil } from './notebook';
+import { initNotebook } from './notebook';
 import { initContact } from './contact';
 import { initFooter } from './footer';
 import { initCard } from './card';
@@ -496,8 +496,6 @@ export function initSite(): void {
   initPortraitReveal();
   initFeatures();
   initNotebook();
-  initCoffee();
-  initPencil();
   initContact();
   initFooter();
   initCard();

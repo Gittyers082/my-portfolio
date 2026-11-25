@@ -1,6 +1,6 @@
 /**
  * Quiet sound effects, synthesized with Web Audio: the heading glitch's electric
- * "zzt", the About desk's page flip, coffee splash and pencil scratch, the Contact stamp,
+ * "zzt", the About grimoire's page flip, coffee splash, quill scratch and fix chime, the Contact stamp,
  * and the aura farmer's gust, leap, landing, lightning and rock crunch
  * (no audio file to download).
  *
@@ -204,7 +204,7 @@ export function scribble(ms: number): void {
   high.Q.value = 1.2;
   const g = ctx.createGain();
   g.gain.setValueAtTime(0, t);
-  // little strokes: the scratch rises and dips as the pencil moves
+  // little strokes: the scratch rises and dips as the nib moves
   const steps = Math.max(4, Math.round(dur / 0.09));
   for (let i = 0; i <= steps; i++) {
     const at = t + (dur * i) / steps;
@@ -244,6 +244,24 @@ export function stamp(): void {
   hit.connect(low).connect(hg).connect(ctx.destination);
   hit.start(t);
   hit.stop(t + 0.09);
+}
+
+/** A small two-note chime, rising: something got fixed. */
+export function chime(): void {
+  if (muted || !ctx || ctx.state !== 'running') return;
+  const t = ctx.currentTime;
+  [[784, 0], [1175, 0.09]].forEach(([f, d]) => {
+    const o = ctx!.createOscillator();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(f, t + d);
+    const g = ctx!.createGain();
+    g.gain.setValueAtTime(0, t + d);
+    g.gain.linearRampToValueAtTime(VOLUME * 1.4, t + d + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.45);
+    o.connect(g).connect(ctx!.destination);
+    o.start(t + d);
+    o.stop(t + d + 0.46);
+  });
 }
 
 /** A fast rush of air for a leap: noise sweeping up, short and sharp. */
