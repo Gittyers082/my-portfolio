@@ -30,7 +30,7 @@ const out = (p: number): number => 1 - Math.pow(1 - p, 3);
 const back = (p: number): number => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
 const earn = (key: string): void => { document.dispatchEvent(new CustomEvent('trust:earn', { detail: key })); };
 
-type Flyer = { el: HTMLElement; to: [number, number]; gone: number; stamp?: boolean };
+type Flyer = { el: HTMLElement; to: [number, number]; gone: number; stamp?: boolean; leaving?: { t: string; o: number } };
 
 export function initNotebook(): void {
   const root = document.querySelector<HTMLElement>('[data-notebook]');
@@ -152,7 +152,13 @@ export function initNotebook(): void {
       leaf.classList.add('is-turning');
       leaf.style.transform = `rotateY(${-180 * e}deg) translateZ(${(Math.sin(e * Math.PI) * 14).toFixed(1)}px)`;
       shade.style.opacity = (Math.sin(e * Math.PI) * 0.28).toFixed(3);
-      FLYERS.flat().forEach((f) => { f.el.style.opacity = '0'; });
+      // whatever was still out on the old page (the green stamp, a leftover error) lifts off and fades
+      FLYERS.forEach((set, page2) => set.forEach((f, i) => {
+        if (page2 !== turn!.from || !f.leaving) { f.el.style.opacity = '0'; return; }
+        const u = ease(clamp((p - i * 0.06) / 0.5));
+        f.el.style.opacity = (f.leaving.o * (1 - u)).toFixed(2);
+        f.el.style.transform = `${f.leaving.t} translateY(${(-26 * u).toFixed(1)}px) rotate(${(u * (i % 2 ? -6 : 6)).toFixed(1)}deg) scale(${(1 - u * 0.2).toFixed(3)})`;
+      }));
       if (p >= 1) {
         leaf.classList.remove('is-turning');
         k = turn.to;
@@ -278,6 +284,7 @@ export function initNotebook(): void {
     flipSound();
     earn('book');
     if (reduce.matches) { k = to; burst(now); return; }
+    FLYERS[k].forEach((f) => { f.leaving = { t: f.el.style.transform, o: parseFloat(f.el.style.opacity) || 0 }; });
     turn = { from: k, to, t0: now };
     kick();
   });
