@@ -10,10 +10,12 @@
  *   rock, lightning, a random weapon from his seven (src/data/weapons.ts), one hit that splits the
  *   rock (with the greatbow, one arrow), then back up.
  *   Narrow screens get a shorter version on the rock; reduced motion gets one still frame.
+ * - Dot, El's familiar, sleeps on the ground to the left; the run startles him and he walks back.
  * Logic: src/scripts/aura.ts · motion: global.css (search "power-up")
  */
 import { WEAPON_ART } from '../data/weapons';
 import Lightning from './Lightning.astro';
+import Dot from './Dot.astro';
 
 const INK = '#15130F';
 const LIGHT = '#F4EFE4';
@@ -61,6 +63,8 @@ const SPLINES = '0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1';
         <g class="af-rock"><path d="M24 468 L46 404 L34 374 L74 336 L112 322 L150 316 L204 318 L236 308 L272 330 L304 354 L296 394 L322 432 L330 468 Z" fill="#E6DECF" stroke="#15130F" stroke-width="5" stroke-linejoin="round"></path><path d="M236 308 L272 330 L304 354 L296 394 L322 432 L330 468 L252 468 L264 422 L242 376 Z" fill="url(#af-dots)" opacity="0.5"></path><path d="M150 316 L160 352 L146 384 M236 308 L228 342 L242 376 M74 336 L94 372 L82 410 M200 400 L214 430" fill="none" stroke="#15130F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></g>
         <g class="af-halves"><g transform="translate(110 468)"><g class="af-halfL"><g transform="translate(-110 -468)"><g clip-path="url(#af-lclip)"><path d="M24 468 L46 404 L34 374 L74 336 L112 322 L150 316 L204 318 L236 308 L272 330 L304 354 L296 394 L322 432 L330 468 Z" fill="#E6DECF" stroke="#15130F" stroke-width="5" stroke-linejoin="round"></path><path d="M236 308 L272 330 L304 354 L296 394 L322 432 L330 468 L252 468 L264 422 L242 376 Z" fill="url(#af-dots)" opacity="0.5"></path><path d="M150 316 L160 352 L146 384 M236 308 L228 342 L242 376 M74 336 L94 372 L82 410 M200 400 L214 430" fill="none" stroke="#15130F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></g></g></g></g><g transform="translate(300 468)"><g class="af-halfR"><g transform="translate(-300 -468)"><g clip-path="url(#af-rclip)"><path d="M24 468 L46 404 L34 374 L74 336 L112 322 L150 316 L204 318 L236 308 L272 330 L304 354 L296 394 L322 432 L330 468 Z" fill="#E6DECF" stroke="#15130F" stroke-width="5" stroke-linejoin="round"></path><path d="M236 308 L272 330 L304 354 L296 394 L322 432 L330 468 L252 468 L264 422 L242 376 Z" fill="url(#af-dots)" opacity="0.5"></path><path d="M150 316 L160 352 L146 384 M236 308 L228 342 L242 376 M74 336 L94 372 L82 410 M200 400 L214 430" fill="none" stroke="#15130F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></g></g></g></g></g>
         <path d="M-200 468 H340" stroke={INK} stroke-width="5"></path>
+        <!-- Dot, asleep on the ground left of the rock; El's landing knocks him back (global.css, "Dot") -->
+        <Dot pose="rock" transform="translate(-120 426) scale(0.42)" />
         <g transform="translate(244 316)"><path class="af-deb af-deb0" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g><g transform="translate(254 318)"><path class="af-deb af-deb1" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g><g transform="translate(238 324)"><path class="af-deb af-deb2" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g><g transform="translate(260 326)"><path class="af-deb af-deb3" d="M0 0 l12 -7 l7 12 l-14 5 Z" fill="#E6DECF" stroke="#15130F" stroke-width="3"></path></g>
         <path class="af-crackC" d="M300 352 L284 380 L298 404 L286 436 L294 468" fill="none" stroke="#15130F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
 
