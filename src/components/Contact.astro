@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Arrow from './Arrow.astro';
+import Dot from './Dot.astro';
 import TechIcon from './TechIcon.astro';
 import { profile, githubUrl } from '../data/profile';
 
@@ -34,6 +35,8 @@ const hasResume = fs.existsSync(path.join(process.cwd(), 'public', profile.resum
           <path d="M92 150 C78 108 84 66 110 44 L104 14 L126 34 L134 0 L150 30 L170 6 L172 38 L196 22 L188 58 C204 84 206 122 188 150 Z" fill="#15130F"></path>
           <path d="M94 104 C86 102 82 114 88 124 C92 130 98 128 98 122" fill="#F4EFE4" stroke="#15130F" stroke-width="4"></path>
           <path d="M116 56 C102 76 100 102 104 128" fill="none" stroke="#F4EFE4" stroke-width="4" stroke-linecap="round"></path>
+          <!-- Dot, sitting on the ledge beside him, legs over the edge, waving too -->
+          <Dot pose="ledge" transform="translate(240 191) scale(0.46)" />
         </svg>
       </button>
       <span class="waver__bubble" aria-hidden="true">Hi!</span>
