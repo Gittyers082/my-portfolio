@@ -33,6 +33,7 @@ import { initCerts } from './certs';
 import { initTyping } from './typing';
 import { initLost } from './lost';
 import { initTheme } from './theme';
+import { initIntro } from './intro';
 
 const reduceMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -484,6 +485,7 @@ function initChapterStamps(): void {
 }
 
 export function initSite(): void {
+  initIntro();
   initSound();
   initGlitch();
   initReveals();
