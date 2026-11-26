@@ -316,7 +316,7 @@ html[data-theme="dark"] .theme-toggle__moon { display: block; }
   position: absolute; inset: 12px -12px -12px 12px;
   background-image: var(--dots); background-size: 7px 7px;
 }
-.hero__card-streaks { position: absolute; left: 100%; top: -14px; width: 150px; height: 60px; }
+.hero__card-streaks { position: absolute; left: 100%; top: -14px; width: 90px; height: 60px; } /* short, so they stop before Dot on the desk */
 .hero__card-pointer { position: absolute; left: calc(-19px - var(--ink-line)); top: calc(22px - var(--ink-line)); width: 22px; height: 30px; } /* inside each face, so it turns with the flip */
 .hero__card-body {
   position: relative; background: var(--paper); border: var(--ink-line) solid var(--ink);
