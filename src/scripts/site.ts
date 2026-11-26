@@ -34,6 +34,7 @@ import { initTyping } from './typing';
 import { initLost } from './lost';
 import { initTheme } from './theme';
 import { initIntro } from './intro';
+import { initPostCredits } from './postcredits';
 
 const reduceMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -500,6 +501,7 @@ export function initSite(): void {
   initNotebook();
   initContact();
   initFooter();
+  initPostCredits();
   initCard();
   initStars();
   initProjectLinks();
