@@ -56,11 +56,40 @@ const { game = true } = Astro.props;
     <span class="statusbar__item statusbar__item--end">© {year} {profile.name}</span>
   </div>
 
-  <a class="totop" href="#main">
-    <svg class="totop__hill" viewBox="0 0 64 40" aria-hidden="true">
-      <path class="totop__path" d="M2 38 L20 20 L30 28 L48 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
-      <path class="totop__flag" d="M48 6 L48 -6 L58 -2 L48 2" fill="var(--accent)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
-    </svg>
-    <span>Back to the top</span>
-  </a>
+  <!-- the last row: the post-credits scene on the left, back to the top on the right -->
+  <div class="footer__end">
+    <button class="pcbtn" type="button" aria-expanded="false" aria-controls="post-credits" hidden data-pc-btn>
+      <svg class="pcbtn__clap" viewBox="0 0 44 40" aria-hidden="true">
+        <path d="M3 16 L41 16 L41 38 L3 38 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path>
+        <path d="M3 24 L41 24" stroke="currentColor" stroke-width="2"></path>
+        <g class="pcbtn__arm">
+          <path d="M3 15 L39 5 L41 12 L5 22 Z" fill="var(--accent)" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M13 12 L17 18 M23 9 L27 15 M33 6 L37 12" stroke="currentColor" stroke-width="2.5"></path>
+        </g>
+      </svg>
+      <span class="pcbtn__t">Post-credits<span class="pcbtn__more"> scene</span></span>
+      <svg class="pcbtn__car" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 L6 6.5 L11 1.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+    <a class="totop" href="#main">
+      <svg class="totop__hill" viewBox="0 0 64 40" aria-hidden="true">
+        <path class="totop__path" d="M2 38 L20 20 L30 28 L48 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+        <path class="totop__flag" d="M48 6 L48 -6 L58 -2 L48 2" fill="var(--accent)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+      </svg>
+      <span>Back to the top</span>
+    </a>
+  </div>
+
+  <!-- meanwhile, back at the intro: four panels, drawn by postcredits.ts on the first open -->
+  <section class="pc" id="post-credits" aria-label="Post-credits scene" data-pc>
+    <div class="pc__clip">
+      <div class="pc__in">
+        <p class="pc__label" aria-hidden="true">Post-credits scene <i></i> <small>Meanwhile, back at the intro…</small></p>
+        <div class="pc__strip">
+          {[0, 1, 2, 3].map((i) => (
+            <div class="pc__panel" style={`--i:${i}`}><svg viewBox="0 0 320 260" role="img"></svg></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
 </footer>
