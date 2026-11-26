@@ -2771,3 +2771,56 @@ html::-webkit-scrollbar-corner { background: var(--sand); }
   .dot--ledge .dot__armR { transform: rotate(-120deg); }
   .dot--desk.is-gone { display: none; }
 }
+
+/* ---------- grand opening (Intro.astro, scripts/intro.ts) ----------
+   El and Merlin cross in the first second (drawn by the script); then Dot runs in, trips at the centre and the
+   ink takes over. Times are from the start: Dot's part begins at 1 s. The ink is var(--ink), so the dark theme
+   inverts it like the drawings. */
+.intro { display: none; }
+html.intro-on { overflow: hidden; }
+html.intro-on .intro { display: block; position: fixed; inset: 0; z-index: 300; background: var(--ivory); cursor: pointer; transition: opacity 300ms linear; }
+.intro.is-leaving { opacity: 0; }
+html.intro-on .intro.is-playing { background: transparent; } /* the cover is only there until the scene paints; after that the paper and the flood cover the page, so the drain reveals it */
+.intro__scene { position: absolute; inset: 0; overflow: hidden; }
+.intro__paper { position: absolute; inset: 0; background: var(--ivory); }
+.intro__floor { position: absolute; left: 0; right: 0; height: 3px; background: var(--ink); opacity: .85; }
+.intro__stone { position: absolute; width: 18px; height: 10px; border-radius: 9px 9px 2px 2px; background: var(--ink); }
+.intro__chars { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.intro__merlin .mer__fire { transform-box: view-box; transform-origin: 100px 118px; transform: skewX(16deg); } /* his flames lean back */
+.intro__dot { position: absolute; }
+.intro__dot-fall { position: absolute; inset: 0; transform-origin: 75% 95%; }
+.intro__dot svg { display: block; overflow: visible; }
+.intro__spill { position: absolute; inset: 0; }
+.intro__spill i { position: absolute; border-radius: 50%; background: var(--ink); }
+.intro__flood { position: absolute; inset: 0; background: var(--ink); opacity: 0; }
+.intro__drips { position: absolute; left: 0; right: 0; top: 0; }
+.intro__drips i { position: absolute; bottom: 0; background: var(--ink); border-radius: 999px 999px 0 0; }
+.intro__logo { position: absolute; left: 0; right: 0; margin: 0; text-align: center; font-size: clamp(120px, 15vw, 220px); line-height: 1; font-weight: 800; font-stretch: 72%; color: var(--ivory); }
+.intro__logo span { color: var(--accent); }
+.intro__name { position: absolute; left: 0; right: 0; margin: 0; text-align: center; font-size: 16px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 699px) { .intro__name { font-size: 13px; } }
+
+/* Dot: dashes in, bobbing, trips at 1.6 s and falls forward onto his face */
+.intro.is-playing .intro__dot { animation: intro-dash 600ms cubic-bezier(.25,.5,.6,1) 1000ms both, intro-hide 1ms linear 3250ms forwards; }
+@keyframes intro-dash { from { transform: translateX(calc(-1 * var(--dash))); } to { transform: none; } }
+.intro.is-playing .intro__dot-fall { animation: intro-run 600ms steps(1) 1000ms both, intro-trip 520ms cubic-bezier(.5,0,.75,1.25) 1600ms both; }
+@keyframes intro-run { 0%, 24%, 48%, 72% { translate: 0 0; rotate: 14deg; } 12%, 36%, 60%, 84% { translate: 0 -9px; rotate: 10deg; } 100% { rotate: 14deg; } }
+@keyframes intro-trip { 0% { rotate: 14deg; } 18% { rotate: -6deg; translate: 4px -8px; } 70% { rotate: 104deg; translate: 14px 0; } 85% { rotate: 96deg; translate: 14px -4px; } 100% { rotate: 100deg; translate: 14px 0; } }
+/* the spill: drops fling, lobes bulge out along the floor, the body pools flat then rises over everything */
+.intro.is-playing .intro__drop { animation: intro-fling 520ms cubic-bezier(.2,.7,.4,1) calc(1980ms + var(--d)) both; }
+@keyframes intro-fling { 0% { transform: scale(0); } 20% { transform: scale(1); } 100% { transform: translate(var(--tx), var(--ty)) scale(1); } }
+.intro.is-playing .intro__lobe { animation: intro-lobe 700ms cubic-bezier(.25,.8,.35,1) calc(2100ms + var(--d)) both; }
+@keyframes intro-lobe { 0% { transform: translate(var(--ox), var(--oy)) scale(0); } 70% { transform: scale(1.06, .94); } 100% { transform: none; } }
+.intro.is-playing .intro__body { animation: intro-body 1000ms cubic-bezier(.55,0,.45,1) 2150ms both; }
+@keyframes intro-body { 0% { transform: scale(0, 0); } 55% { transform: scale(.38, .07); } 100% { transform: scale(1, 1); } }
+/* covered: swap to one flat flood, El. pops up in it, then it drains down the page */
+.intro.is-playing .intro__paper { animation: intro-hide 1ms linear 3290ms forwards; }
+.intro.is-playing .intro__spill { animation: intro-hide 1ms linear 3300ms forwards; }
+.intro.is-playing .intro__flood { animation: intro-show 1ms linear 3280ms forwards, intro-drain 760ms cubic-bezier(.6,0,.4,1) 4150ms forwards; }
+.intro.is-playing .intro__logo { animation: intro-pop 460ms cubic-bezier(.2,1.5,.4,1) 3320ms both; }
+.intro.is-playing .intro__name { animation: intro-fade 300ms ease 3500ms both; }
+@keyframes intro-hide { to { opacity: 0; } }
+@keyframes intro-show { to { opacity: 1; } }
+@keyframes intro-pop { from { opacity: 0; transform: scale(.6) translateY(30px); } }
+@keyframes intro-fade { from { opacity: 0; } }
+@keyframes intro-drain { to { transform: translateY(var(--drain)); } }

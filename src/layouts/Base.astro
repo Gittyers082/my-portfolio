@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import TrustMeter from '../components/TrustMeter.astro';
+import Intro from '../components/Intro.astro';
 import { profile, githubUrl } from '../data/profile';
 
 interface Props {
@@ -10,12 +11,14 @@ interface Props {
   description?: string;
   footerGame?: boolean; // the footer's dodge.exe (the 404 page has its own)
   meter?: boolean; // the Explored meter (nothing to explore on the 404 page)
+  intro?: boolean; // the grand opening (the home page only)
 }
 
 const {
   title = `${profile.name} · ${profile.title}`,
   footerGame = true,
   meter = true,
+  intro = false,
   description = `${profile.name} is a ${profile.title.toLowerCase()} at ${profile.school} who builds web apps and is exploring AI engineering.`,
 } = Astro.props;
 
@@ -74,8 +77,19 @@ const person = Astro.url.pathname === '/' && {
         document.documentElement.dataset.theme = t;
       })();
     </script>
+    <!-- The grand opening (home only): once per visit, never for reduced motion; decided before the first paint -->
+    {intro && (
+      <script is:inline>
+        (function () {
+          var seen = null;
+          try { seen = sessionStorage.getItem('intro-seen'); } catch (e) {}
+          if (!seen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('intro-on');
+        })();
+      </script>
+    )}
   </head>
   <body>
+    {intro && <Intro />}
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav />
     <main id="main">
