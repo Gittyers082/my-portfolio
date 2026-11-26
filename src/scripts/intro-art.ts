@@ -4,21 +4,21 @@
  * Colours are the site's drawing hex values, so the dark theme remaps them like every other drawing
  * (global.css: html[data-theme="dark"] [fill="#15130F"] ...); FAR has no remap, so it is passed in per theme.
  */
-type Pt = [number, number];
+export type Pt = [number, number];
 
-const INK = '#15130F';
-const LIGHT = '#F4EFE4'; // the cream halo between limbs and body
-const PAPER = '#FBF8F1';
-const CYAN = '#00789A';
-const CYAN2 = '#2BA5C6';
+export const INK = '#15130F';
+export const LIGHT = '#F4EFE4'; // the cream halo between limbs and body
+export const PAPER = '#FBF8F1';
+export const CYAN = '#00789A';
+export const CYAN2 = '#2BA5C6';
 
-const P = (p: Pt): string => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
+export const P = (p: Pt): string => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
 const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
 const lerpPt = (a: Pt, b: Pt, t: number): Pt => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
 const smooth = (t: number): number => t * t * (3 - 2 * t);
-const path3 = (a: Pt, b: Pt, c: Pt, w: number, col: string): string =>
+export const path3 = (a: Pt, b: Pt, c: Pt, w: number, col: string): string =>
   `<path d="M${P(a)} L${P(b)} L${P(c)}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
-const halo = (a: Pt, b: Pt, c: Pt, w: number): string => path3(a, b, c, w + 5, LIGHT);
+export const halo = (a: Pt, b: Pt, c: Pt, w: number): string => path3(a, b, c, w + 5, LIGHT);
 const shoe = (f: Pt, col: string): string =>
   `<path d="M${(f[0] - 6).toFixed(1)} ${f[1].toFixed(1)} L${(f[0] + 16).toFixed(1)} ${(f[1] + 1).toFixed(1)}" stroke="${col}" stroke-width="15" stroke-linecap="round"/>`;
 

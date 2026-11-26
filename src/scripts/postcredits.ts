@@ -2,7 +2,7 @@
  * The post-credits scene: a button on the left of the footer's last row, across from Back to the top, opens a
  * four-panel strip under it. Meanwhile, back at the intro: Dot is crying, Merlin blames El.
  * - The strip is built on the first open; Dot and Merlin are clones of their drawings already on the page,
- *   as in the grand opening. Pages without them (the 404) don't get the button.
+ *   as in the grand opening. If either is missing the button stays hidden.
  * - While open and on screen the panels are redrawn every frame (capes, flames, tears); paused otherwise.
  * - Reduced motion: it opens without the slide or the pop, and the panels hold still.
  */
@@ -44,8 +44,10 @@ export function initPostCredits(): void {
     } catch { /* a bad frame shouldn't break the footer; the next one tries again */ }
   };
 
+  const FRAME_MS = 1000 / 30; // capes, flames and tears read the same at 30fps, at half the work
+  let last = 0;
   const loop = (now: number): void => {
-    draw((now - t0) / 1000);
+    if (now - last >= FRAME_MS) { last = now; draw((now - t0) / 1000); }
     raf = requestAnimationFrame(loop);
   };
   const play = (): void => {
@@ -64,8 +66,17 @@ export function initPostCredits(): void {
       if (!cast) build();
       t0 = performance.now();
       draw(0);
-      // bring the strip into view once it has slid open
-      window.setTimeout(() => box.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'nearest' }), still() ? 0 : 600);
+      // bring the strip into view once it has slid open (the grid-template-rows transition in global.css)
+      const show = (): void => box.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'nearest' });
+      if (still()) show();
+      else {
+        const onEnd = (e: TransitionEvent): void => {
+          if (e.target !== box) return;
+          box.removeEventListener('transitionend', onEnd);
+          show();
+        };
+        box.addEventListener('transitionend', onEnd);
+      }
     }
     play();
   };

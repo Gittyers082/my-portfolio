@@ -4,20 +4,7 @@
  * Colours are the site's drawing hex values, so the dark theme remaps them (global.css); FAR has no remap,
  * so it is passed in per theme, as in the grand opening.
  */
-import { COLOSSAL } from './intro-art';
-
-type Pt = [number, number];
-
-const INK = '#15130F';
-const LIGHT = '#F4EFE4';
-const PAPER = '#FBF8F1';
-const CYAN = '#00789A';
-const CYAN2 = '#2BA5C6';
-
-const P = (p: Pt): string => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
-const path3 = (a: Pt, b: Pt, c: Pt, w: number, col: string): string =>
-  `<path d="M${P(a)} L${P(b)} L${P(c)}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
-const halo = (a: Pt, b: Pt, c: Pt, w: number): string => path3(a, b, c, w + 5, LIGHT);
+import { COLOSSAL, INK, LIGHT, PAPER, CYAN, CYAN2, P, path3, halo, type Pt } from './intro-art';
 
 /** El's head, side on, facing +x: spiky hair, the black headband of his headphones with its white line and ear cup. */
 const HEAD = (tilt: number): string => `<g transform="rotate(${tilt.toFixed(1)})">
@@ -50,11 +37,11 @@ function elStand(id: string, x: number, ground: number, t: number, far: string, 
     <path d="M${N(-6, 10)} C${neck[0] - 18} ${neck[1] + 34} -20 -14 -16 26" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" opacity=".55"/>
     <path d="M${N(16, 4)} C${N(8, -4)} ${N(-6, -4)} ${N(-16, 6)}" fill="none" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>`;
   const torso = `<path d="M0 -10 L${P(neck)}" stroke="${INK}" stroke-width="42" stroke-linecap="round"/><path d="M-14 -14 L15 -14 L19 6 L-13 6 Z" fill="${INK}"/>`;
-  // the greatsword, driven point-first into the ground (clipped at the ground line, a crack and two chips);
+  // the colossal greatsword at the grand opening's scale, almost as tall as he is, driven point-first into the ground (clipped at the ground line, a crack and two chips);
   // when he pats Dot it stands behind him, so his hand reaches Dot and not the hilt
-  const sx = mode === 'pat' ? -62 : 62, o = sx - 62;
-  const sword = `<clipPath id="${id}" clipPathUnits="userSpaceOnUse"><rect x="${sx - 42}" y="-200" width="120" height="296"/></clipPath>`
-    + `<g clip-path="url(#${id})"><g transform="translate(${sx} -16) rotate(91) scale(.5)">${COLOSSAL}</g></g>`
+  const sx = mode === 'pat' ? -40 : 78, o = sx - 62;
+  const sword = `<clipPath id="${id}" clipPathUnits="userSpaceOnUse"><rect x="${sx - 50}" y="-260" width="110" height="356"/></clipPath>`
+    + `<g clip-path="url(#${id})"><g transform="translate(${sx} -93) rotate(90) scale(.74)">${COLOSSAL}</g></g>`
     + `<g transform="translate(${o} 0)"><path d="M44 97 L52 92 M83 97 L76 91 M50 97 L80 97" stroke="${INK}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M40 92 l4 -4 l3 4 Z M86 91 l3 -5 l4 4 Z" fill="${INK}"/></g>`;
   let farArm: string, near: string, extra = '';
   if (mode === 'scratch') {
@@ -93,7 +80,7 @@ function dotCry(body: string, cx: number, ground: number, t: number, size: numbe
 }
 
 /** Merlin scolding: flames flaring, angry brows, leaning in. svg: his drawing's inner markup, ids unique to the panel. */
-function merlinScold(svg: string, cx: number, cy: number, t: number, size: number, lean: number): string {
+function merlinScold(svg: string, glow: string, cx: number, cy: number, t: number, size: number, lean: number): string {
   const k = size / 130, flare = 1.12 + Math.sin(t * 9) * 0.06;
   let i = 0;
   const live = svg.replace(/seed="\d+"/, `seed="${Math.floor(t * 14) % 60}"`)
@@ -104,14 +91,15 @@ function merlinScold(svg: string, cx: number, cy: number, t: number, size: numbe
     });
   const brows = `<path d="M58 80 L94 92 M142 80 L106 92" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>`;
   const bob = Math.sin(t * 4) * 5;
-  return `<circle cx="${cx}" cy="${(cy - 10 + bob).toFixed(1)}" r="${size * 0.62}" fill="url(#pc-glow)"/>
+  return `<circle cx="${cx}" cy="${(cy - 10 + bob).toFixed(1)}" r="${size * 0.62}" fill="url(#${glow})"/>
     <g transform="rotate(${lean * 10} ${cx} ${(cy + bob).toFixed(1)})"><svg x="${cx - 130 * k}" y="${(cy - 180 * k + bob).toFixed(1)}" width="${260 * k}" height="${294 * k}" viewBox="-30 -70 260 294" style="overflow:visible">${live}${brows}</svg></g>`;
 }
 
 // ---------- speech bubbles: measured text, a box in clear space, a tail from the side nearest the speaker
-const measure = document.createElement('canvas').getContext('2d');
+let measure: CanvasRenderingContext2D | null | undefined;
 const textWidth = (s: string, font: string): number => {
-  if (!measure) return s.length * 8;
+  if (measure === undefined) measure = document.createElement('canvas').getContext('2d');
+  if (!measure) return s.length * 8; // no canvas: a rough average glyph width
   measure.font = font;
   return measure.measureText(s).width;
 };
@@ -154,7 +142,7 @@ function bubble(x: number, y: number, lines: string[], tx: number, ty: number, s
 const caption = (text: string, w: number): string =>
   `<rect x="0" y="0" width="${w}" height="28" fill="${INK}"/><text x="11" y="19" font-family="Archivo, sans-serif" font-weight="800" font-size="13" letter-spacing="1" fill="${PAPER}">${text}</text>`;
 const floor = (y: number): string => `<line x1="0" y1="${y}" x2="320" y2="${y}" stroke="${INK}" stroke-width="3"/>`;
-const DEFS = `<defs><radialGradient id="pc-glow"><stop offset="0" stop-color="${CYAN2}" stop-opacity=".3"/><stop offset="1" stop-color="${CYAN2}" stop-opacity="0"/></radialGradient></defs>`;
+const defs = (id: string): string => `<defs><radialGradient id="${id}"><stop offset="0" stop-color="${CYAN2}" stop-opacity=".3"/><stop offset="1" stop-color="${CYAN2}" stop-opacity="0"/></radialGradient></defs>`;
 
 /** What each panel says, for screen readers. */
 export const PANEL_LABELS = [
@@ -174,14 +162,14 @@ export interface Cast {
 export function panels(c: Cast, t: number): string[] {
   const G = 232;
   return [
-    DEFS + floor(G) + dotCry(c.dot, 150, G, t, 104) + caption('1 · SPLAT', 92)
+    floor(G) + dotCry(c.dot, 150, G, t, 104) + caption('1 · SPLAT', 92)
       + `<g opacity=".55">${[0, 1, 2].map((i) => `<rect x="${226 + i * 12}" y="${70 + i * 24}" width="${70 - i * 14}" height="4" rx="2" fill="${INK}"/>`).join('')}</g>`,
-    DEFS + floor(G) + merlinScold(c.merlin[0], 84, 166, t, 76, 1) + elStand('pc-sw2', 238, G, t, c.far, -1, 'scratch', 0.8)
+    defs('pc-glow2') + floor(G) + merlinScold(c.merlin[0], 'pc-glow2', 84, 166, t, 76, 1) + elStand('pc-sw2', 238, G, t, c.far, -1, 'scratch', 0.8)
       + bubble(100, 52, ['You ran right', 'past him!'], 88, 108, 14) + caption('2', 28),
-    DEFS + floor(G) + elStand('pc-sw3', 176, G, t, c.far, 1, 'scratch', 0.8)
+    floor(G) + elStand('pc-sw3', 176, G, t, c.far, 1, 'scratch', 0.8)
       + bubble(84, 52, ['I was charging', 'an attack.'], 156, 66, 14) + bubble(60, 194, ['AT WHAT?!'], -6, 168, 15, true) + caption('3', 28),
-    DEFS + floor(G) + dotCry(c.dot, 150, G, t * 0.5, 80) + elStand('pc-sw4', 214, G, t, c.far, -1, 'pat', 0.8)
-      + `<g transform="translate(252 22) scale(.5)">${merlinScold(c.merlin[1], 60, 60, t, 70, -1)}</g>`
+    defs('pc-glow4') + floor(G) + dotCry(c.dot, 150, G, t * 0.5, 80) + elStand('pc-sw4', 214, G, t, c.far, -1, 'pat', 0.8)
+      + `<g transform="translate(264 14) scale(.5)">${merlinScold(c.merlin[1], 'pc-glow4', 60, 60, t, 70, -1)}</g>`
       + bubble(92, 60, ['…can I be in', 'the next intro?'], 132, 150, 13) + caption('4', 28),
   ];
 }
