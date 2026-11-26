@@ -10,6 +10,7 @@
  * Logic: src/scripts/card.ts
  */
 import { facts, secretFact, course } from '../data/profile';
+import Dot from './Dot.astro';
 import Arrow from './Arrow.astro';
 
 // the secret 7th card stays hidden until the visitor has explored 100% (card.ts reveals it)
@@ -31,6 +32,11 @@ const SPEED = `<svg class="card__speed" viewBox="0 0 100 100" preserveAspectRati
     <ul class="card__grid" role="list">
       {cards.map((f) => (
         <li class:list={['card__fact', { 'card__fact--hi': f.highlight, 'card__fact--secret': f.secret }]} data-fact data-secret={f.secret ? '' : undefined} hidden={f.secret}>
+          {f.secret && (
+            <svg class="card__dot" viewBox="0 0 120 112" aria-hidden="true">
+              <Dot pose="ledge" transform="" />
+            </svg>
+          )}
           <div class="card__flip">
             <button class="card__face card__face--front" type="button" aria-label={`${f.label}: ${f.value}. Flip for more`} data-flip>
               <Fragment set:html={SPEED} />

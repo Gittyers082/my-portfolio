@@ -124,7 +124,8 @@ function initSecret(card: HTMLElement): void {
     secret.hidden = false;
     if (!animate || reduceMotion()) return;
     secret.classList.add('is-arriving');
-    window.setTimeout(() => secret.classList.remove('is-arriving'), 900);
+    // the card drops in, then Dot hops onto its top edge (global.css: card-arrive, card-dot-hop)
+    window.setTimeout(() => secret.classList.remove('is-arriving'), 1600);
   };
   if (exploredAll()) reveal(false);
   document.addEventListener('explore:complete', () => reveal(true));
