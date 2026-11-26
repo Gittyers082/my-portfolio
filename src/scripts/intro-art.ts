@@ -23,7 +23,7 @@ const shoe = (f: Pt, col: string): string =>
   `<path d="M${(f[0] - 6).toFixed(1)} ${f[1].toFixed(1)} L${(f[0] + 16).toFixed(1)} ${(f[1] + 1).toFixed(1)}" stroke="${col}" stroke-width="15" stroke-linecap="round"/>`;
 
 /** El's 8th weapon: an original colossal greatsword, grip along -x, the blade along +x. */
-const COLOSSAL = `<g>
+export const COLOSSAL = `<g>
   <path d="M-70 -7 L-64 -11 L-58 -11 L-58 11 L-64 11 L-70 7 Z" fill="${LIGHT}" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/>
   <path d="M-58 -5.5 L-14 -5.5 L-14 5.5 L-58 5.5 Z" fill="${INK}"/>
   ${[-54, -46, -38, -30, -22].map((x) => `<path d="M${x} -5.5 L${x + 5} 5.5" stroke="${LIGHT}" stroke-width="1.6"/>`).join('')}
